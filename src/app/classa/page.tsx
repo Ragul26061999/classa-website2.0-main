@@ -177,7 +177,6 @@ export default function ClassaPage() {
       setActiveModule(Math.floor(latest));
     });
   }, [activeModuleIndex]);
-  const [expandedModules, setExpandedModules] = useState<number[]>([]);
   const currentIndex = activeRole === -1 ? 0 : activeRole;
   // Keyboard nav: roving tabindex and refs for tabs
   const [focusedIdx, setFocusedIdx] = useState<number>(0);
@@ -329,7 +328,6 @@ export default function ClassaPage() {
                         <motion.img
                           src={MODULES[activeModule].image.src}
                           alt={MODULES[activeModule].image.alt}
-                          className="h-full w-full object-cover object-center"
                           loading="lazy"
                           initial={{ opacity: 0, scale: 1.1 }}
                           animate={{ opacity: 1, scale: 1, transition: { delay: 0.2, duration: 0.6 } }}

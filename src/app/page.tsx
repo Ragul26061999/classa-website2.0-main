@@ -1,10 +1,7 @@
 import HeroSection from '@/components/HeroSection';
-import AboutUsSection from '@/components/AboutUsSection';
 import WhyChooseSection from '@/components/WhyChooseSection';
-
 import ContactSection from '@/components/ContactSection';
 import Navbar from '@/components/Navbar';
-import CardsSection from '@/components/trail';
 import NextGenLearn from '@/components/NextGenLearn';
 
 export default function Home() {

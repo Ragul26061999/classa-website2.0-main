@@ -121,11 +121,11 @@ const Folder: React.FC<FolderProps> = ({
 
   const folderStyle = {
     // CSS vars if needed later
-    ["--folder-color" as any]: color,
-    ["--folder-back-color" as any]: folderBackColor,
-    ["--paper-1" as any]: paper1,
-    ["--paper-2" as any]: paper2,
-    ["--paper-3" as any]: paper3,
+    "--folder-color": color,
+    "--folder-back-color": folderBackColor,
+    "--paper-1": paper1,
+    "--paper-2": paper2,
+    "--paper-3": paper3,
   } as React.CSSProperties;
 
   const scaleStyle: React.CSSProperties = { transform: `scale(${size})` };

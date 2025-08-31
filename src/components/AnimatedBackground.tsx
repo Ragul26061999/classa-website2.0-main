@@ -48,10 +48,21 @@ const GradientMaterial = shaderMaterial(
 // Extend Three.js with our custom material
 extend({ GradientMaterial });
 
+
 // Add TypeScript support for the custom material
 declare module '@react-three/fiber' {
   interface ThreeElements {
-    gradientMaterial: any;
+    gradientMaterial: {
+      ref?: React.Ref<THREE.ShaderMaterial>;
+      attach?: string;
+      side?: THREE.Side;
+      transparent?: boolean;
+      opacity?: number;
+      time?: number;
+      color1?: THREE.Color;
+      color2?: THREE.Color;
+      color3?: THREE.Color;
+    }
   }
 }
 

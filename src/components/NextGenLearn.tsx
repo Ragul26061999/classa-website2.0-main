@@ -71,7 +71,7 @@ const features = [
   },
 ];
 
-const HomeContent = () => {
+const NextGenLearn = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
@@ -393,4 +393,4 @@ const HomeContent = () => {
   );
 };
 
-export default HomeContent;
+export default NextGenLearn;

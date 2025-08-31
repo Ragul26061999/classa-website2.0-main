@@ -1,13 +1,20 @@
 'use client';
 
-import React, { useEffect, useState, useRef, ReactElement } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import FOG from 'vanta/dist/vanta.fog.min.js';
 import * as THREE from 'three';
 
+// Define the type for the Vanta.js effect
+type VantaEffect = {
+  destroy: () => void;
+  setOptions: (options: any) => void;
+  [key: string]: any;
+};
+
 const HeroSection = () => {
-  const [vantaEffect, setVantaEffect] = useState<any>(null);
-  const vantaRef = useRef(null);
+  const [vantaEffect, setVantaEffect] = useState<VantaEffect | null>(null);
+  const vantaRef = useRef<HTMLDivElement>(null);
 
 
   // Vanta.js background effect with pastel colors

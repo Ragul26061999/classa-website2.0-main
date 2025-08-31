@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import {
   LayoutGrid,
   ClipboardCheck,
@@ -21,8 +22,6 @@ import {
   Crosshair,
   Lightbulb,
   BookOpen,
-  ChevronRight,
-  ChevronLeft,
   X,
 } from 'lucide-react';
 import Folder from './Folder';
@@ -259,7 +258,12 @@ const AboutUs = () => {
                 {/* Vision */}
                 <div className="grid md:grid-cols-2 gap-8 items-center">
                   <div className="relative h-48 w-full overflow-hidden rounded-xl bg-gray-100">
-                    <img src="/image/vision.png" alt="Vision" className="h-full w-full object-cover" />
+                    <Image 
+                      src="/image/vision.png" 
+                      alt="Vision" 
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                   <div>
                     <div className="mb-3 flex items-center gap-2">
@@ -275,7 +279,12 @@ const AboutUs = () => {
                 {/* Mission */}
                 <div className="grid md:grid-cols-2 gap-8 items-center">
                   <div className="relative h-48 w-full overflow-hidden rounded-xl bg-gray-100">
-                    <img src="/image/mission.png" alt="Mission" className="h-full w-full object-cover" />
+                    <Image 
+                      src="/image/mission.png" 
+                      alt="Mission" 
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                   <div>
                     <div className="mb-3 flex items-center gap-2">
@@ -327,9 +336,7 @@ const AboutUs = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.3 + i * 0.1 }}
                     viewport={{ once: true }}
-                    whileHover={{ scale: 1.05 }}
                     className="relative flex flex-col items-center gap-3 py-3 w-full cursor-pointer hover:bg-sky-500/20 rounded-lg transition-all duration-300 group-hover:opacity-100"
-                    initial={{ opacity: 0.8 }}
                     animate={{ opacity: 1 }}
                     whileHover={{
                       scale: 1.05,

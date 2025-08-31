@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { Phone, MapPin, Send, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -33,10 +34,11 @@ export default function ContactSection() {
             viewport={{ once: true }}
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-zinc-200 hover:scale-[1.02] transition-transform duration-500">
-              <img
+              <Image
                 src="/m-monk-E813FON0wDQ-unsplash.jpg"
                 alt="Classroom chairs"
-                className="h-[520px] w-full object-cover object-[12%_50%] sm:object-[10%_50%] md:object-[8%_50%] xl:object-[6%_50%] saturate-[0.9] contrast-[0.98] brightness-[1.02]"
+                fill
+                className="object-cover object-[12%_50%] sm:object-[10%_50%] md:object-[8%_50%] xl:object-[6%_50%] saturate-[0.9] contrast-[0.98] brightness-[1.02]"
               />
               {/* Subtle bottom gradient to improve legibility of overlay cards, mimicking the sample */}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/25" />
@@ -54,7 +56,7 @@ export default function ContactSection() {
                 <div className="p-6">
                   <p className="text-lg font-semibold">Have a Challenge or an Idea?</p>
                   <p className="mt-2 text-sm leading-relaxed text-zinc-600">
-                    Fill out the form, and let's talk about how we can support your business with tailored solutions.
+                                        Fill out the form, and let&apos;s talk about how we can support your business with tailored solutions.
                   </p>
                 </div>
               </div>

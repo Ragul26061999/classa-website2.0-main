@@ -3,6 +3,7 @@
 import { Shield, Cog, Crosshair, Lightbulb, Eye, BadgeCheck } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AboutUsSection() {
   return (
@@ -78,10 +79,11 @@ export default function AboutUsSection() {
                   </p>
                 </div>
                 <div className="relative h-48 w-full overflow-hidden rounded-xl bg-gray-100">
-                  <img 
+                  <Image 
                     src="/image/vision.png" 
                     alt="Vision Illustration"
-                    className="h-full w-full object-cover object-center"
+                    fill
+                    className="object-cover object-center"
                   />
                 </div>
               </motion.div>
@@ -104,10 +106,11 @@ export default function AboutUsSection() {
                   </p>
                 </div>
                 <div className="relative h-48 w-full overflow-hidden rounded-xl bg-gray-100 order-1 md:order-2">
-                  <img 
+                  <Image 
                     src="/image/mission.png" 
                     alt="Mission Illustration"
-                    className="h-full w-full object-cover object-center"
+                    fill
+                    className="object-cover object-center"
                   />
                 </div>
               </motion.div>

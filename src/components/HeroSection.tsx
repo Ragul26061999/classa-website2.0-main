@@ -171,9 +171,7 @@
 
 'use client';
 import { useEffect, useRef, useState } from 'react';
-
-import dynamic from 'next/dynamic';
-import { motion, AnimatePresence, useAnimation, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaLayerGroup, 
   FaRobot, 
@@ -182,67 +180,29 @@ import {
   FaChalkboardTeacher, 
   FaUserFriends, 
   FaCloud,
-  FaPaperPlane, 
-  FaBook, 
-  FaGraduationCap, 
-  FaLightbulb, 
-  FaPencilAlt, 
-  FaCalculator, 
-  FaFlask, 
-  FaMusic, 
-  FaPalette, 
-  FaGlobeAmericas,
-  FaAtom,
-  FaLaptopCode,
-  FaHome,
-  FaInfoCircle,
-  FaUserTie,
   FaRocket
 } from 'react-icons/fa';
-
 import { useInView } from 'react-intersection-observer';
-import Navbar from './Navbar';
 
 
 
-function RotatingSpan() {
-  const rotatingTexts = [
-
-    "Adaptive Learning",
-    "Empowered Teaching",
-    "Intelligent Management",
-    "Seamless Administration",
-  ];
-
-  const [visibleIdx, setVisibleIdx] = useState(0);
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      let nextIdx;
-      do {
-        nextIdx = Math.floor(Math.random() * rotatingTexts.length);
-      } while (nextIdx === visibleIdx && rotatingTexts.length > 1);
-      setVisibleIdx(nextIdx);
-    }, 3000); // Increased duration for better animation visibility
-    
-    return () => clearInterval(interval);
-  }, [visibleIdx, rotatingTexts.length]);
+function RotatingSpan({ text }: { text: string }) {
   
   return (
     <div className="relative h-20 overflow-hidden flex items-center">
      
       <AnimatePresence mode="wait">
         <motion.div 
-          key={visibleIdx}
+          key={text}
           className="flex space-x-0.5"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {rotatingTexts[visibleIdx].split('').map((char, index) => (
+          {text.split('').map((char, index) => (
             <motion.span
-              key={`${visibleIdx}-${index}`}
+              key={`${text}-${index}`}
               className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent tracking-tight"
               initial={{ 
                 y: 50, 
@@ -426,58 +386,55 @@ const AnimatedFloatingButton = () => {
 };
 
 function HomeContent() {
-  const [showOnePlatform, setShowOnePlatform] = useState(false);
-  const [showOffers, setShowOffers] = useState(false);
-  const [showWhyChooseClassA, setShowWhyChooseClassA] = useState(false);
-  const [showContactUs, setShowContactUs] = useState(false);
-  
-  const [onePlatformRef, onePlatformInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-  
-  const [offersRef, offersInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-  
-  const [whyChooseClassARef, whyChooseClassAInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
-  
-  const contactSectionRef = useRef<HTMLDivElement>(null);
-  const [contactUsRef, contactUsInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+  const content = [
+    { text: "Adaptive Learning", image: '/image/Adaptive.jpg' },
+    { text: "Empowered Teaching", image: '/image/Empowered.jpg' },
+    { text: "Intelligent Management", image: '/image/Intelligent.jpg' },
+    { text: "Seamless Administration", image: '/image/Seamless.jpg' },
+  ];
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (onePlatformInView) {
-      setShowOnePlatform(true);
-    }
-  }, [onePlatformInView]);
-
-  useEffect(() => {
-    if (offersInView) {
-      setShowOffers(true);
-    }
-  }, [offersInView]);
+    const interval = setInterval(() => {
+      setActiveIndex((prevIndex) => (prevIndex + 1) % content.length);
+    }, 5000); // Change content every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
+  const [onePlatformRef] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
   
-  useEffect(() => {
-    if (whyChooseClassAInView) {
-      setShowWhyChooseClassA(true);
-    }
-  }, [whyChooseClassAInView]);
+  const [offersRef] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
   
-  useEffect(() => {
-    if (contactUsInView) {
-      setShowContactUs(true);
-    }
-  }, [contactUsInView]);
+  const [whyChooseClassARef] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+  
+  const [contactUsRef] = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
 
   return (
-    <div id="home" className="min-h-screen flex flex-col bg-[url('/image/Gemini1.png')] bg-cover bg-center bg-no-repeat relative overflow-hidden">
+    <div id="home" className="min-h-screen flex flex-col relative overflow-hidden">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeIndex}
+          style={{
+            backgroundImage: `url(${content[activeIndex].image})`,
+          }}
+          className="absolute inset-0 w-full h-full bg-cover bg-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
+        />
+      </AnimatePresence>
       {/* Background decorative elements */}
       <div className="absolute top-20 left-10 w-32 h-32 bg-blue-200/20 rounded-full blur-xl" />
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-purple-200/20 rounded-full blur-xl" />
@@ -499,7 +456,7 @@ function HomeContent() {
               <div className="flex flex-col items-start">
                 <span className="font-stretch-125 text-xl sm:text-2xl md:text-3xl lg:text-5xl">Empowering Institutions with</span>
                 <span className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl mt-2">
-                  <RotatingSpan />
+                  <RotatingSpan text={content[activeIndex].text} />
                 </span>
               </div>
             </h1>

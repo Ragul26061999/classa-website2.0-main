@@ -7,10 +7,9 @@ interface TeamMemberProps {
   name: string;
   role: string;
   imageUrl: string;
-  description: string;
 }
 
-const TeamMemberCard: React.FC<TeamMemberProps> = ({ name, role, imageUrl, description }) => {
+const TeamMemberCard: React.FC<TeamMemberProps> = ({ name, role, imageUrl }) => {
   return (
     <motion.div
       className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg cursor-pointer border border-gray-200 relative overflow-hidden"

@@ -543,7 +543,7 @@ export default function WhyChooseSection() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className="mb-14 lg:sticky lg:top-24 lg:z-[80] lg:bg-[#F7FAFC]/80 lg:backdrop-blur-sm lg:py-2 mb-"
+        className="mb-14 lg:sticky lg:top-24 lg:z-[80] lg:bg-[#F7FAFC]/80 lg:backdrop-blur-sm lg:py-2"
       >
         <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/60 px-3 py-1 text-xs text-slate-600 backdrop-blur">
           <Sparkles size={16} /> Modern AI for Learning
