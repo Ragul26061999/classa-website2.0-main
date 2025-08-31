@@ -17,8 +17,8 @@ export default function ContactSection() {
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-semibold tracking-tight leading-tight bg-gradient-to-r from-[#70A5F9] to-[#1169F9] via-[#2A7AF9] text-transparent bg-clip-text">Easy to Reach</h2>
-          <p className="mt-1 text-4xl font-light bg-gradient-to-r from-[#70A5F9] to-[#1169F9] via-[#2A7AF9] text-transparent bg-clip-text">Ready to Help</p>
+          <h2 className="text-4xl font-semibold tracking-tight leading-tight bg-gradient-to-r from-[#9333ea] to-[#6b21a8] via-[#c084fc] text-transparent bg-clip-text">Easy to Reach</h2>
+          <p className="mt-1 text-4xl font-light bg-gradient-to-r from-[#a855f7] to-[#818cf8] via-[#60a5fa] text-transparent bg-clip-text ml-20">Ready to Help</p>
           <p className="mt-6 text-zinc-600">Get in Touch with the CLASSA Team</p>
         </motion.div>
 
@@ -34,7 +34,7 @@ export default function ContactSection() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-zinc-200 hover:scale-[1.02] transition-transform duration-500">
               <img
-                src="/m-monk-E813FON0wDQ-unsplash.jpg"
+                src="/image/contactus.png"
                 alt="Classroom chairs"
                 className="h-[520px] w-full object-cover object-[12%_50%] sm:object-[10%_50%] md:object-[8%_50%] xl:object-[6%_50%] saturate-[0.9] contrast-[0.98] brightness-[1.02]"
               />
