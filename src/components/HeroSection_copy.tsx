@@ -8,12 +8,12 @@ import * as THREE from 'three';
 // Define the type for the Vanta.js effect
 type VantaEffect = {
   destroy: () => void;
-  setOptions: (options: any) => void;
+  setOptions: (options: { [key: string]: any }) => void;
   [key: string]: any;
 };
 
 const HeroSection = () => {
-  const [vantaEffect, setVantaEffect] = useState<VantaEffect | null>(null);
+  const [vantaEffect, setVantaEffect] = useState<{ destroy: () => void; setOptions: (options: { [key: string]: any }) => void } | null>(null);
   const vantaRef = useRef<HTMLDivElement>(null);
 
 

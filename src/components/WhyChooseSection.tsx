@@ -1,29 +1,9 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
-import { motion, useScroll, useTransform, Variants, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Brain, Sparkles, BarChart3, Users2, MessageSquareHeart, Globe2, LucideIcon } from "lucide-react";
 
-// ---- Utility ----
-const fadeUp: Variants = {
-  hidden: { 
-    opacity: 0, 
-    y: 16,
-    transition: {
-      duration: 0.3,
-      ease: "easeInOut"
-    }
-  },
-  show: (i: number = 0) => ({ 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      delay: 0.08 * i, 
-      duration: 0.5, 
-      ease: "easeOut" 
-    } 
-  })
-};
 
 // ---- Color schemes (pastel) ----
 interface Scheme {
@@ -552,7 +532,7 @@ export default function WhyChooseSection() {
           Why Schools & Students Choose <span className="bg-gradient-to-r from-blue-700 to-sky-500 bg-clip-text text-transparent">CLASSA</span>
         </h2>
         <p className="mt-3  max-w-2xl text-slate-600">
-          Smarter learning powered by AI, built for India's curriculum. Clear insights for teachers. Real results for students.
+          Smarter learning powered by AI, built for India&apos;s curriculum. Clear insights for teachers. Real results for students.
         </p>
       </motion.div>
 
@@ -573,7 +553,7 @@ export default function WhyChooseSection() {
               Track mastery and growth with live dashboards and evidence-based interventions.
             </FeatureCard>
             <FeatureCard index={3} icon={Users2} title="Teachers Love It" onInView={setActive} scheme={pastelSchemes[3]}>
-              Save hours with auto-generated lesson plans, worksheets, and analytics you'll actually use.
+              Save hours with auto-generated lesson plans, worksheets, and analytics you&apos;ll actually use.
             </FeatureCard>
             <FeatureCard index={4} icon={MessageSquareHeart} title="Parents Stay Connected" onInView={setActive} scheme={pastelSchemes[4]}>
               Simple progress reports and alerts keep families informed without extra work.

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { BookOpen, Users, MonitorPlay, GraduationCap, BarChart3, Handshake, Computer, MessageSquare, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const features = [
@@ -74,7 +73,7 @@ const features = [
 const NextGenLearn = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
+  const isManuallyPaused = isPaused; // Alias for backward compatibility
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const cardWidth = 320; // Width of card + gap
   const featuresCount = features.length;
@@ -115,7 +114,7 @@ const NextGenLearn = () => {
       const deltaTime = timestamp - lastTimestamp.current;
       lastTimestamp.current = timestamp;
       
-      if (isPaused || isScrolling.current || isManuallyPaused) {
+      if (isPaused || isScrolling.current) {
         animationFrameId.current = requestAnimationFrame(autoScroll);
         return;
       }
@@ -149,7 +148,7 @@ const NextGenLearn = () => {
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, [isPaused, isManuallyPaused, featuresCount]);
+  }, [isPaused, featuresCount]);
 
   // Handle arrow button clicks with smooth card snapping
   const handleArrowClick = (direction: 'left' | 'right') => {
@@ -171,7 +170,7 @@ const NextGenLearn = () => {
     
     // Calculate target scroll position
     let targetScroll: number;
-    let currentCard = Math.round(scrollPosition / cardTotalWidth);
+    const currentCard = Math.round(scrollPosition / cardTotalWidth);
     
     if (direction === 'right') {
       // Move to next card
@@ -322,9 +321,9 @@ const NextGenLearn = () => {
               ref={scrollContainerRef}
               className="overflow-x-auto no-scrollbar pb-6 scroll-smooth will-change-transform"
               onMouseEnter={() => setIsPaused(true)}
-              onMouseLeave={() => !isManuallyPaused && setIsPaused(false)}
+              onMouseLeave={() => !isPaused && setIsPaused(false)}
               onTouchStart={() => setIsPaused(true)}
-              onTouchEnd={() => !isManuallyPaused && setIsPaused(false)}
+              onTouchEnd={() => !isPaused && setIsPaused(false)}
             >
               <div className="flex space-x-6 w-max px-4">
                 {[...features, ...features, ...features].map((feature, index) => (
