@@ -1,174 +1,3 @@
-// 'use client';
-
-// import React, { useEffect, useState, useRef } from "react";
-// import { motion, AnimatePresence } from "framer-motion";
-// import AnimatedText from "./AnimatedText";
-// import Image from "next/image"; // ✅ for optimized image loading
-// import FOG from 'vanta/dist/vanta.fog.min.js';
-// import * as THREE from 'three';
-
-// // Fade-up animation variant
-// const fadeUp = (delay = 0) => ({
-//   initial: { opacity: 0, y: 20 },
-//   animate: { opacity: 1, y: 0 },
-//   transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as any, delay },
-// });
-
-// // Reusable button
-// function Button({
-//   children,
-//   variant = "primary",
-// }: {
-//   children: React.ReactNode;
-//   variant?: "primary" | "secondary";
-// }) {
-//   return (
-//     <button
-//       className={[
-//         "rounded-xl px-6 py-3 text-base font-medium transition inline-flex items-center justify-center shadow-md hover:scale-105 duration-300",
-//         variant === "primary"
-//           ? "bg-gradient-to-r from-sky-500 to-blue-600 text-white hover:from-sky-600 hover:to-blue-700"
-//           : "bg-white/80 text-gray-900 ring-1 ring-black/10 hover:bg-white",
-//       ].join(" ")}
-//     >
-//       {children}
-//     </button>
-//   );
-// }
-
-// export default function HeroSection() {
-//   const [vantaEffect, setVantaEffect] = useState<any>(null);
-//   const vantaRef = useRef(null);
-
-//   // Vanta.js background effect with pastel colors
-//   useEffect(() => {
-//     if (!vantaEffect && vantaRef.current) {
-//       const effect = FOG({
-//         el: vantaRef.current,
-//         THREE: THREE,
-//         mouseControls: true,
-//         touchControls: true,
-//         gyroControls: false,
-//         minHeight: 200.00,
-//         minWidth: 200.00,
-//         highlightColor: 0xADD8E6,  // Light Blue
-//         midtoneColor: 0x87CEEB,    // Sky Blue
-//         lowlightColor: 0x6495ED,   // Cornflower Blue
-//         baseColor: 0xf8fafc,       // Light Cyan
-//         blurFactor: 0.70,
-//         speed: 1.50,
-//         zoom: 0.85
-//       });
-//       setVantaEffect(effect);
-//     }
-//     return () => {
-//       if (vantaEffect) vantaEffect.destroy();
-//     };
-//   }, [vantaEffect]);
-
-//   const highlightedContent = [
-//     "Adaptive Learning",
-//     "Empowered Teaching",
-//     "Intelligent Management",
-//     "Seamless Administration",
-//   ];
-
-//   const phraseClasses = [
-//     "text-blue-700",
-//     "text-indigo-700",
-//     "text-purple-700",
-//     "text-blue-700",
-//   ];
-
-//   const [index, setIndex] = useState(0);
-
-//   // Cycle through phrases with timing sync
-//   useEffect(() => {
-//     const text = highlightedContent[index];
-//     const charCount = text.length;
-//     const animDuration = 0.8;
-//     const stagger = 0.05;
-//     const dwell = 2.0;
-//     const revealTime = Math.max(0, charCount - 1) * stagger + animDuration;
-//     const totalSeconds = revealTime + dwell;
-//     const id = setTimeout(
-//       () => setIndex((p) => (p + 1) % highlightedContent.length),
-//       totalSeconds * 1000
-//     );
-//     return () => clearTimeout(id);
-//   }, [index]);
-
-//   return (
-//     <section ref={vantaRef} id="home" className="relative min-h-screen overflow-hidden">
-
-//       {/* Content Container */}
-//       <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 pt-24 sm:px-8 md:pt-32 lg:flex-row lg:items-center lg:gap-12">
-//         {/* === LEFT: Text Content === */}
-//         <div className="text-center md:text-left p-6">
-//           <motion.h1
-//             {...fadeUp(0.05)}
-//             className="text-[44px] md:text-[52px] font-extrabold leading-tight tracking-tight text-slate-900 mb-0"
-//             style={{
-//               fontFamily:
-//                 "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-//               marginBottom: 0,
-//               paddingBottom: 0
-//             }}
-//           >
-//             Empowering Institutions with
-//           </motion.h1>
-
-//           <div className="mt-0">
-//             <AnimatePresence mode="wait">
-//               <AnimatedText
-//                 key={index}
-//                 text={highlightedContent[index]}
-//                 className={`text-[36px] md:text-[44px] font-extrabold leading-tight tracking-tight ${phraseClasses[index % phraseClasses.length]}`}
-//                 splitType="chars"
-//                 duration={0.8}
-//                 staggerDelay={0.05}
-//                 delay={0}
-//                 animationType="revealWave"
-//               />
-//             </AnimatePresence>
-//           </div>
-
-//           <motion.p
-//             {...fadeUp(0.25)}
-//             className="mx-auto md:mx-0 mt-6 max-w-xl text-[16px] leading-relaxed text-slate-600"
-//             style={{
-//               fontFamily:
-//                 "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-//             }}
-//           >
-//             A next-generation EdTech ecosystem that seamlessly integrates smart
-//             classrooms, institutional management, and data-driven insights to
-//             elevate learning outcomes.
-//           </motion.p>
-
-//           <motion.div
-//             {...fadeUp(0.4)}
-//             className="mt-8 flex flex-col md:flex-row justify-center gap-4"
-//           >
-//             <Button variant="primary">Book a Demo</Button>
-//             <Button variant="secondary">Explore Modules</Button>
-//           </motion.div>
-//         </div>
-
-//       </div>
-//       <style jsx global>{`
-//         .vanta-canvas {
-//           filter: blur(2px);
-//         }
-//       `}</style>
-//     </section>
-//   );
-// }
-
-
-
-
-
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -204,23 +33,22 @@ function RotatingSpan({ text }: { text: string }) {
             <motion.span
               key={`${text}-${index}`}
               className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent tracking-tight"
-              initial={{ 
-                y: 50, 
-                rotateX: -90,
+              initial={{
+                y: '100%',
                 opacity: 0,
-                textShadow: '0 0 8px rgba(147, 51, 234, 0.8)'
+                scale: 0.8,
+                filter: 'blur(8px)'
               }}
-              animate={{ 
-                y: 0, 
-                rotateX: 0,
+              animate={{
+                y: '0%',
                 opacity: 1,
-                textShadow: '0 0 0px rgba(147, 51, 234, 0)'
+                scale: 1,
+                filter: 'blur(0px)'
               }}
-              transition={{ 
-                duration: 0.6, 
-                delay: index * 0.05,
-                ease: [0.16, 1, 0.3, 1],
-                rotateX: { duration: 0.8, ease: [0.22, 1, 0.36, 1] }
+              transition={{
+                duration: 0.7,
+                delay: index * 0.04,
+                ease: [0.2, 0.6, 0.3, 0.9]
               }}
               style={{
                 display: 'inline-block',
