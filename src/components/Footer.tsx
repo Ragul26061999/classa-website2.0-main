@@ -21,8 +21,7 @@ export default function Footer() {
               />
             </div>
             <p className="mt-5 max-w-xl text-white/90">
-              Smarter Learning. Seamless Teaching. Unified Schooling.
-            </p>
+            Modular , Scalable , intelligent</p>
           </div>
 
           {/* Pages */}
@@ -36,7 +35,7 @@ export default function Footer() {
                 <Link href="/about" className="hover:text-white">About Us</Link>
               </li>
               <li>
-                <Link href="/classa" className="hover:text-white">CLASSA</Link>
+                <Link href="/classa" className="hover:text-white">Unified Platform</Link>
               </li>
             </ul>
           </div>
@@ -55,8 +54,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 border-t border-white/10 pt-6 text-sm text-white/70">
-          <p>© {new Date().getFullYear()} CLASSA. All rights reserved.</p>
+        <div className="mt-10 border-t border-white/10 pt-6 text-sm text-white/70 -mb-6">
+          <p>© {new Date().getFullYear()} CLASSA. Powerd by Techmatrix AI.</p>
         </div>
       </div>
     </footer>

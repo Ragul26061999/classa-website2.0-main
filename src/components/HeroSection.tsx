@@ -207,9 +207,7 @@ import Navbar from './Navbar';
 
 function RotatingSpan() {
   const rotatingTexts = [
-    // "Learning",
-    // "Teaching",
-    // "Management-Tools"
+
     "Adaptive Learning",
     "Empowered Teaching",
     "Intelligent Management",
@@ -507,13 +505,13 @@ function HomeContent() {
             </h1>
           </div>
           <p className="text-base md:text-lg text-gray-600 mb-8 leading-relaxed ">
-            A next-gen EdTech ecosystem integrating<br />
+            A Next-Gen Edtech ecosystem integrating<br />
             smart classrooms, institutional management, and <br />
             data-driven insights to elevate learning.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto mt-5">
             <motion.a 
-              href="#" 
+              href="#contact" 
               className="relative px-8 py-3.5 rounded-full border-2 border-gray-900 bg-white text-gray-900 font-semibold flex items-center justify-center gap-2 overflow-hidden group"
               whileHover={{ y: -4 }}
               transition={{ type: 'spring', stiffness: 400, damping: 15 }}
@@ -535,7 +533,7 @@ function HomeContent() {
             </motion.a>
 
             <motion.a 
-              href="#" 
+              href="/classa#modules" 
               className="relative px-8 py-3.5 rounded-full bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold flex items-center justify-center gap-2 overflow-hidden group"
               whileHover={{ y: -4 }}
               transition={{ type: 'spring', stiffness: 400, damping: 15 }}

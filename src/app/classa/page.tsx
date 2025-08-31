@@ -2,7 +2,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection_copy from "@/components/HeroSection_copy";
 import { Check, Plus, Minus } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import type React from "react";
 
@@ -52,7 +52,7 @@ const MODULES: Module[] = [
       // { text: "Customize content for local needs → Tailor resources to meet regional standards and cultural contexts.", colorClass: "bg-[#3B82F6]" }
     ],
     image: {
-      src: "/cms.png",
+      src: "/image/Cms.png",
       alt: "Content Management System"
     },
     accent: { ring: "ring-[#007DC6]", ringSoft: "ring-[#007DC6]/70", dot: "bg-[#007DC6]", gradient: "from-blue-50 to-sky-50" }
@@ -67,7 +67,7 @@ const MODULES: Module[] = [
       // { text: "Generate reports and insights → Comprehensive analytics tools provide insights into student performance and trends.", colorClass: "bg-[#EDC531]" }
     ],
     image: {
-      src: "/lms.jpg",
+      src: "/image/Lms.png",
       alt: "Learning Management System"
     },
     accent: { ring: "ring-[#EDC531]", ringSoft: "ring-[#EDC531]/70", dot: "bg-[#EDC531]", gradient: "from-yellow-50 to-amber-50" }
@@ -82,7 +82,7 @@ const MODULES: Module[] = [
       // { text: "Insightful scorecards", colorClass: "bg-[#12881F]" }
     ],
     image: {
-      src: "/ams.png",
+      src: "/image/Ams.png",
       alt: "Assessment Management System"
     },
     accent: { ring: "ring-[#12881F]", ringSoft: "ring-[#12881F]/70", dot: "bg-[#12881F]", gradient: "from-emerald-50 to-green-50" }
@@ -97,7 +97,7 @@ const MODULES: Module[] = [
       { text: "Multilingual support", colorClass: "bg-[#A422D0]" }
     ],
     image: {
-      src: "/senseai.png",
+      src: "/image/Sims.png",
       alt: "SenseAI preview"
     },
     accent: { ring: "ring-[#A422D0]", ringSoft: "ring-[#A422D0]/70", dot: "bg-[#A422D0]", gradient: "from-purple-50 to-fuchsia-50" }
@@ -112,7 +112,7 @@ const MODULES: Module[] = [
       { text: "Staff & inventory", colorClass: "bg-[#F29553]" }
     ],
     image: {
-      src: "/sms.jpg",
+      src: "/image/Sms.png",
       alt: "School Management System"
     },
     accent: { ring: "ring-[#F29553]", ringSoft: "ring-[#F29553]/70", dot: "bg-[#F29553]", gradient: "from-orange-50 to-amber-50" }
@@ -162,8 +162,21 @@ const MODULES: Module[] = [
 ];
 
 export default function ClassaPage() {
-  const [activeRole, setActiveRole] = useState(0);
+  const [activeRole, setActiveRole] = useState(-1);
   const [activeModule, setActiveModule] = useState<number>(0);
+  const modulesRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ 
+    target: modulesRef,
+    offset: ["start start", "end end"]
+  });
+
+  const activeModuleIndex = useTransform(scrollYProgress, [0, 1], [0, MODULES.length - 0.5]);
+
+  useEffect(() => {
+    return activeModuleIndex.onChange((latest) => {
+      setActiveModule(Math.floor(latest));
+    });
+  }, [activeModuleIndex]);
   const [expandedModules, setExpandedModules] = useState<number[]>([]);
   const currentIndex = activeRole === -1 ? 0 : activeRole;
   // Keyboard nav: roving tabindex and refs for tabs
@@ -227,217 +240,112 @@ export default function ClassaPage() {
       <HeroSection_copy />
 
       {/* Modules */}
-      <section aria-labelledby="modules" className="relative pt-20 md:pt-28 lg:pt-36 pb-">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">Our Modules</h2>
-          
-          {/* CLASSA Buttons */}
-          <div className="flex justify-center space-x-2 md:space-x-4 mb-12 flex-wrap">
-            {['C', 'L', 'A', 'S', 'S', 'A'].map((letter, index) => {
-              const color = [
-                'bg-[#007DC6]', // C - Blue
-                'bg-[#EDC531]', // L - Yellow
-                'bg-[#12881F]', // A - Green
-                'bg-[#A422D0]', // S - Purple
-                'bg-[#F29553]', // S - Orange
-                'bg-[#E75C5C]'  // A - Red
-              ][index];
-              
-              return (
-                <motion.button
-                  key={index}
-                  onClick={() => setActiveModule(activeModule === index ? 0 : index)}
-                  className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold ${
-                    activeModule === index 
-                      ? `text-white shadow-2xl ${color}`
-                      : 'bg-white text-gray-700 shadow-md hover:shadow-lg'
-                  }`}
-                  aria-label={`Show ${MODULES[index].title}`}
-                  whileHover={{
-                    scale: 1.1,
-                    y: -5,
-                    transition: { type: 'spring', stiffness: 400, damping: 10 }
-                  }}
-                  whileTap={{
-                    scale: 0.95,
-                    transition: { type: 'spring', stiffness: 400, damping: 20 }
-                  }}
-                  animate={{
-                    rotateY: activeModule === index ? 360 : 0,
-                    scale: activeModule === index ? 1.15 : 1,
-                    y: activeModule === index ? -8 : 0,
-                    boxShadow: activeModule === index 
-                      ? `0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)`
-                      : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                    transition: {
-                      type: 'spring',
-                      stiffness: 300,
-                      damping: 15,
-                      duration: 0.5
-                    }
-                  }}
-                >
-                  <motion.span
+      <section ref={modulesRef} aria-labelledby="modules" className="relative h-[300vh]">
+        <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+            <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 pt-35">Our Modules</h2>
+            
+            {/* CLASSA Buttons */}
+            <div className="flex justify-center space-x-2 md:space-x-4 mb-12 flex-wrap">
+              {['C', 'L', 'A', 'S', 'S', 'A'].map((letter, index) => {
+                const color = [
+                  'bg-[#007DC6]', // C - Blue
+                  'bg-[#EDC531]', // L - Yellow
+                  'bg-[#12881F]', // A - Green
+                  'bg-[#A422D0]', // S - Purple
+                  'bg-[#F29553]', // S - Orange
+                  'bg-[#E75C5C]'  // A - Red
+                ][index];
+                
+                return (
+                  <motion.button
+                    key={index}
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold ${
+                      activeModule === index 
+                        ? `text-white shadow-2xl ${color}`
+                        : 'bg-white text-gray-700 shadow-md hover:shadow-lg'
+                    }`}
+                    aria-label={`Show ${MODULES[index].title}`}
                     animate={{
-                      rotateX: activeModule === index ? 360 : 0,
-                      textShadow: activeModule === index 
-                        ? '0 0 10px rgba(255,255,255,0.8)' 
-                        : 'none'
-                    }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: 500,
-                      damping: 20
+                      scale: activeModule === index ? 1.15 : 1,
+                      y: activeModule === index ? -8 : 0,
+                      transition: {
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 15
+                      }
                     }}
                   >
-                    {letter}
-                  </motion.span>
-                </motion.button>
-              );
-            })}
-          </div>
+                    <motion.span>{letter}</motion.span>
+                  </motion.button>
+                );
+              })}
+            </div>
 
-          {/* Module Display */}
-          <div className="relative min-h-[500px]">
-            <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeModule}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: 0,
-                    transition: { 
-                      duration: 0.5,
-                      ease: [0.16, 1, 0.3, 1] 
-                    } 
-                  }}
-                  exit={{ 
-                    opacity: 0, 
-                    y: -20,
-                    transition: { 
-                      duration: 0.3,
-                      ease: [0.5, 0, 1, 1] 
-                    } 
-                  }}
-                  className="grid md:grid-cols-5 gap-8 py-6"
-                >
-                  <motion.div 
-                    className="md:col-span-3"
-                    initial={{ opacity: 0, x: -20 }}
+            {/* Module Display */}
+            <div className="relative min-h-[500px]">
+              <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeModule}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ 
                       opacity: 1, 
-                      x: 0,
+                      y: 0,
                       transition: { 
-                        delay: 0.1,
-                        duration: 0.6,
-                        ease: [0.22, 1, 0.36, 1]
+                        duration: 0.5,
+                        ease: [0.16, 1, 0.3, 1] 
                       } 
                     }}
-                  >
-                    <motion.h3 
-                      className="text-2xl font-bold text-gray-900 mb-4"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ 
-                        opacity: 1, 
-                        y: 0,
-                        transition: { 
-                          delay: 0.2,
-                          duration: 0.5
-                        } 
-                      }}
-                    >
-                      {MODULES[activeModule].title}
-                    </motion.h3>
-                    <motion.p 
-                      className="text-gray-600 mb-6"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ 
-                        opacity: 1, 
-                        y: 0,
-                        transition: { 
-                          delay: 0.25,
-                          duration: 0.5
-                        } 
-                      }}
-                    >
-                      {MODULES[activeModule].description}
-                    </motion.p>
-                    <motion.ul className="space-y-3">
-                      {MODULES[activeModule].bullets.map((bullet, idx) => (
-                        <motion.li 
-                          key={idx} 
-                          className="flex items-start gap-3 text-gray-700"
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ 
-                            opacity: 1, 
-                            x: 0,
-                            transition: { 
-                              delay: 0.3 + (idx * 0.08),
-                              duration: 0.5
-                            } 
-                          }}
-                        >
-                          <motion.span 
-                            className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${MODULES[activeModule].accent.dot} text-white shadow-sm`}
-                            initial={{ scale: 0 }}
-                            animate={{ 
-                              scale: 1,
-                              transition: { 
-                                delay: 0.35 + (idx * 0.08),
-                                type: 'spring',
-                                stiffness: 300,
-                                damping: 20
-                              } 
-                            }}
-                          >
-                            <Check size={14} strokeWidth={3} />
-                          </motion.span>
-                          <span>{bullet.text}</span>
-                        </motion.li>
-                      ))}
-                    </motion.ul>
-                  </motion.div>
-                  <motion.div 
-                    className="md:col-span-2 rounded-2xl overflow-hidden"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: 1,
+                    exit={{ 
+                      opacity: 0, 
+                      y: -20,
                       transition: { 
-                        delay: 0.15,
-                        duration: 0.7,
-                        ease: [0.16, 1, 0.3, 1]
+                        duration: 0.3,
+                        ease: [0.5, 0, 1, 1] 
                       } 
                     }}
+                    className="grid md:grid-cols-5 gap-8 py-6"
                   >
-                    <div className={`relative h-64 md:h-full overflow-hidden rounded-2xl ring-2 ${MODULES[activeModule].accent.ringSoft || MODULES[activeModule].accent.ring} bg-gradient-to-br ${MODULES[activeModule].accent.gradient}`}>
-                      <motion.img
-                        src={MODULES[activeModule].image.src}
-                        alt={MODULES[activeModule].image.alt}
-                        className="h-full w-full object-cover object-center"
-                        loading="lazy"
-                        initial={{ opacity: 0, scale: 1.1 }}
-                        animate={{ 
-                          opacity: 1, 
-                          scale: 1,
-                          transition: { 
-                            delay: 0.4,
-                            duration: 0.8,
-                            ease: [0.22, 1, 0.36, 1]
-                          } 
-                        }}
-                      />
+                    <motion.div className="md:col-span-3">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                        {MODULES[activeModule].title}
+                      </h3>
+                      <p className="text-gray-600 mb-6">
+                        {MODULES[activeModule].description}
+                      </p>
+                      <ul className="space-y-3">
+                        {MODULES[activeModule].bullets.map((bullet, idx) => (
+                          <li key={idx} className="flex items-start gap-3 text-gray-700">
+                            <span className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${MODULES[activeModule].accent.dot} text-white shadow-sm`}>
+                              <Check size={14} strokeWidth={3} />
+                            </span>
+                            <span>{bullet.text}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                    <div className="md:col-span-2 rounded-2xl overflow-hidden">
+                      <div className={`relative h-64 md:h-full overflow-hidden rounded-2xl ring-2 ${MODULES[activeModule].accent.ringSoft || MODULES[activeModule].accent.ring} bg-gradient-to-br ${MODULES[activeModule].accent.gradient}`}>
+                        <motion.img
+                          src={MODULES[activeModule].image.src}
+                          alt={MODULES[activeModule].image.alt}
+                          className="h-full w-full object-cover object-center"
+                          loading="lazy"
+                          initial={{ opacity: 0, scale: 1.1 }}
+                          animate={{ opacity: 1, scale: 1, transition: { delay: 0.2, duration: 0.6 } }}
+                        />
+                      </div>
                     </div>
                   </motion.div>
-                </motion.div>
-              </AnimatePresence>
+                </AnimatePresence>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Tailored for Every Role */}
-      <section aria-labelledby="roles" className="relative py-2 mt-4">
-        <div className="mx-auto px-4 lg:px-6 mb-24">
+      <section aria-labelledby="roles" className="relative py-2 mt-4 min-h-[80vh]">
+        <div className="mx-auto px-4 lg:px-6">
           <header className="max-w-3xl">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 ml-5">
               Tailored for Every Role
@@ -476,11 +384,11 @@ export default function ClassaPage() {
             })}
           </div>
 
-          <div className="mt-10 grid gap-10 lg:grid-cols-12">
+          <div className="mt-10 grid gap-10 lg:grid-cols-10">
             {/* Left: image with frosted glass content overlay (smaller) */}
-            <div className="relative lg:col-span-9 self-start" ref={imageAreaRef}>
+            <div className="relative lg:col-span-7 self-start mx-auto w-full max-w-4xl" ref={imageAreaRef}>
               <div className="relative overflow-hidden rounded-2xl ring-2 ring-sky-300 shadow-lg shadow-sky-100">
-                <div className="aspect-[16/9] w-full lg:aspect-auto lg:h-[420px]">
+                <div className="aspect-[16/9] w-full lg:aspect-auto lg:h-[380px]">
                   <AnimatePresence mode="wait">
                     <motion.img
                       key={currentIndex}
@@ -524,7 +432,7 @@ export default function ClassaPage() {
             </div>
 
             {/* Right: vertical tabs with straight labels (desktop) */}
-            <div className="lg:col-span-3 mb-24 hidden lg:flex lg:self-stretch lg:h-[420px]">
+            <div className="lg:col-span-3 mb-8 lg:mb-0 hidden lg:flex lg:self-stretch lg:h-[380px]">
               <div className="flex flex-col w-full h-full items-stretch justify-start divide-y divide-slate-200" role="tablist" aria-orientation="vertical" aria-label="Roles tabs (desktop)">
                 {ROLES.map((r, idx) => {
                   const isActive = activeRole === idx;
@@ -540,7 +448,7 @@ export default function ClassaPage() {
                       onKeyDown={(e) => handleKeyDown(e, idx, 'vertical', 'desktop')}
                       tabIndex={focusedIdx === idx ? 0 : -1}
                       ref={(el) => { desktopTabRefs.current[idx] = el; }}
-                      className={`relative group w-full border-l-4 border-transparent hover:border-sky-400 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50 px-8 py-6 text-left flex-1 flex transition-all duration-300 ease-out transform hover:scale-[1.02] hover:shadow-lg ${isActive ? 'border-l-sky-500 bg-gradient-to-r from-sky-100 to-blue-100 shadow-md scale-[1.01]' : 'hover:translate-x-1'}`}
+                      className={`relative group w-full border-l-4 border-transparent hover:border-sky-400 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50 px-6 py-4 text-left flex-1 flex transition-all duration-300 ease-out transform hover:scale-[1.02] hover:shadow-lg ${isActive ? 'border-l-sky-500 bg-gradient-to-r from-sky-100 to-blue-100 shadow-md scale-[1.01]' : 'hover:translate-x-1'}`}
                       title={r.title}
                     >
                       {/* Active indicator */}
@@ -553,9 +461,18 @@ export default function ClassaPage() {
                           {isActive ? (
                             <Minus className="text-sky-600 drop-shadow-sm" size={26} strokeWidth={2.5} />
                           ) : (
-                            <Plus className="text-slate-400 group-hover:text-sky-500 transition-colors duration-200" size={26} strokeWidth={2.5} />
+                            <div className="flex items-center gap-1">
+                              <Plus className="text-slate-400 group-hover:text-sky-500 transition-colors duration-200 flex-shrink-0" size={26} strokeWidth={2.5} />
+                              
+                            </div>
+                            
                           )}
                         </div>
+                        <>
+                          <span className="text-[10px] font-medium text-slate-400 group-hover:text-sky-500 transition-colors duration-200 writing-vertical-rl uppercase tracking-wider">
+                                Click me
+                          </span>
+                          </>
                       </span>
                     </button>
                   );
