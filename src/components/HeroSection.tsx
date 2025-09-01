@@ -15,7 +15,7 @@ import { useInView } from 'react-intersection-observer';
 
 
 
-function RotatingSpan({ text }: { text: string }) {
+function RotatingSpan({ text, color }: { text: string; color: string }) {
   
   return (
     <div className="relative h-20 overflow-hidden flex items-center">
@@ -32,7 +32,7 @@ function RotatingSpan({ text }: { text: string }) {
           {text.split('').map((char, index) => (
             <motion.span
               key={`${text}-${index}`}
-              className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 bg-clip-text text-transparent tracking-tight"
+              className={`inline-block bg-gradient-to-r ${color} bg-clip-text text-transparent tracking-tight`}
               initial={{
                 y: '100%',
                 opacity: 0,
@@ -215,10 +215,30 @@ const AnimatedFloatingButton = () => {
 
 function HomeContent() {
   const content = [
-    { text: "Adaptive Learning", image: '/image/A.jpg' },
-    { text: "Empowered Teaching", image: '/image/E.jpg' },
-    { text: "Intelligent Management", image: '/image/I.jpg' },
-    { text: "Seamless Administration", image: '/image/S.jpg' },
+    { 
+      text: "Adaptive Learning", 
+      image: '/image/A.jpg',
+      color: 'from-[#0ea5e9] to-[#0ea5e9]',
+      gradient: 'bg-gradient-to-r from-[#0ea5e9] to-[#0ea5e9]'
+    },
+    { 
+      text: "Empowered Teaching", 
+      image: '/image/E.jpg',
+      color: 'from-[#3b82f6] to-[#3b82f6]',
+      gradient: 'bg-gradient-to-r from-[#3b82f6] to-[#3b82f6]'
+    },
+    { 
+      text: "Intelligent Management", 
+      image: '/image/I.jpg',
+      color: 'from-[#6366f1] to-[#6366f1]',
+      gradient: 'bg-gradient-to-r from-[#6366f1] to-[#6366f1]'
+    },
+    { 
+      text: "Seamless Administration", 
+      image: '/image/S.jpg',
+      color: 'from-[#8b5cf6] to-[#8b5cf6]',
+      gradient: 'bg-gradient-to-r from-[#8b5cf6] to-[#8b5cf6]'
+    },
   ];
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -283,8 +303,7 @@ function HomeContent() {
             <h1 className="text-lg sm:text-2xl md:text-2xl lg:text-4xl font-bold leading-tight text-gray-900 -mt-15">
               <div className="flex flex-col items-start">
                 <span className="font-stretch-125 text-xl sm:text-2xl md:text-3xl lg:text-5xl">Empowering Institutions with</span>
-                <span className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl mt-2">
-                  <RotatingSpan text={content[activeIndex].text} />
+                <span className="text-4xl sm:text-5xl md:text-5xl lg:text-5xl mt-2 leading-tight">                  <RotatingSpan text={content[activeIndex].text} color={content[activeIndex].color} />
                 </span>
               </div>
             </h1>

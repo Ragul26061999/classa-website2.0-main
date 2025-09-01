@@ -537,12 +537,12 @@ export default function WhyChooseSection() {
       </motion.div>
 
       {/* content */}
-      <div className="grid grid-cols-12 items-start gap-10 mt-">
+      <div className="grid grid-cols-12 items-start gap-10 mt-16">
         <div className="col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 lg:self-start mt-16">
           <HeroVisual active={active} scheme={pastelSchemes[active]} />
         </div>
         <div className="col-span-6">
-          <div className="relative lg:min-h-[300vh]">
+          <div className="relative lg:min-h-[300vh] ">
             <FeatureCard index={0} icon={Brain} title="AI That Works for You" onInView={setActive} scheme={pastelSchemes[0]}>
               Adaptive learning paths, question generation, and feedback tuned to each learner — not just a chatbot.
             </FeatureCard>
