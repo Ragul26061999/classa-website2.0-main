@@ -9,10 +9,22 @@ interface FeatureCardProps {
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => (
-  <div className="flex-none w-80 p-6 bg-white rounded-lg shadow-lg flex flex-col items-center justify-center text-center mx-4">
-    <div className="text-4xl text-blue-600 mb-4">{icon}</div>
-    <h3 className="text-xl font-semibold text-gray-800 mb-2">{title}</h3>
-    <p className="text-gray-600">{description}</p>
+  <div className="flex-none w-80 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 flex flex-col items-center justify-center text-center mx-4 group">
+    <div className="relative mb-6">
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-300 blur-xl scale-150"></div>
+      <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-full border-2 border-blue-100 group-hover:border-blue-200 transition-all duration-300">
+        <div className="text-5xl text-blue-600 group-hover:scale-110 transition-transform duration-300">
+          {icon}
+        </div>
+      </div>
+    </div>
+    <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-3 group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">
+      {title}
+    </h3>
+    <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+      {description}
+    </p>
+    <div className="mt-4 w-16 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full group-hover:w-24 transition-all duration-300"></div>
   </div>
 );
 
@@ -112,9 +124,9 @@ const HomeContent: React.FC = () => {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+    <section className="py-2 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-gray-800 mb-4">
+        <h2 className="text-4xl font-bold text-center text-blue-800 mb-4">
           NextGen Learn: Shaping Future Education
         </h2>
         <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">

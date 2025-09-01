@@ -5,15 +5,8 @@ import { motion } from 'framer-motion';
 import FOG from 'vanta/dist/vanta.fog.min.js';
 import * as THREE from 'three';
 
-// Define the type for the Vanta.js effect
-type VantaEffect = {
-  destroy: () => void;
-  setOptions: (options: { [key: string]: any }) => void;
-  [key: string]: any;
-};
-
 const HeroSection = () => {
-  const [vantaEffect, setVantaEffect] = useState<{ destroy: () => void; setOptions: (options: { [key: string]: any }) => void } | null>(null);
+  const [vantaEffect, setVantaEffect] = useState<any>(null);
   const vantaRef = useRef<HTMLDivElement>(null);
 
 
@@ -28,13 +21,13 @@ const HeroSection = () => {
         gyroControls: false,
         minHeight: 200.00,
         minWidth: 200.00,
-        highlightColor: 0xFFFFFF,  // White
-        midtoneColor: 0x818cf8,   // Very light blue (almost white)
-        lowlightColor: 0xd8b4fe,  // Light blue
-        baseColor: 0xFFFFFF,      // White      
+        highlightColor: 0xf5f5f4,  // White
+        midtoneColor: 0xc7d2fe,   // Very light blue (almost white)
+        lowlightColor: 0xc4b5fd,  // Light blue
+        baseColor: 0xf5f5f4,      // White      
         blurFactor: 0.80,
-        speed: 1.50,
-        zoom: 0.85
+        speed: 2,
+        zoom: 1
       });
       setVantaEffect(effect);
     }

@@ -49,7 +49,7 @@ export default function Navbar() {
         {/* Left: Logo + brand */}
         <Link href="/#home" className="flex items-center gap-3 -ml-20">
           <Image
-            src="image/Classa logo.png"
+            src="/image/classa logo.png"
             alt="CLASSA logo"
             width={160}
             height={160}
@@ -60,11 +60,11 @@ export default function Navbar() {
 
         {/* Center: Nav links */}
         <nav className="hidden gap-8 md:flex py-2">
-          <Link href="/" className={navLinkClass("/")}>Home</Link>
-          <Link href="/about" className={navLinkClass("/about")}>
+          <Link href="/" className={`${navLinkClass("/")} text-lg`}>Home</Link>
+          <Link href="/about" className={`${navLinkClass("/about")} text-lg`}>
             About Us
           </Link>
-          <Link href="/classa" className={navLinkClass("/classa")}>
+          <Link href="/classa" className={`${navLinkClass("/classa")} text-lg`}>
             Unified Platform
           </Link>
         </nav>

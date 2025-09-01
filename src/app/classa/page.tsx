@@ -23,7 +23,7 @@ type Bullet = { text: string; colorClass: string };
 // Role-specific images for the sticky left panel
 const ROLE_IMAGES: { src: string; alt: string }[] = [
   {
-    src: "/Principal.png",
+    src: "/image/principle.png",
     alt: "Open office with meeting rooms representing administration and planning",
   },
   {
@@ -344,13 +344,13 @@ export default function ClassaPage() {
       {/* Tailored for Every Role */}
       <section aria-labelledby="roles" className="relative py-2 mt-4 min-h-[80vh]">
         <div className="mx-auto px-4 lg:px-6">
-          <header className="max-w-3xl">
+          <header className="max-w-6xl">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 ml-5">
               Tailored for Every Role
               <span className="block font-normal">in Your Institution</span>
             </h2>
             <p className="mt-3 text-slate-600 text-sm md:text-base">
-              <span className="text-sky-600 font-semibold">CLASSA</span> offers specialized features for each member of your educational community—streamlining collaboration and boosting productivity.
+              <span className="text-sky-600 font-semibold ml-5">CLASSA</span> offers specialized features for each member of your educational community—streamlining collaboration and boosting productivity.
             </p>
           </header>
 

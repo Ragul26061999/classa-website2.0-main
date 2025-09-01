@@ -28,7 +28,7 @@ import Folder from './Folder';
 import CardSwap, { Card } from './CardSwap';
 import Link from 'next/link';
 
-import MeetTheTeam from './MeetTheTeam';
+// import MeetTheTeam from './MeetTheTeam';
 
 const AboutUs = () => {
   // Pastel glass palette helpers
@@ -164,7 +164,7 @@ const AboutUs = () => {
                 transition={{ duration: 0.7, delay: 0.15 }}
                 className="mt-6 text-[1.05rem] text-gray-600 leading-relaxed"
               >
-                CLASSA is a next-generation education technology platform designed to
+                CLASSA is a Next-Generation education technology platform designed to
                 streamline academic delivery, student support, and school management with one unified AI-driven system.
               </motion.p>
             </div>
@@ -435,7 +435,7 @@ const AboutUs = () => {
         </section>
 
         {/* ===== MEET THE TEAM ===== */}
-        <MeetTheTeam />
+        {/* <MeetTheTeam /> */}
 
         {/* Feature Detail Modal */}
         <AnimatePresence>
