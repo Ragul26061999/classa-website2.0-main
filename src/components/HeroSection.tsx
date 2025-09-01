@@ -215,10 +215,10 @@ const AnimatedFloatingButton = () => {
 
 function HomeContent() {
   const content = [
-    { text: "Adaptive Learning", image: '/image/Adaptive.jpg' },
-    { text: "Empowered Teaching", image: '/image/Empowered.jpg' },
-    { text: "Intelligent Management", image: '/image/Intelligent.jpg' },
-    { text: "Seamless Administration", image: '/image/Seamless.jpg' },
+    { text: "Adaptive Learning", image: '/image/A.jpg' },
+    { text: "Empowered Teaching", image: '/image/E.jpg' },
+    { text: "Intelligent Management", image: '/image/I.jpg' },
+    { text: "Seamless Administration", image: '/image/S.jpg' },
   ];
   const [activeIndex, setActiveIndex] = useState(0);
 
