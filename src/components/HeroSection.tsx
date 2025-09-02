@@ -217,25 +217,25 @@ function HomeContent() {
   const content = [
     { 
       text: "Adaptive Learning", 
-      image: '/image/A1.jpeg',
+      image: '/image/Adaptive.jpg',
       color: 'from-[#0ea5e9] to-[#0ea5e9]',
       gradient: 'bg-gradient-to-r from-[#0ea5e9] to-[#0ea5e9]'
     },
     { 
       text: "Empowered Teaching", 
-      image: '/image/E1.jpeg',
+      image: '/image/Empowered.jpg',
       color: 'from-[#3b82f6] to-[#3b82f6]',
       gradient: 'bg-gradient-to-r from-[#3b82f6] to-[#3b82f6]'
     },
     { 
       text: "Intelligent Management", 
-      image: '/image/I1.jpeg',
+      image: '/image/Intelligent.jpg',
       color: 'from-[#6366f1] to-[#6366f1]',
       gradient: 'bg-gradient-to-r from-[#6366f1] to-[#6366f1]'
     },
     { 
       text: "Seamless Administration", 
-      image: '/image/S1.jpeg',
+      image: '/image/Seamless.jpg',
       color: 'from-[#8b5cf6] to-[#8b5cf6]',
       gradient: 'bg-gradient-to-r from-[#8b5cf6] to-[#8b5cf6]'
     },
