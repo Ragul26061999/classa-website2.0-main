@@ -234,6 +234,43 @@ const AboutUs = () => {
           </div>
         </section>
 
+        {/* ===== NEW SECTION ===== */}
+        <section className="relative py-16 px-6 bg-gray-50">
+          <div className="max-w-7xl mx-auto text-center">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7 }}
+              viewport={{ once: true }}
+              className="text-3xl md:text-4xl font-bold text-[#1E2D3D] mb-6"
+            >
+              Our Commitment to Excellence
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              viewport={{ once: true }}
+              className="text-[1.05rem] text-gray-600 leading-relaxed max-w-3xl mx-auto mb-10"
+            >
+              At CLASSA, we are dedicated to continuously improving our platform and services to meet the evolving needs of educators and students. Our commitment to innovation ensures that we provide the most effective and engaging learning experience possible.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <Link
+                href="/contact"
+                className="rounded-xl bg-sky-600 px-8 py-4 text-lg font-semibold text-white shadow-md hover:bg-sky-700 transition-all duration-300"
+              >
+                Get in Touch
+              </Link>
+            </motion.div>
+          </div>
+        </section>
+
         {/* ===== VISION + MISSION ===== */}
         <section className="relative py-16 px-6 ">
           <motion.h2
@@ -265,7 +302,7 @@ const AboutUs = () => {
                       className="object-cover"
                     />
                   </div>
-                  <div>
+                  <div className="border border-blue-500 rounded-xl transition-all duration-300 ease-in-out hover:border-sky-400 hover:shadow-lg hover:shadow-blue-500 hover:scale-105 p-4">
                     <div className="mb-3 flex items-center gap-2">
                       <Eye className="h-5 w-5 text-sky-600" />
                       <h3 className="text-2xl font-semibold text-sky-600">Vision</h3>
@@ -286,7 +323,7 @@ const AboutUs = () => {
                       className="object-cover"
                     />
                   </div>
-                  <div>
+                  <div className="border border-blue-500 rounded-xl transition-all duration-300 ease-in-out hover:border-sky-400 hover:shadow-lg hover:shadow-blue-500 hover:scale-105 p-4">
                     <div className="mb-3 flex items-center gap-2">
                       <BadgeCheck className="h-5 w-5 text-sky-600" />
                       <h3 className="text-2xl font-semibold text-sky-600">Mission</h3>
@@ -340,7 +377,6 @@ const AboutUs = () => {
                     animate={{ opacity: 1 }}
                     whileHover={{
                       scale: 1.05,
-                      x: 4,
                       transition: { type: 'spring', stiffness: 400, damping: 10 }
                     }}
                   >
@@ -359,6 +395,9 @@ const AboutUs = () => {
                       >
                         →
                       </motion.span>
+                    </div>
+                    <div className="absolute inset-0 flex items-center justify-center bg-sky-600/90 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center p-4">
+                      <p className="text-sm text-white">{description}</p>
                     </div>
                   </motion.div>
                 </React.Fragment>

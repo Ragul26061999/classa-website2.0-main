@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaWhatsapp, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 export default function Footer() {
   return (
@@ -22,6 +23,12 @@ export default function Footer() {
             </div>
             <p className="mt-5 max-w-xl text-white/90">
             Modular , Scalable , intelligent</p>
+            <div className="flex space-x-4 mt-6">
+              <a href="#" className="text-white/80 hover:text-white transition-colors duration-300"><FaWhatsapp size={24} /></a>
+              <a href="#" className="text-white/80 hover:text-white transition-colors duration-300"><FaInstagram size={24} /></a>
+              <a href="#" className="text-white/80 hover:text-white transition-colors duration-300"><FaLinkedin size={24} /></a>
+              <a href="#" className="text-white/80 hover:text-white transition-colors duration-300"><FaTwitter size={24} /></a>
+            </div>
           </div>
 
           {/* Pages */}

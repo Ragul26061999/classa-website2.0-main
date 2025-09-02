@@ -43,7 +43,7 @@ const ROLE_IMAGES: { src: string; alt: string }[] = [
 // CLASSA Educational Management Systems
 const MODULES: Module[] = [
   {
-    title: <span className="bg-[#007DC6] text-white px-2 py-1 rounded-md">Content Management System</span>,
+    title: <span className="bg-whitle text-[#007DC6] px-2 py-1 rounded-md">Content Management System</span>,
     description: "Upload, organize, and distribute lesson plans, videos, and notes → Teachers can seamlessly share learning materials in one centralized platform.",
     bullets: [
       { text: "Enable subject/class-specific content access with role-based permissions → Only the right students and staff see the right content at the right time.", colorClass: "bg-[#3B82F6]" },
@@ -58,7 +58,7 @@ const MODULES: Module[] = [
     accent: { ring: "ring-[#007DC6]", ringSoft: "ring-[#007DC6]/70", dot: "bg-[#007DC6]", gradient: "from-blue-50 to-sky-50" }
   },
   {
-    title: <span className="bg-[#EDC531] text-white px-2 py-1 rounded-md">Learning Management System</span>,
+    title: <span className="bg-white text-[#EDC531] px-2 py-1 rounded-md">Learning Management System</span>,
     description: "Auto-generate class schedules and timetables → Saves time by creating optimized timetables instantly.",
     bullets: [
       { text: "Assign, evaluate, and track student tasks → Teachers can manage homework and assignments with real-time progress tracking.", colorClass: "bg-[#EDC531]" },
@@ -73,7 +73,7 @@ const MODULES: Module[] = [
     accent: { ring: "ring-[#EDC531]", ringSoft: "ring-[#EDC531]/70", dot: "bg-[#EDC531]", gradient: "from-yellow-50 to-amber-50" }
   },
   {
-    title: <span className="bg-[#12881F] text-white px-2 py-1 rounded-md">Assessment Management System</span>,
+    title: <span className="bg-white text-[#12881F] px-2 py-1 rounded-md">Assessment Management System</span>,
     description: "Design AI-supported or manual evaluations → Teachers can create tests quickly with AI assistance or set them manually.",
     bullets: [
       { text: "Tag questions by Bloom’s taxonomy and difficulty level → Assessments are structured for deeper learning and progressive challenge.", colorClass: "bg-[#12881F]" },
@@ -88,7 +88,7 @@ const MODULES: Module[] = [
     accent: { ring: "ring-[#12881F]", ringSoft: "ring-[#12881F]/70", dot: "bg-[#12881F]", gradient: "from-emerald-50 to-green-50" }
   },
   {
-    title: <span className="bg-[#A422D0] text-white px-2 py-1 rounded-md">SenseAI – Learning Intelligence</span>,
+    title: <span className="bg-white text-[#A422D0] px-2 py-1 rounded-md">SenseAI – Learning Intelligence</span>,
     description: "AI that adapts to each learner and gives teachers superpowers.",
     bullets: [
       { text: "Adaptive learning paths", colorClass: "bg-[#A422D0]" },
@@ -103,7 +103,7 @@ const MODULES: Module[] = [
     accent: { ring: "ring-[#A422D0]", ringSoft: "ring-[#A422D0]/70", dot: "bg-[#A422D0]", gradient: "from-purple-50 to-fuchsia-50" }
   },
   {
-    title: <span className="bg-[#F29553] text-white px-2 py-1 rounded-md">School Management System</span>,
+    title: <span className="bg-white text-[#F29553] px-2 py-1 rounded-md">School Management System</span>,
     description: "Manage admissions, fees, transport, and staff records → Automates core administrative processes for efficiency.",
     bullets: [
       { text: "Integrate RFID or biometric attendance tracking → Ensures accurate, real-time student and staff presence records.", colorClass: "bg-[#F29553]" },
@@ -118,7 +118,7 @@ const MODULES: Module[] = [
     accent: { ring: "ring-[#F29553]", ringSoft: "ring-[#F29553]/70", dot: "bg-[#F29553]", gradient: "from-orange-50 to-amber-50" }
   },
   {
-    title: <span className="bg-[#E75C5C] text-white px-2 py-1 rounded-md">Admission Management System</span>,
+    title: <span className="bg-white text-[#E75C5C] px-2 py-1 rounded-md">Admission Management System</span>,
     description: "Enable online applications with document uploads → Simplifies admissions by moving the entire process online.",
     bullets: [
       { text: "Track applicant status and communication in real-time → Keeps parents and schools updated at every step of the process.", colorClass: "bg-[#E75C5C]" },
@@ -137,7 +137,7 @@ const MODULES: Module[] = [
  const ROLES: { icon: string; title: string; text: string }[] = [
   {
     icon: "🧑‍💼",
-    title: "🧑‍💼 Principals & Admins",
+    title: "🧑 Leadership",
     text:
       "Comprehensive dashboards consolidate critical data into accessible insights, while robust analytics tools deliver real-time performance trends for optimized resource allocation and strategic decision-making.",
   },
@@ -149,7 +149,7 @@ const MODULES: Module[] = [
   },
   {
     icon: "🧑‍🎓",
-    title: "🧑‍🎓 Students",
+    title: "🧑 Students",
     text:
       "Personalized learning journeys adapt to individual styles and pace, supported by interactive tools like flashcards, summaries, mnemonics, and quizzes—plus immediate feedback to highlight strengths.",
   },
@@ -161,7 +161,7 @@ const MODULES: Module[] = [
   },
 ];
 
-export default function ClassaPage() {
+function ClassaPage() {
   const [activeRole, setActiveRole] = useState(-1);
   const [activeModule, setActiveModule] = useState<number>(0);
   const modulesRef = useRef<HTMLDivElement>(null);
@@ -305,7 +305,36 @@ export default function ClassaPage() {
                     }}
                     className="grid md:grid-cols-5 gap-8 py-6"
                   >
-                    <motion.div className="md:col-span-3">
+                    <motion.div 
+                      className="md:col-span-3 rounded-lg p-6 relative overflow-hidden group"
+                      style={{
+                        border: `2px solid ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}`,
+                        boxShadow: `0 0 0 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}20`
+                      }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ 
+                        opacity: 1, 
+                        y: 0,
+                        boxShadow: `0 0 20px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}40`,
+                        transition: { 
+                          duration: 0.5,
+                          ease: [0.16, 1, 0.3, 1] 
+                        } 
+                      }}
+                      whileHover={{
+                        boxShadow: `0 0 30px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}60`,
+                        transition: { duration: 0.3 }
+                      }}
+                    >
+                      <div className="absolute inset-0 overflow-hidden">
+                        <div 
+                          className="absolute inset-0 opacity-30 transition-opacity duration-500"
+                          style={{
+                            background: `linear-gradient(90deg, transparent, ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}, transparent)`,
+                            animation: 'shimmer 3s infinite',
+                          }}
+                        />
+                      </div>
                       <h3 className="text-2xl font-bold text-gray-900 mb-4">
                         {MODULES[activeModule].title}
                       </h3>
@@ -336,9 +365,10 @@ export default function ClassaPage() {
                     </div>
                   </motion.div>
                 </AnimatePresence>
+              </div>
             </div>
           </div>
-        </div>
+        {/* </div> */}
       </section>
 
       {/* Tailored for Every Role */}
@@ -430,7 +460,7 @@ export default function ClassaPage() {
             </div>
 
             {/* Right: vertical tabs with straight labels (desktop) */}
-            <div className="lg:col-span-3 mb-8 lg:mb-0 hidden lg:flex lg:self-stretch lg:h-[380px]">
+            <div className="lg:col-span-3 mb-8 lg:mb-0 hidden lg:flex lg:self-stretch lg:h-[380px] items-stretch">
               <div className="flex flex-col w-full h-full items-stretch justify-start divide-y divide-slate-200" role="tablist" aria-orientation="vertical" aria-label="Roles tabs (desktop)">
                 {ROLES.map((r, idx) => {
                   const isActive = activeRole === idx;
@@ -453,9 +483,9 @@ export default function ClassaPage() {
                       {isActive && (
                         <span className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-sky-400 to-sky-600 rounded-r-full shadow-sm" />
                       )}
-                      <span className="flex items-center justify-between gap-4 w-full relative z-10">
+                      <span className="flex items-center justify-between w-full relative z-10">
                         <span className={`text-lg font-semibold tracking-tight transition-colors duration-200 ${isActive ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'}`}>{r.title}</span>
-                        <div className={`transition-all duration-300 ease-out ${isActive ? 'rotate-180 scale-110' : 'group-hover:scale-110 group-hover:rotate-90'}`}>
+                        <div className={`transition-all duration-300 ease-out flex-shrink-0 ${isActive ? 'rotate-180 scale-110' : 'group-hover:scale-110 group-hover:rotate-90'}`}>
                           {isActive ? (
                             <Minus className="text-sky-600 drop-shadow-sm" size={26} strokeWidth={2.5} />
                           ) : (
@@ -486,3 +516,5 @@ export default function ClassaPage() {
 }
 
 // (Removed old RoleCard component in favor of the new, image+list layout)
+
+export default ClassaPage;

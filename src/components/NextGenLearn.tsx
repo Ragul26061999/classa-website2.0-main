@@ -6,128 +6,220 @@ interface FeatureCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
+  color: {
+    icon: string;
+    gradientFrom: string;
+    gradientTo: string;
+    border: string;
+  };
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => (
-  <div className="flex-none w-80 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 flex flex-col items-center justify-center text-center mx-4 group">
+const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, color }) => (
+  <div className="flex-none w-80 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 flex flex-col items-center justify-center text-center mx-4 group relative">
+    <div className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r ${color.gradientFrom} ${color.gradientTo} rounded-full flex items-center justify-center shadow-md`}>
+      <div className={`w-4 h-4 ${color.icon.replace('text-', 'bg-')} rounded-full`}></div>
+    </div>
     <div className="relative mb-6">
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-300 blur-xl scale-150"></div>
-      <div className="relative bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-full border-2 border-blue-100 group-hover:border-blue-200 transition-all duration-300">
-        <div className="text-5xl text-blue-600 group-hover:scale-110 transition-transform duration-300">
+      <div className={`absolute inset-0 bg-gradient-to-r ${color.gradientFrom} ${color.gradientTo} rounded-full opacity-10 group-hover:opacity-20 transition-opacity duration-300 blur-xl scale-150`}></div>
+      <div className={`relative bg-gradient-to-br ${color.gradientFrom.replace('500', '50')} ${color.gradientTo.replace('600', '100')} p-6 rounded-full border-2 ${color.border} group-hover:${color.border.replace('100', '200')} transition-all duration-300`}>
+        <div className={`text-5xl ${color.icon} group-hover:scale-110 transition-transform duration-300`}>
           {icon}
         </div>
       </div>
     </div>
-    <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-3 group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300">
+    <h3 className={`text-2xl font-bold bg-gradient-to-r ${color.gradientFrom} ${color.gradientTo} bg-clip-text text-transparent mb-3 group-hover:opacity-90 transition-all duration-300`}>
       {title}
     </h3>
     <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
       {description}
     </p>
-    <div className="mt-4 w-16 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full group-hover:w-24 transition-all duration-300"></div>
+    <div className={`mt-4 w-16 h-1 bg-gradient-to-r ${color.gradientFrom} ${color.gradientTo} rounded-full group-hover:w-24 transition-all duration-300`}></div>
   </div>
 );
 
-const HomeContent: React.FC = () => {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollIntervalRef = useRef<NodeJS.Timeout | null>(null);
+ const HomeContent: React.FC = () => {
+   const scrollRef = useRef<HTMLDivElement>(null);
+   const scrollIntervalRef = useRef<number | null>(null);
 
-  const features = [
+   const features = [
     {
       title: 'Online Classes',
       description: 'Engage in live, interactive online classes with expert instructors.',
       icon: <MonitorPlay size={40} />,
+      color: {
+        icon: 'text-blue-500',
+        gradientFrom: 'from-blue-500',
+        gradientTo: 'to-blue-600',
+        border: 'border-blue-100'
+      }
     },
     {
       title: 'Mentorship & Guidance',
       description: 'Receive personalized guidance and support from experienced mentors.',
       icon: <Users size={40} />,
+      color: {
+        icon: 'text-purple-500',
+        gradientFrom: 'from-purple-500',
+        gradientTo: 'to-purple-600',
+        border: 'border-purple-100'
+      }
     },
     {
       title: 'Digital Study Materials',
       description: 'Access a vast library of digital textbooks, notes, and practice questions.',
       icon: <BookOpen size={40} />,
+      color: {
+        icon: 'text-green-500',
+        gradientFrom: 'from-green-500',
+        gradientTo: 'to-green-600',
+        border: 'border-green-100'
+      }
     },
     {
       title: 'Career Guidance',
       description: 'Get expert advice and resources to help shape your future career path.',
       icon: <GraduationCap size={40} />,
+      color: {
+        icon: 'text-yellow-500',
+        gradientFrom: 'from-yellow-500',
+        gradientTo: 'to-yellow-600',
+        border: 'border-yellow-100'
+      }
     },
     {
       title: 'Tests & Assessments',
       description: 'Regular tests and assessments to track progress and identify areas for improvement.',
       icon: <BarChart3 size={40} />,
+      color: {
+        icon: 'text-pink-500',
+        gradientFrom: 'from-pink-500',
+        gradientTo: 'to-pink-600',
+        border: 'border-pink-100'
+      }
     },
     {
       title: 'Parent–Teacher Connect',
       description: 'Seamless communication channel for parents and teachers to collaborate on student progress.',
       icon: <Handshake size={40} />,
+      color: {
+        icon: 'text-indigo-500',
+        gradientFrom: 'from-indigo-500',
+        gradientTo: 'to-indigo-600',
+        border: 'border-indigo-100'
+      }
     },
     {
       title: 'Flexible Learning Platform',
       description: 'Learn anytime, anywhere with our adaptable and user-friendly online platform.',
       icon: <Computer size={40} />,
+      color: {
+        icon: 'text-red-500',
+        gradientFrom: 'from-red-500',
+        gradientTo: 'to-red-600',
+        border: 'border-red-100'
+      }
     },
     {
       title: 'Peer Learning & Community',
       description: 'Collaborate with peers, share knowledge, and grow together in a supportive community.',
       icon: <MessageSquare size={40} />,
+      color: {
+        icon: 'text-cyan-500',
+        gradientFrom: 'from-cyan-500',
+        gradientTo: 'to-cyan-600',
+        border: 'border-cyan-100'
+      }
     },
   ];
 
-  useEffect(() => {
-    scrollIntervalRef.current = setInterval(() => {
-      if (scrollRef.current) {
-        const { scrollWidth, clientWidth, scrollLeft } = scrollRef.current;
-        const maxScrollLeft = scrollWidth - clientWidth;
-        if (scrollLeft >= maxScrollLeft) {
-          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          scrollRef.current.scrollBy({ left: 1, behavior: 'smooth' });
-        }
-        setScrollPosition(scrollRef.current.scrollLeft);
-      }
-    }, 20);
-    return () => {
-      if (scrollIntervalRef.current) clearInterval(scrollIntervalRef.current);
-    };
-  }, []);
+   const displayedFeatures = [...features, ...features];
 
-  const handleScroll = (direction: 'left' | 'right') => {
-    if (scrollIntervalRef.current) clearInterval(scrollIntervalRef.current);
-    scrollIntervalRef.current = null;
-    if (scrollRef.current) {
-      const scrollAmount = 300;
-      if (direction === 'left') {
-        scrollRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-      } else {
-        scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+   useEffect(() => {
+     const scrollElement = scrollRef.current;
+     if (!scrollElement) return;
+
+     const autoScroll = () => {
+       if (scrollElement) {
+         const { scrollWidth, clientWidth, scrollLeft } = scrollElement;
+         const cardWidth = 352; // Approximate width of a single card
+         const singleSetWidth = features.length * cardWidth;
+
+         if (scrollLeft >= singleSetWidth) {
+           scrollElement.scrollLeft = 0;
+         } else {
+           scrollElement.scrollLeft += 1;
+         }
+       }
+       scrollIntervalRef.current = requestAnimationFrame(autoScroll);
+     };
+
+     scrollIntervalRef.current = requestAnimationFrame(autoScroll);
+
+     return () => {
+       if (scrollIntervalRef.current) {
+         cancelAnimationFrame(scrollIntervalRef.current as any);
+       }
+     };
+   }, []);
+
+   const handleScroll = (direction: 'left' | 'right') => {
+    const scrollElement = scrollRef.current;
+    if (!scrollElement) return;
+
+    // Temporarily stop auto-scroll
+    if (scrollIntervalRef.current) {
+      cancelAnimationFrame(scrollIntervalRef.current as any);
+      scrollIntervalRef.current = null;
+    }
+
+    const cardWidth = 352; // Approximate width of a single card (w-80 + mx-4*2 = 320 + 16*2 = 352)
+    const currentScroll = scrollElement.scrollLeft;
+    const singleSetWidth = features.length * cardWidth;
+
+    let targetScroll = currentScroll;
+    if (direction === 'left') {
+      targetScroll = currentScroll - cardWidth;
+      if (targetScroll < 0) {
+        // If scrolling left from the beginning of the first set, jump to the end of the duplicated set
+        targetScroll = singleSetWidth + targetScroll; 
+      }
+    } else {
+      targetScroll = currentScroll + cardWidth;
+      if (targetScroll >= singleSetWidth * 2) { 
+        // If scrolled past the end of the second set, wrap around to the beginning of the second set
+        targetScroll = targetScroll - singleSetWidth; 
       }
     }
-    // Always restart auto-scroll after short delay
+
+    scrollElement.scrollTo({ left: targetScroll, behavior: 'smooth' });
+
+    // Restart auto-scroll after a short delay
     setTimeout(() => {
-      if (scrollIntervalRef.current) clearInterval(scrollIntervalRef.current);
-      scrollIntervalRef.current = setInterval(() => {
-        if (scrollRef.current) {
-          const { scrollWidth, clientWidth, scrollLeft } = scrollRef.current;
-          const maxScrollLeft = scrollWidth - clientWidth;
-          if (scrollLeft >= maxScrollLeft) {
-            scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-          } else {
-            scrollRef.current.scrollBy({ left: 1, behavior: 'smooth' });
+      if (scrollRef.current) {
+        const autoScroll = () => {
+          if (scrollRef.current) {
+            const { scrollWidth, clientWidth, scrollLeft } = scrollRef.current;
+            const singleSetWidth = features.length * cardWidth;
+
+            if (scrollLeft >= singleSetWidth) {
+              scrollRef.current.scrollLeft = 0;
+            } else {
+              scrollRef.current.scrollLeft += 1;
+            }
+            // Removed setScrollPosition(scrollRef.current.scrollLeft);
           }
-          setScrollPosition(scrollRef.current.scrollLeft);
-        }
-      }, 20);
+          scrollIntervalRef.current = requestAnimationFrame(autoScroll);
+        };
+        scrollIntervalRef.current = requestAnimationFrame(autoScroll);
+      }
     }, 500);
   };
 
   return (
     <section className="py-2 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-blue-800 mb-4">
-          NextGen Learn: Shaping Future Education
+        <h2 className="text-4xl font-bold text-center mb-4">
+          <span style={{ color: '#007DC6' }}>NextGen Learn:</span> <span className="text-black">Shaping Future Education</span>
         </h2>
         <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
           Discover how our innovative features are transforming the learning experience for students and educators alike.
@@ -138,12 +230,8 @@ const HomeContent: React.FC = () => {
             ref={scrollRef}
             className="flex overflow-x-auto py-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {features.map((feature, index) => (
-              <FeatureCard key={index} {...feature} />
-            ))}
-            {/* Duplicate cards for continuous scroll effect */}
-            {features.map((feature, index) => (
-              <FeatureCard key={`duplicate-${index}`} {...feature} />
+            {displayedFeatures.map((feature, index) => (
+              <FeatureCard key={index} {...feature} color={feature.color} />
             ))}
           </div>
 

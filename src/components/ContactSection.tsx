@@ -67,8 +67,8 @@ export default function ContactSection() {
                   title="Visit us at:"
                   value={
                     <>
-                      <p>Techmatrix AI Pvt Ltd</p>
-                      <p className="text-sm text-zinc-600">173, Nanjundapuram Road</p>
+                      <p>Techmatrix AI Private Limited</p>
+                      <p className="text-sm text-zinc-600">169, Nanjundapuram Road</p>
                       <p className="text-sm text-zinc-600">Ramanathapuram,</p>
                       <p className="text-sm text-zinc-600">Coimbatore-641045</p>
                       <p className="text-sm text-zinc-600">Tamil Nadu, India</p>
