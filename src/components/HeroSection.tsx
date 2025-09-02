@@ -217,25 +217,25 @@ function HomeContent() {
   const content = [
     { 
       text: "Adaptive Learning", 
-      image: '/image/A.jpg',
+      image: '/image/A1.jpeg',
       color: 'from-[#0ea5e9] to-[#0ea5e9]',
       gradient: 'bg-gradient-to-r from-[#0ea5e9] to-[#0ea5e9]'
     },
     { 
       text: "Empowered Teaching", 
-      image: '/image/E.jpg',
+      image: '/image/E1.jpeg',
       color: 'from-[#3b82f6] to-[#3b82f6]',
       gradient: 'bg-gradient-to-r from-[#3b82f6] to-[#3b82f6]'
     },
     { 
       text: "Intelligent Management", 
-      image: '/image/I.jpg',
+      image: '/image/I1.jpeg',
       color: 'from-[#6366f1] to-[#6366f1]',
       gradient: 'bg-gradient-to-r from-[#6366f1] to-[#6366f1]'
     },
     { 
       text: "Seamless Administration", 
-      image: '/image/S.jpg',
+      image: '/image/S1.jpeg',
       color: 'from-[#8b5cf6] to-[#8b5cf6]',
       gradient: 'bg-gradient-to-r from-[#8b5cf6] to-[#8b5cf6]'
     },
@@ -295,7 +295,7 @@ function HomeContent() {
       {/* Hero Section */}
       <main className="flex flex-1 flex-col-reverse lg:flex-row items-center justify-start max-w-7xl mx-auto w-full px-6 md:px-8 py-8 lg:py-12 gap-12 lg:gap-8 relative z-10 ml-5">
         {/* Left Side */}
-        <div className="flex-1 flex flex-col items-start justify-center w-full max-w-4xl">
+        <div className="relative flex-1 flex flex-col items-start justify-center w-full max-w-4xl p-8 rounded-2xl bg-white/5 backdrop-blur-md border border-blue-400/40 shadow-xl">
           <div className="mb-6 ">
             <span className="inline-block text-blue-400 text-3xl mr-2 align-middle animate-pulse -mt-25">✦</span>
           </div>

@@ -1,7 +1,10 @@
 import React from 'react';
 import Head from 'next/head';
+import { Inter } from 'next/font/google';
 
-const AnimatedRocketHero = () => {
+const inter = Inter({ subsets: ['latin'] });
+
+const AnimatedRocketHero: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Head>
@@ -11,14 +14,18 @@ const AnimatedRocketHero = () => {
       </Head>
 
       <style jsx global>{`
+        /* Custom animation for the paper plane for smoother looping */
         #paper-plane-group,
         #paper-plane-group-2,
         #paper-plane-group-3 {
+          /* The SVG path starts at x=-50. We initially position the plane there. */
           transform: translateX(-50px);
         }
       `}</style>
 
+      {/* Hero Section */}
       <header className="relative bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden w-full min-h-screen flex items-center justify-center p-6">
+        {/* Background SVG Animation */}
         <div className="absolute inset-0 z-0 opacity-70">
           <svg width="100%" height="100%" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice">
             {/* Plane 1: Original Path & Trail */}
@@ -217,6 +224,7 @@ const AnimatedRocketHero = () => {
           </svg>
         </div>
 
+        {/* Content */}
         <div className="relative z-10 text-center max-w-2xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-800 leading-tight mb-4">
             Propel Your Ideas Forward

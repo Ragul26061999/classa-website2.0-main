@@ -137,7 +137,7 @@ const MODULES: Module[] = [
  const ROLES: { icon: string; title: string; text: string }[] = [
   {
     icon: "🧑‍💼",
-    title: "🧑 Leadership",
+    title: "🧑‍💼Leader",
     text:
       "Comprehensive dashboards consolidate critical data into accessible insights, while robust analytics tools deliver real-time performance trends for optimized resource allocation and strategic decision-making.",
   },
@@ -155,7 +155,7 @@ const MODULES: Module[] = [
   },
   {
     icon: "👨‍👩‍👧",
-    title: "👨‍👩‍👧 Parents",
+    title: "👨‍👩 Parents",
     text:
       "Clear, timely updates keep parents informed about progress and deadlines, with secure communication channels that foster active engagement and support at home.",
   },
