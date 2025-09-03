@@ -27,6 +27,7 @@ import {
 import Folder from './Folder';
 import CardSwap, { Card } from './CardSwap';
 import Link from 'next/link';
+// import PastelDoodles from './ui/PastelDoodles';
 
 // import MeetTheTeam from './MeetTheTeam';
 
@@ -147,81 +148,8 @@ const AboutUs = () => {
     <section className="min-h-screen bg-[radial-gradient(60%_80%_at_10%_10%,#dbeafe_0%,#ffffff_50%)]">
       <div className="max-w-7xl mx-auto">
         {/* ===== HERO WITH CARDS ===== */}
-        <section className="relative min-h-[70vh] md:min-h-screen flex items-center px-6 overflow-hidden bg-gradient-to-br from-blue-50 to-indigo-100">
-          {/* Animated Background */}
-          <div className="absolute inset-0 z-0 opacity-70">
-            <svg width="100%" height="100%" viewBox="0 0 1440 800" preserveAspectRatio="xMidYMid slice">
-              {/* Plane 1: Original Path & Trail */}
-              <path id="motionPath1" fill="none" stroke="none" 
-                    d="M-50,450 C 250,250 550,550 850,450 S 1150,250 1490,400" />
-              <path fill="none" stroke="#cbd5e1" strokeWidth="2" 
-                    strokeDasharray="2000" strokeDashoffset="2000"
-                    d="M-50,450 C 250,250 550,550 850,450 S 1150,250 1490,400">
-                <animate attributeName="stroke-dashoffset" dur="12s" repeatCount="indefinite" from="2000" to="0" calcMode="spline" keySplines="0.4, 0, 0.2, 1" />
-              </path>
-              <path fill="none" stroke="#94a3b8" strokeWidth="3" 
-                    strokeDasharray="80 2000" strokeDashoffset="2080"
-                    d="M-50,450 C 250,250 550,550 850,450 S 1150,250 1490,400">
-                <animate attributeName="stroke-dashoffset" dur="12s" repeatCount="indefinite" from="2080" to="0" calcMode="spline" keySplines="0.4, 0, 0.2, 1" />
-              </path>
-
-              {/* Plane 2: New Path & Dashed Trail */}
-              <path id="motionPath2" fill="none" stroke="none" 
-                    d="M-50,750 C 300,500 600,200 900,300 S 1200,600 1490,500" />
-              <path fill="none" stroke="#a5b4fc" strokeWidth="2"
-                    strokeDasharray="10 15 2000 2000" strokeDashoffset="4045"
-                    d="M-50,750 C 300,500 600,200 900,300 S 1200,600 1490,500">
-                   <animate attributeName="stroke-dashoffset" dur="14s" begin="4s" repeatCount="indefinite" from="4045" to="0" calcMode="spline" keySplines="0.4, 0, 0.2, 1" />
-              </path>
-
-              {/* Plane 3: Another New Path & Thinner Trail */}
-              <path id="motionPath3" fill="none" stroke="none" 
-                    d="M-50,200 C 400,600 800,100 1490,300" />
-              <path fill="none" stroke="#fca5a5" strokeWidth="1" 
-                    strokeDasharray="2000" strokeDashoffset="2000"
-                    d="M-50,200 C 400,600 800,100 1490,300">
-                <animate attributeName="stroke-dashoffset" dur="10s" begin="2s" repeatCount="indefinite" from="2000" to="0" calcMode="spline" keySplines="0.4, 0, 0.2, 1" />
-              </path>
-              <path fill="none" stroke="#ef4444" strokeWidth="2" 
-                    strokeDasharray="60 2000" strokeDashoffset="2060"
-                    d="M-50,200 C 400,600 800,100 1490,300">
-                <animate attributeName="stroke-dashoffset" dur="10s" begin="2s" repeatCount="indefinite" from="2060" to="0" calcMode="spline" keySplines="0.4, 0, 0.2, 1" />
-              </path>
-
-              {/* Paper Plane 1 Group */}
-              <g id="paper-plane-group" transform="scale(5)">
-                  <g id="paper-plane-1">
-                    <path d="M2.2,16.5l19.5-8.5L2.2,0.1L2.2,7l13.6,1.4L2.2,9.9L2.2,16.5z" fill="#38bdf8"/>
-                    <path d="M2.2,16.5l19.5-8.5L2.2,0.1l0,0C2.2,0.1,2.2,7,2.2,7l13.6,1.4L2.2,9.9L2.2,16.5z" fill="#0ea5e9"/>
-                  </g>
-                  <animateMotion dur="12s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines="0.4, 0, 0.2, 1">
-                      <mpath href="#motionPath1" />
-                  </animateMotion>
-              </g>
-
-              {/* Paper Plane 2 Group */}
-              <g id="paper-plane-group-2" transform="scale(5)">
-                  <g id="paper-plane-2">
-                    <path d="M2.2,16.5l19.5-8.5L2.2,0.1L2.2,7l13.6,1.4L2.2,9.9L2.2,16.5z" fill="#818cf8"/>
-                    <path d="M2.2,16.5l19.5-8.5L2.2,0.1l0,0C2.2,0.1,2.2,7,2.2,7l13.6,1.4L2.2,9.9L2.2,16.5z" fill="#6366f1"/>
-                  </g>
-                  <animateMotion dur="14s" begin="4s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines="0.4, 0, 0.2, 1">
-                      <mpath href="#motionPath2" />
-                  </animateMotion>
-              </g>
-
-              {/* Paper Plane 3 Group */}
-              <g id="paper-plane-group-3" transform="scale(5)">
-                  <g id="paper-plane-3">
-                    <path d="M2.2,16.5l19.5-8.5L2.2,0.1L2.2,7l13.6,1.4L2.2,9.9L2.2,16.5z" fill="#f87171"/>
-                    <path d="M2.2,16.5l19.5-8.5L2.2,0.1l0,0C2.2,0.1,2.2,7,2.2,7l13.6,1.4L2.2,9.9L2.2,16.5z" fill="#dc2626"/>
-                  </g>
-                  <animateMotion dur="10s" begin="2s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines="0.4, 0, 0.2, 1">
-                      <mpath href="#motionPath3" />
-                  </animateMotion>
-              </g>
-            </svg>
-          </div>
+        <section className="relative min-h-[70vh] md:min-h-screen flex items-center px-6 overflow-hidden">
+          {/* <PastelDoodles /> */}
 
           <div className="relative w-full grid md:grid-cols-2 gap-10 items-center z-10">
             <div className="order-2 md:order-1 text-center md:text-left">
@@ -371,7 +299,7 @@ const AboutUs = () => {
                 <div className="grid md:grid-cols-2 gap-8 items-center">
                   <div className="relative h-48 w-full overflow-hidden rounded-xl bg-gray-100">
                     <Image 
-                      src="/image/vision.png" 
+                      src="/image/vision2.png" 
                       alt="Vision" 
                       fill
                       className="object-cover"
@@ -450,7 +378,7 @@ const AboutUs = () => {
                     className="relative flex flex-col items-center gap-3 py-3 w-full group"
                     animate={{ opacity: 1 }}
                   >
-                    <div className="relative">
+                    <div className="relative flex items-center">
                       <div className="flex flex-col items-center gap-3 p-3 rounded-lg transition-all duration-300 group-hover:bg-white/10">
                         <Icon className="h-7 w-7" />
                         <div className="flex items-center gap-2">
@@ -470,9 +398,10 @@ const AboutUs = () => {
                         </div>
                       </div>
                       <motion.div 
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                        whileHover={{ opacity: 1, y: 0, scale: 1 }}
-                        className="absolute z-10 w-64 p-4 mt-2 text-sm bg-white rounded-lg shadow-lg text-gray-700"
+                        initial={{ opacity: 0, x: 10, scale: 0.95 }}
+                        whileHover={{ opacity: 1, x: 20, scale: 1 }}
+                        className="absolute left-full ml-2 z-10 w-64 p-4 text-sm bg-white rounded-lg shadow-lg text-gray-700"
+                        style={{ pointerEvents: 'none' }}
                       >
                         <p>{description}</p>
                       </motion.div>

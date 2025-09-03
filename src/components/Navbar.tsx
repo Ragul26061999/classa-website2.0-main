@@ -16,7 +16,7 @@ export default function Navbar() {
   const navLinkClass = (href: string) =>
     isActive(href)
       ? "text-blue-600 font-medium"
-      : "text-slate-700 hover:text-blue-600 transition-colors";
+      : "text-blue-400 hover:text-blue-400 transition-colors";
 
   useEffect(() => {
     const hero = document.querySelector('#home');
@@ -37,13 +37,39 @@ export default function Navbar() {
     observer.observe(hero);
     return () => observer.disconnect();
   }, []);
+  // Apply transform based on --navbar-hidden CSS variable
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const handleScroll = () => {
+        const navbar = document.querySelector('header');
+        if (navbar) {
+          const hiddenValue = getComputedStyle(document.documentElement)
+            .getPropertyValue('--navbar-hidden')
+            .trim();
+          navbar.style.transform = hiddenValue ? `translateY(${hiddenValue})` : '';
+        }
+      };
+      
+      // Initial check
+      handleScroll();
+      
+      // Add scroll listener
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         overHero
           ? "bg-transparent border-transparent backdrop-blur-0"
-          : "bg-white/70 backdrop-blur-md border-b border-slate-200/60 supports-[backdrop-filter]:bg-white/60 shadow-sm"
+          : "bg-transparent backdrop-blur-sm border-transparent shadow-sm"
       }`}
+      style={{
+        transform: 'var(--navbar-hidden, none)',
+        transition: 'transform 0.3s ease-in-out, background-color 0.3s ease-in-out'
+      }}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         {/* Left: Logo + brand */}

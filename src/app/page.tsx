@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <HeroSection />
+      <HeroSection hideNavbar />
       <WhyChooseSection />
       <NextGenLearn />
       <ContactSection />
