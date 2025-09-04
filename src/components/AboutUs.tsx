@@ -146,26 +146,25 @@ const AboutUs = () => {
   } | null>(null);
 
   return (
-    <section className="min-h-screen bg-[radial-gradient(60%_80%_at_10%_10%,#dbeafe_0%,#ffffff_50%)]">
-      <div className="max-w-7xl mx-auto">
-      
+    <section className="py-12 sm:py-16 md:py-20 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* ===== HERO WITH CARDS ===== */}
-        <section className="relative min-h-[70vh] md:min-h-screen flex items-center px-6 overflow-hidden">
+        <section className="relative min-h-[80vh] sm:min-h-[70vh] md:min-h-screen flex items-center py-16 sm:py-0 overflow-hidden">
           <PastelDoodles />
-          <div className="relative w-full grid md:grid-cols-2 gap-10 items-center z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-12 sm:mt-16">
             <div className="order-2 md:order-1 text-center md:text-left">
               {/* Top decorative icons */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="flex items-center justify-center md:justify-start gap-3 mb-6"
+                className="flex flex-wrap items-center justify-center md:justify-start gap-2 sm:gap-3 mb-4 sm:mb-6"
               >
                 <motion.div 
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  className="p-2 rounded-full bg-sky-100/70 backdrop-blur-sm"
+                  className="p-1.5 sm:p-2 rounded-full bg-sky-100/70 backdrop-blur-sm flex-shrink-0"
                 >
                   <GraduationCap className="h-5 w-5 text-sky-600" />
                 </motion.div>
@@ -181,7 +180,7 @@ const AboutUs = () => {
                   initial={{ opacity: 0, x: -40 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.4 }}
-                  className="p-2 rounded-full bg-sky-100/70 backdrop-blur-sm"
+                  className="p-1.5 sm:p-2 rounded-full bg-sky-100/70 backdrop-blur-sm flex-shrink-0"
                 >
                   <Brain className="h-5 w-5 text-sky-600" />
                 </motion.div>
@@ -191,7 +190,7 @@ const AboutUs = () => {
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-700 via-sky-600 to-indigo-700"
+                className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-700 via-sky-600 to-indigo-700"
               >
                 Who We Are
               </motion.h1>
