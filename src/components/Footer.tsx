@@ -24,8 +24,8 @@ export default function Footer() {
             <p className="mt-5 max-w-xl text-white/90">
             Modular , Scalable , intelligent</p>
             <div className="flex space-x-4 mt-6">
-              <a href="#" className="text-white/80 hover:text-white transition-colors duration-300"><FaFacebook size={24} /></a>
-              <a href="#" className="text-white/80 hover:text-white transition-colors duration-300"><FaInstagram size={24} /></a>
+              <a href="https://www.facebook.com/share/1TNhYA2RbR/" className="text-white/80 hover:text-white transition-colors duration-300"><FaFacebook size={24} /></a>
+              <a href="https://www.instagram.com/classa_edtech/" className="text-white/80 hover:text-white transition-colors duration-300"><FaInstagram size={24} /></a>
               <a href="#" className="text-white/80 hover:text-white transition-colors duration-300"><FaLinkedin size={24} /></a>
             </div>
           </div>

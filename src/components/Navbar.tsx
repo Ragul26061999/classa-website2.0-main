@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
-  const [overHero, setOverHero] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -15,60 +15,47 @@ export default function Navbar() {
 
   const navLinkClass = (href: string) =>
     isActive(href)
-      ? "text-blue-600 font-medium"
-      : "text-blue-400 hover:text-blue-400 transition-colors";
+      ? "text-[#0070F3] font-bold"
+      : `text-${isScrolled ? 'gray-700' : 'blue-700'} hover:text-[#3DA9FC] transition-colors`;
 
   useEffect(() => {
-    const hero = document.querySelector('#home');
-    if (!hero) {
-      setOverHero(false);
-      return;
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setOverHero(entry.isIntersecting);
-      },
-      {
-        threshold: 0,
-        // Trigger slightly before reaching the very top to avoid flicker
-        rootMargin: "-80px 0px 0px 0px",
-      }
-    );
-    observer.observe(hero);
-    return () => observer.disconnect();
-  }, []);
-  // Apply transform based on --navbar-hidden CSS variable
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleScroll = () => {
-        const navbar = document.querySelector('header');
-        if (navbar) {
-          const hiddenValue = getComputedStyle(document.documentElement)
-            .getPropertyValue('--navbar-hidden')
-            .trim();
-          navbar.style.transform = hiddenValue ? `translateY(${hiddenValue})` : '';
-        }
-      };
+    const handleScroll = () => {
+      const hero = document.querySelector('#home');
+      if (!hero) return;
       
-      // Initial check
-      handleScroll();
+      const heroHeight = hero.clientHeight;
+      const scrollPosition = window.scrollY;
       
-      // Add scroll listener
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
+      // Add glassy effect when scrolled past 100px or when not over hero
+      setIsScrolled(scrollPosition > 100 || !isElementInViewport(hero));
+    };
+
+    const isElementInViewport = (el: Element) => {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top <= 100 && // 100px from top of viewport
+        rect.bottom >= 0
+      );
+    };
+
+    // Initial check
+    handleScroll();
+    
+    // Add scroll listener
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        overHero
-          ? "bg-transparent border-transparent backdrop-blur-0"
-          : "bg-transparent backdrop-blur-sm border-transparent shadow-sm"
+        isScrolled
+          ? "bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100"
+          : "bg-transparent backdrop-blur-0"
       }`}
       style={{
         transform: 'var(--navbar-hidden, none)',
-        transition: 'transform 0.3s ease-in-out, background-color 0.3s ease-in-out'
+        transition: 'all 0.3s ease-in-out'
       }}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
@@ -86,11 +73,11 @@ export default function Navbar() {
 
         {/* Center: Nav links */}
         <nav className="hidden gap-8 md:flex py-2">
-          <Link href="/" className={`${navLinkClass("/")} text-lg`}>Home</Link>
-          <Link href="/about" className={`${navLinkClass("/about")} text-lg`}>
+          <Link href="/" className={`${navLinkClass("/")} text-lg font-bold`}>Home</Link>
+          <Link href="/about" className={`${navLinkClass("/about")} text-lg font-bold`}>
             About Us
           </Link>
-          <Link href="/classa" className={`${navLinkClass("/classa")} text-lg`}>
+          <Link href="/classa" className={`${navLinkClass("/classa")} text-lg font-bold`}>
             Unified Platform
           </Link>
         </nav>
@@ -98,7 +85,7 @@ export default function Navbar() {
         {/* Right: CTA */}
         <Link
           href="/#contact"
-          className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-3 text-sm font-medium text-slate-900 ring-1 ring-slate-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:shadow transition-colors duration-200 -mr-20"
+          className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200 -mr-20"
         >
           Contact Us <ArrowRight className="h-4 w-4" />
         </Link>

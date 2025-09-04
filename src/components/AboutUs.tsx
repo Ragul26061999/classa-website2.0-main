@@ -350,7 +350,7 @@ const AboutUs = () => {
             viewport={{ once: true }}
             className="text-center text-3xl md:text-4xl font-bold text-[#1E2D3D] mb-12"
           >
-            CLASSA: Next-Generation Education Platform
+            <span className="text-blue-500">CLASSA</span>: Next-Generation Education Platform
           </motion.h2>
 
           <div className="relative flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">

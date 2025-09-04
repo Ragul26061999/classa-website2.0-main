@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface HeroSectionProps {
   hideNavbar?: boolean;
@@ -16,6 +17,7 @@ const rotatingTexts = [
 ];
 
 export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
+  const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
   const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -154,10 +156,16 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
         </p>
 
         <div className="flex gap-4 justify-center">
-          <button className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-400 transition">
+          <button 
+            onClick={() => router.push('/#contact')}
+            className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-400 transition"
+          >
             Book a Demo
           </button>
-          <button className="px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition">
+          <button 
+            onClick={() => router.push('/classa')}
+            className="px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition"
+          >
             Explore the Module
           </button>
         </div>
