@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import PastelDoodles from './ui/PastelDoodles';
 import Image from 'next/image';
 import {
   LayoutGrid,
@@ -147,12 +148,45 @@ const AboutUs = () => {
   return (
     <section className="min-h-screen bg-[radial-gradient(60%_80%_at_10%_10%,#dbeafe_0%,#ffffff_50%)]">
       <div className="max-w-7xl mx-auto">
+      
         {/* ===== HERO WITH CARDS ===== */}
         <section className="relative min-h-[70vh] md:min-h-screen flex items-center px-6 overflow-hidden">
-          {/* <PastelDoodles /> */}
-
+          <PastelDoodles />
           <div className="relative w-full grid md:grid-cols-2 gap-10 items-center z-10">
             <div className="order-2 md:order-1 text-center md:text-left">
+              {/* Top decorative icons */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="flex items-center justify-center md:justify-start gap-3 mb-6"
+              >
+                <motion.div 
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="p-2 rounded-full bg-sky-100/70 backdrop-blur-sm"
+                >
+                  <GraduationCap className="h-5 w-5 text-sky-600" />
+                </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className="p-2 rounded-full bg-indigo-100/70 backdrop-blur-sm"
+                >
+                  <BookOpen className="h-5 w-5 text-indigo-600" />
+                </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  className="p-2 rounded-full bg-sky-100/70 backdrop-blur-sm"
+                >
+                  <Brain className="h-5 w-5 text-sky-600" />
+                </motion.div>
+              </motion.div>
+
               <motion.h1
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -170,6 +204,39 @@ const AboutUs = () => {
                 CLASSA is a Next-Generation education technology platform designed to
                 streamline academic delivery, student support, and school management with one unified AI-driven system.
               </motion.p>
+
+              {/* Bottom decorative icons */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="flex items-center justify-center md:justify-start gap-3 mt-8"
+              >
+                <motion.div 
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.6 }}
+                  className="p-2 rounded-full bg-emerald-100/70 backdrop-blur-sm"
+                >
+                  <Users className="h-5 w-5 text-emerald-600" />
+                </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                  className="p-2 rounded-full bg-violet-100/70 backdrop-blur-sm"
+                >
+                  <Lightbulb className="h-5 w-5 text-violet-600" />
+                </motion.div>
+                <motion.div 
+                  initial={{ opacity: 0, x: -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                  className="p-2 rounded-full bg-rose-100/70 backdrop-blur-sm"
+                >
+                  <Stars className="h-5 w-5 text-rose-600" />
+                </motion.div>
+              </motion.div>
             </div>
 
             <div className="order-1 md:order-2 flex items-center justify-center md:justify-end mt-20 md:mt-40">
