@@ -136,7 +136,7 @@ function FeatureCard({ icon: Icon, title, children, index, onInView, scheme }: F
           }
         })
       }}
-      className={`group relative overflow-hidden rounded-2xl border bg-white/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-lg max-w-lg mx-auto lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 ${scheme.border}`}
+      className={`group relative overflow-hidden rounded-2xl border bg-white/70 p-4 sm:p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-lg w-full max-w-lg mx-auto lg:max-w-none lg:sticky lg:top-[120px] lg:-translate-y-0 ${scheme.border}`}
       style={{
         zIndex: 20 + index,
         marginTop: index === 0 ? 0 : "8rem",
@@ -148,12 +148,12 @@ function FeatureCard({ icon: Icon, title, children, index, onInView, scheme }: F
     >
       <div className={`absolute -right-8 -top-8 h-28 w-28 rounded-full bg-gradient-to-br opacity-60 blur-2xl ${scheme.blobFrom} ${scheme.blobTo}`} />
       <div className="flex items-center gap-3">
-        <div className={`grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-md ${scheme.iconFrom} ${scheme.iconTo}`}>
-          <Icon size={22} />
+        <div className={`grid h-9 w-9 sm:h-11 sm:w-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-md ${scheme.iconFrom} ${scheme.iconTo}`}>
+          <Icon size={20} className="w-4 h-4 sm:w-5 sm:h-5" />
         </div>
-        <h4 className={`text-lg font-semibold tracking-tight ${scheme.text}`}>{title}</h4>
+        <h4 className={`text-base sm:text-lg font-semibold tracking-tight ${scheme.text}`}>{title}</h4>
       </div>
-      <p className="mt-3 text-sm leading-6 text-slate-600">{children}</p>
+      <p className="mt-2 sm:mt-3 text-sm sm:text-base leading-6 text-slate-600">{children}</p>
       <div className={`mt-4 h-1 w-0 bg-gradient-to-r transition-all duration-500 group-hover:w-full ${scheme.underlineFrom} ${scheme.underlineTo}`} />
     </motion.div>
   );
@@ -516,7 +516,7 @@ export default function WhyChooseSection() {
 
       {/* background gradient */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(at_20%_10%,#e0f2fe,transparent_30%)]" />
-      <div className="mx-auto max-w-6xl px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="relative lg:min-h-[250vh] -pb-2">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -537,11 +537,13 @@ export default function WhyChooseSection() {
       </motion.div>
 
       {/* content */}
-      <div className="grid grid-cols-12 items-start gap-10 mt-16">
-        <div className="col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 lg:self-start mt-16">
-          <HeroVisual active={active} scheme={pastelSchemes[active]} />
+      <div className="grid grid-cols-1 lg:grid-cols-12 items-start gap-6 lg:gap-10 mt-8 sm:mt-12 lg:mt-16">
+        <div className="lg:col-span-5 xl:col-span-6 lg:sticky lg:top-[120px] lg:-translate-y-0 lg:self-start mt-0 lg:mt-16 px-4 sm:px-0">
+          <div className="relative w-full aspect-square max-w-[500px] mx-auto">
+            <HeroVisual active={active} scheme={pastelSchemes[active]} />
+          </div>
         </div>
-        <div className="col-span-6">
+        <div className="lg:col-span-7 xl:col-span-6 space-y-6 sm:space-y-8 lg:space-y-10">
           <div className="relative lg:min-h-[300vh] ">
             <FeatureCard index={0} icon={Brain} title="AI That Works for You" onInView={setActive} scheme={pastelSchemes[0]}>
               Adaptive learning paths, question generation, and feedback tuned to each learner — not just a chatbot.
