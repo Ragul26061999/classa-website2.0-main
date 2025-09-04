@@ -199,212 +199,322 @@ function ClassaPage() {
     }
   }, [activeRole]);
 
-  const handleKeyDown = (
+  function handleKeyDown(
     e: React.KeyboardEvent<HTMLButtonElement>,
     idx: number,
-    direction: 'horizontal' | 'vertical',
-    refs: React.MutableRefObject<(HTMLButtonElement | null)[]>
-  ) => {
+    orientation: 'horizontal' | 'vertical',
+    scope: 'mobile' | 'desktop'
+  ) {
     const key = e.key;
     const last = ROLES.length - 1;
-    const go = (to: number) => {
-      setActiveRole(to);
-      refs.current[to]?.focus();
+    let next = idx;
+    const refs = scope === 'mobile' ? mobileTabRefs.current : desktopTabRefs.current;
+
+    const go = (n: number) => {
+      setFocusedIdx(n);
+      const target = refs[n];
+      if (target) requestAnimationFrame(() => target.focus());
     };
 
-    if (key === 'ArrowDown' || (direction === 'vertical' && key === 'ArrowRight')) {
-      e.preventDefault();
-      const next = (idx + 1) % ROLES.length;
-      go(next);
-      return;
-    }
-    if (key === 'ArrowUp' || (direction === 'vertical' && key === 'ArrowLeft')) {
-      e.preventDefault();
-      const prev = (idx - 1 + ROLES.length) % ROLES.length;
-      go(prev);
-      return;
+    if (orientation === 'horizontal') {
+      if (key === 'ArrowRight') { e.preventDefault(); next = idx === last ? 0 : idx + 1; go(next); return; }
+      if (key === 'ArrowLeft')  { e.preventDefault(); next = idx === 0 ? last : idx - 1; go(next); return; }
+    } else {
+      if (key === 'ArrowDown') { e.preventDefault(); next = idx === last ? 0 : idx + 1; go(next); return; }
+      if (key === 'ArrowUp')   { e.preventDefault(); next = idx === 0 ? last : idx - 1; go(next); return; }
     }
     if (key === 'Home') { e.preventDefault(); go(0); return; }
-    if (key === 'End') { e.preventDefault(); go(ROLES.length - 1); return; }
+    if (key === 'End')  { e.preventDefault(); go(last); return; }
     if (key === 'Enter' || key === ' ') {
       e.preventDefault();
       setActiveRole(prev => (prev === idx ? -1 : idx));
       return;
     }
   }
-
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white  ">
       <Navbar />
+
+      {/* Hero */}
       <HeroSection_copy />
-      
-      {/* Role Selection */}
-      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-gradient-to-b from-white to-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 sm:mb-10 md:mb-12 px-2">
-            Designed for Every Role in Education
-          </h2>
-          
-          {/* Mobile accordion */}
-          <div className="lg:hidden space-y-4">
-            {ROLES.map((role, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden">
-                <button
-                  ref={el => { if (el) mobileTabRefs.current[index] = el; }}
-                  onClick={() => setActiveRole(activeRole === index ? -1 : index)}
-                  onKeyDown={(e) => handleKeyDown(e, index, 'horizontal', mobileTabRefs)}
-                  className={`w-full p-4 sm:p-6 text-left flex justify-between items-center ${activeRole === index ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
-                  aria-expanded={activeRole === index}
-                  aria-controls={`role-panel-${index}`}
-                >
-                  <h3 className="text-lg sm:text-xl font-semibold">{role.title}</h3>
-                  {activeRole === index ? (
-                    <Minus className="h-5 w-5 text-gray-500" />
-                  ) : (
-                    <Plus className="h-5 w-5 text-gray-500" />
-                  )}
-                </button>
-                <AnimatePresence>
-                  {activeRole === index && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.3, ease: 'easeInOut' }}
-                      className="overflow-hidden"
+
+      {/* Modules */}
+      <section ref={modulesRef} aria-labelledby="modules" className="relative h-[300vh]">
+        <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+            <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 pt-35">Our Modules</h2>
+            
+            {/* CLASSA Buttons */}
+            <div className="flex justify-center space-x-2 md:space-x-4 mb-12 flex-wrap">
+              {['C', 'L', 'A', 'S', 'S', 'A'].map((letter, index) => {
+                const color = [
+                  'bg-[#007DC6]', // C - Blue
+                  'bg-[#EDC531]', // L - Yellow
+                  'bg-[#12881F]', // A - Green
+                  'bg-[#A422D0]', // S - Purple
+                  'bg-[#F29553]', // S - Orange
+                  'bg-[#E75C5C]'  // A - Red
+                ][index];
+                
+                return (
+                  <motion.button
+                    key={index}
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold ${
+                      activeModule === index 
+                        ? `text-white shadow-2xl ${color}`
+                        : 'bg-white text-gray-700 shadow-md hover:shadow-lg'
+                    }`}
+                    aria-label={`Show ${MODULES[index].title}`}
+                    animate={{
+                      scale: activeModule === index ? 1.15 : 1,
+                      y: activeModule === index ? -8 : 0,
+                      transition: {
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 15
+                      }
+                    }}
+                  >
+                    <motion.span>{letter}</motion.span>
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* Module Display */}
+            <div className="relative min-h-[500px]">
+              <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeModule}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ 
+                      opacity: 1, 
+                      y: 0,
+                      transition: { 
+                        duration: 0.5,
+                        ease: [0.16, 1, 0.3, 1] 
+                      } 
+                    }}
+                    exit={{ 
+                      opacity: 0, 
+                      y: -20,
+                      transition: { 
+                        duration: 0.3,
+                        ease: [0.5, 0, 1, 1] 
+                      } 
+                    }}
+                    className="grid md:grid-cols-5 gap-8 py-6"
+                  >
+                    <motion.div 
+                      className="md:col-span-3 rounded-lg p-6 relative overflow-hidden group"
+                      style={{
+                        border: `2px solid ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}`,
+                        boxShadow: `0 0 0 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}20`
+                      }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ 
+                        opacity: 1, 
+                        y: 0,
+                        boxShadow: `0 0 20px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}40`,
+                        transition: { 
+                          duration: 0.5,
+                          ease: [0.16, 1, 0.3, 1] 
+                        } 
+                      }}
+                      whileHover={{
+                        boxShadow: `0 0 30px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}60`,
+                        transition: { duration: 0.3 }
+                      }}
                     >
-                      <div className="p-4 sm:p-6 pt-0 sm:pt-0 text-gray-600 text-sm sm:text-base">
-                        {role.text}
+                      <div className="absolute inset-0 overflow-hidden">
+                        <div 
+                          className="absolute inset-0 opacity-30 transition-opacity duration-500"
+                          style={{
+                            background: `linear-gradient(90deg, transparent, ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}, transparent)`,
+                            animation: 'shimmer 3s infinite',
+                          }}
+                        />
                       </div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                        {MODULES[activeModule].title}
+                      </h3>
+                      <p className="text-gray-600 mb-6">
+                        {MODULES[activeModule].description}
+                      </p>
+                      <ul className="space-y-3">
+                        {MODULES[activeModule].bullets.map((bullet, idx) => (
+                          <li key={idx} className="flex items-start gap-3 text-gray-700">
+                            <span className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${MODULES[activeModule].accent.dot} text-white shadow-sm`}>
+                              <Check size={14} strokeWidth={3} />
+                            </span>
+                            <span>{bullet.text}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </motion.div>
-                  )}
+                    <div className="md:col-span-2 rounded-2xl overflow-hidden">
+                      <div className={`relative h-64 md:h-full overflow-hidden rounded-2xl ring-2 ${MODULES[activeModule].accent.ringSoft || MODULES[activeModule].accent.ring} bg-gradient-to-br ${MODULES[activeModule].accent.gradient}`}>
+                        <motion.img
+                          src={MODULES[activeModule].image.src}
+                          alt={MODULES[activeModule].image.alt}
+                          loading="lazy"
+                          initial={{ opacity: 0, scale: 1.1 }}
+                          animate={{ opacity: 1, scale: 1, transition: { delay: 0.2, duration: 0.6 } }}
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
                 </AnimatePresence>
               </div>
-            ))}
+            </div>
           </div>
-          
-          {/* Desktop grid */}
-          <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {ROLES.map((role, index) => {
-              const isActive = activeRole === index;
+        {/* </div> */}
+      </section>
+
+      {/* Tailored for Every Role */}
+      <section aria-labelledby="roles" className="relative py-2 mt-4 min-h-[80vh]">
+        <div className="mx-auto px-4 lg:px-6">
+          <header className="max-w-6xl">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 ml-5">
+              Tailored for Every Role
+              <span className="block font-normal">in Your Institution</span>
+            </h2>
+            <p className="mt-3 text-slate-600 text-sm md:text-base">
+              <span className="text-sky-600 font-semibold ml-5">CLASSA</span> offers specialized features for each member of your educational community—streamlining collaboration and boosting productivity.
+            </p>
+          </header>
+
+          {/* Tabs (mobile): horizontal chips */}
+          <div className="mt-8 flex flex-wrap gap-3 lg:hidden" role="tablist" aria-label="Roles tabs (mobile)">
+            {ROLES.map((r, idx) => {
+              const isActive = activeRole === idx;
               return (
                 <button
-                  key={index}
-                  ref={(el: HTMLButtonElement | null) => { 
-                    if (el) desktopTabRefs.current[index] = el; 
-                  }}
-                  onClick={() => setActiveRole(isActive ? -1 : index)}
-                  onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => 
-                    handleKeyDown(e, index, 'horizontal', desktopTabRefs)
-                  }
-                  className={`p-6 rounded-xl text-left transition-all ${
-                    isActive ? 'bg-blue-50 ring-2 ring-blue-500' : 'bg-white hover:bg-gray-50 shadow-sm'
-                  }`}
+                  key={r.title}
+                  id={`role-tab-${idx}`}
+                  role="tab"
+                  aria-selected={isActive}
                   aria-expanded={isActive}
-                  aria-controls={`role-panel-${index}`}
+                  aria-controls={`role-panel-${idx}`}
+                  onClick={() => setActiveRole(prev => prev === idx ? -1 : idx)}
+                  onKeyDown={(e) => handleKeyDown(e, idx, 'horizontal', 'mobile')}
+                  tabIndex={focusedIdx === idx ? 0 : -1}
+                  ref={(el) => { mobileTabRefs.current[idx] = el; }}
+                  className={
+                    `inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors ` +
+                    (isActive ? "bg-sky-600 text-white border-sky-600" : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200")
+                  }
                 >
-                  <h3 className="text-xl font-semibold mb-2">{role.title}</h3>
-                  <p className="text-gray-600 text-sm sm:text-base">
-                    {role.text.length > 100 ? `${role.text.substring(0, 100)}...` : role.text}
-                  </p>
+                  <span className="text-base">{r.icon}</span>
+                  <span className="font-medium">{r.title}</span>
                 </button>
               );
             })}
           </div>
-        </div>
-      </section>
-      
-      {/* Modules */}
-      <section ref={modulesRef} className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-8 sm:mb-12 px-2">
-            Comprehensive School Management Solutions
-          </h2>
-          
-          <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
-            {/* Module List - Mobile */}
-            <div className="lg:hidden relative
-              after:absolute after:right-0 after:top-0 after:bottom-0 after:w-8 after:bg-gradient-to-l after:from-white after:to-transparent after:pointer-events-none">
-              <div className="flex space-x-3 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
-                {MODULES.map((module, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      const element = document.getElementById(`module-${index}`);
-                      element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }}
-                    className={`whitespace-nowrap px-4 py-2.5 rounded-full text-sm font-medium transition-colors ${activeModule === index ? 'bg-blue-600 text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                  >
-                    {typeof module.title === 'string' ? module.title.split(' ')[0] : 'Module'}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            {/* Module List - Desktop */}
-            <div className="hidden lg:block w-full lg:w-1/3 xl:w-1/4">
-              <div className="sticky top-24 space-y-2">
-                {MODULES.map((module, index) => (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      const element = document.getElementById(`module-${index}`);
-                      element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }}
-                    className={`w-full text-left p-3 sm:p-4 rounded-lg transition-all text-sm sm:text-base ${activeModule === index ? 'bg-blue-50 text-blue-700 ring-2 ring-blue-500 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                  >
-                    {module.title}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            {/* Module Details */}
-            <div className="w-full lg:w-2/3 xl:w-3/4 space-y-8 sm:space-y-12">
-              {MODULES.map((module, index) => (
-                <div key={index} id={`module-${index}`} className="scroll-mt-24">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-10% 0px -10% 0px' }}
-                    transition={{ duration: 0.4 }}
-                    className={`p-5 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl bg-gradient-to-br ${module.accent.gradient} border border-gray-100 shadow-sm`}
-                  >
-                    <div className="flex flex-col md:flex-row gap-6 md:gap-8">
-                      <div className="md:w-1/2">
-                        <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">{module.title}</h3>
-                        <p className="text-gray-700 text-sm sm:text-base mb-4 sm:mb-6">{module.description}</p>
-                        <ul className="space-y-2.5 sm:space-y-3">
-                          {module.bullets.map((bullet, i) => (
-                            <li key={i} className="flex items-start">
-                              <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mt-2 sm:mt-2.5 mr-2.5 sm:mr-3 flex-shrink-0 ${bullet.colorClass}`}></span>
-                              <span className="text-sm sm:text-base text-gray-700">{bullet.text}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div className="md:w-1/2 flex items-center justify-center">
-                        <div className={`p-0.5 sm:p-1 rounded-xl sm:rounded-2xl bg-white shadow-sm sm:shadow-md ring-1 ring-gray-100 ${module.accent.ring} overflow-hidden w-full`}>
-                          <img
-                            src={module.image.src}
-                            alt={module.image.alt}
-                            className="w-full h-auto rounded-lg sm:rounded-xl object-cover"
-                            loading="lazy"
-                            width={500}
-                            height={300}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+
+          <div className="mt-10 grid gap-10 lg:grid-cols-10">
+            {/* Left: image with frosted glass content overlay (smaller) */}
+            <div className="relative lg:col-span-7 self-start mx-auto w-full max-w-4xl" ref={imageAreaRef}>
+              <div className="relative overflow-hidden rounded-2xl ring-2 ring-sky-300 shadow-lg shadow-sky-100">
+                <div className="aspect-[16/9] w-full lg:aspect-auto lg:h-[380px]">
+                  <AnimatePresence mode="wait">
+                    <motion.img
+                      key={currentIndex}
+                      src={ROLE_IMAGES[currentIndex]?.src}
+                      alt={ROLE_IMAGES[currentIndex]?.alt}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      initial={{ opacity: 0, scale: 1.02 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                  </AnimatePresence>
                 </div>
-              ))}
+                {/* Frosted glass overlay with active content */}
+                <AnimatePresence mode="wait">
+                  {activeRole !== -1 && (
+                    <motion.div
+                      key={`panel-${currentIndex}`}
+                      role="tabpanel"
+                      id={`role-panel-${currentIndex}`}
+                      aria-labelledby={`role-tab-${currentIndex}`}
+                      tabIndex={-1}
+                      ref={panelRef}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8 lg:bottom-10 lg:left-10 lg:right-10 rounded-2xl bg-white/60 backdrop-blur-md ring-1 ring-white/50 shadow-xl p-6 md:p-8"
+                    >
+                      <h3 className="text-xl md:text-2xl font-semibold text-slate-900">
+                        {ROLES[currentIndex].title}
+                      </h3>
+                      <p className="mt-2 text-slate-700 text-sm md:text-base lg:text-lg">
+                        {ROLES[currentIndex].text}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+
+            {/* Right: vertical tabs with straight labels (desktop) */}
+            <div className="lg:col-span-3 mb-8 lg:mb-0 hidden lg:flex lg:self-stretch lg:h-[380px] items-stretch">
+              <div className="flex flex-col w-full h-full items-stretch justify-start divide-y divide-slate-200" role="tablist" aria-orientation="vertical" aria-label="Roles tabs (desktop)">
+                {ROLES.map((r, idx) => {
+                  const isActive = activeRole === idx;
+                  return (
+                    <button
+                      key={r.title}
+                      id={`role-tab-${idx}`}
+                      role="tab"
+                      aria-selected={isActive}
+                      aria-expanded={isActive}
+                      aria-controls={`role-panel-${idx}`}
+                      onClick={() => setActiveRole(prev => prev === idx ? -1 : idx)}
+                      onKeyDown={(e) => handleKeyDown(e, idx, 'vertical', 'desktop')}
+                      tabIndex={focusedIdx === idx ? 0 : -1}
+                      ref={(el) => { desktopTabRefs.current[idx] = el; }}
+                      className={`relative group w-full border-l-4 border-transparent hover:border-sky-400 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50 px-6 py-4 text-left flex-1 flex transition-all duration-300 ease-out transform hover:scale-[1.02] hover:shadow-lg ${isActive ? 'border-l-sky-500 bg-gradient-to-r from-sky-100 to-blue-100 shadow-md scale-[1.01]' : 'hover:translate-x-1'}`}
+                      title={r.title}
+                    >
+                      {/* Active indicator */}
+                      {isActive && (
+                        <span className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-sky-400 to-sky-600 rounded-r-full shadow-sm" />
+                      )}
+                      <span className="flex items-center justify-between w-full relative z-10">
+                        <span className={`text-lg font-semibold tracking-tight transition-colors duration-200 ${isActive ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'}`}>{r.title}</span>
+                        <div className={`transition-all duration-300 ease-out flex-shrink-0 ${isActive ? 'rotate-180 scale-110' : 'group-hover:scale-110 group-hover:rotate-90'}`}>
+                          {isActive ? (
+                            <Minus className="text-sky-600 drop-shadow-sm" size={26} strokeWidth={2.5} />
+                          ) : (
+                            <div className="flex items-center gap-1">
+                              <Plus className="text-slate-400 group-hover:text-sky-500 transition-colors duration-200 flex-shrink-0" size={26} strokeWidth={2.5} />
+                              
+                            </div>
+                            
+                          )}
+                        </div>
+                        <>
+                          <span className="text-[10px] font-medium text-slate-400 group-hover:text-sky-500 transition-colors duration-200 writing-vertical-rl uppercase tracking-wider">
+                                Click me
+                          </span>
+                          </>
+                      </span>
+                    </button>
+                  );
+                })}
+                {/* Right edge divider removed; using internal divide-y lines */}
+              </div>
             </div>
           </div>
-        </div>  
+        </div>
       </section>
     </main>
   );
-};
+}
+
+// (Removed old RoleCard component in favor of the new, image+list layout)
 
 export default ClassaPage;

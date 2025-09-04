@@ -15,7 +15,7 @@ interface FeatureCardProps {
 }
 
 const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, color }) => (
-  <div className="w-full sm:w-72 md:w-80 p-6 sm:p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 sm:hover:-translate-y-2 border border-gray-100 flex flex-col items-center justify-center text-center mx-2 sm:mx-3 md:mx-4 group relative">
+  <div className="flex-none w-80 p-8 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:-translate-y-2 border border-gray-100 flex flex-col items-center justify-center text-center mx-4 group relative">
     <div className={`absolute -top-2 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-gradient-to-r ${color.gradientFrom} ${color.gradientTo} rounded-full flex items-center justify-center shadow-md`}>
       <div className={`w-4 h-4 ${color.icon.replace('text-', 'bg-')} rounded-full`}></div>
     </div>
@@ -41,27 +41,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, col
    const scrollRef = useRef<HTMLDivElement>(null);
    const scrollIntervalRef = useRef<number | null>(null);
 
-   // Responsive breakpoints for different screen sizes
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 640);
-      setIsTablet(window.innerWidth >= 640 && window.innerWidth < 1024);
-    };
-
-    // Initial check
-    checkScreenSize();
-    
-    // Add event listener for window resize
-    window.addEventListener('resize', checkScreenSize);
-    
-    // Clean up
-    return () => window.removeEventListener('resize', checkScreenSize);
-  }, []);
-
-  const features = [
+   const features = [
     {
       title: 'Online Classes',
       description: 'Engage in live, interactive online classes with expert instructors.',
@@ -237,31 +217,24 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, col
 
   return (
     <section className="py-2 bg-gradient-to-b from-gray-50 to-white">
-      <div className="relative w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-10 sm:py-16 md:py-20 lg:py-24">
-        <div className="text-center mb-8 sm:mb-12 px-2">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
-            Next-Gen Learning Experience
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            Empowering students with cutting-edge educational tools and resources
-          </p>
-        </div>
+      <div className="container mx-auto px-4">
+        <h2 className="text-4xl font-bold text-center mb-4">
+          <span style={{ color: '#007DC6' }}>NextGen Learn:</span> <span className="text-black">Shaping Future Education</span>
+        </h2>
+        <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+          Discover how our innovative features are transforming the learning experience for students and educators alike.
+        </p>
+
         <div className="relative">
-          <div 
+          <div
             ref={scrollRef}
-            className="w-full overflow-x-auto scrollbar-hide py-4 sm:py-8 px-2 sm:px-4 lg:px-8 -mx-2 sm:-mx-4 lg:-mx-8"
-            style={{
-              WebkitOverflowScrolling: 'touch',
-            }}
+            className="flex overflow-x-auto py-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-4">
-              {features.map((feature, index) => (
-                <div key={`${feature.title}-${index}`} className="w-full">
-                  <FeatureCard {...feature} />
-                </div>
-              ))}
-            </div>
+            {displayedFeatures.map((feature, index) => (
+              <FeatureCard key={index} {...feature} color={feature.color} />
+            ))}
           </div>
+
           <button
             className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md focus:outline-none"
             onClick={() => handleScroll('left')}
