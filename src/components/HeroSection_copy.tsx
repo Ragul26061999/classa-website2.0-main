@@ -15,23 +15,7 @@ const HeroSection = () => {
   const vantaEffect = useRef<any>(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.VANTA && vantaRef.current && !vantaEffect.current) {
-      vantaEffect.current = window.VANTA.NET({
-        el: vantaRef.current,
-        mouseControls: true,
-        touchControls: true,
-        minHeight: 200.0,
-        minWidth: 200.0,
-        scale: 1.0,
-        scaleMobile: 1.0,
-        color: 0x1e3a8a,
-        backgroundColor: 0xf8fafc,
-        points: 12.0,
-        maxDistance: 25.0,
-        spacing: 18.0,
-      });
-    }
-
+    // This effect is now handled by the Script component's onLoad
     return () => {
       if (vantaEffect.current) {
         vantaEffect.current.destroy();
@@ -39,6 +23,30 @@ const HeroSection = () => {
       }
     };
   }, []);
+
+  const initVanta = () => {
+    if (vantaRef.current && window.VANTA && !vantaEffect.current) {
+      try {
+        vantaEffect.current = window.VANTA.NET({
+          el: vantaRef.current,
+          THREE: window.THREE,
+          mouseControls: true,
+          touchControls: true,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          scale: 1.0,
+          scaleMobile: 1.0,
+          color: 0x1e3a8a,
+          backgroundColor: 0xf8fafc,
+          points: 12.0,
+          maxDistance: 25.0,
+          spacing: 18.0,
+        });
+      } catch (error) {
+        console.error('VANTA initialization error:', error);
+      }
+    }
+  };
 
   return (
     <>
@@ -49,24 +57,7 @@ const HeroSection = () => {
       <Script 
         src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"
         strategy="afterInteractive"
-        onLoad={() => {
-          if (vantaRef.current && window.VANTA && !vantaEffect.current) {
-            vantaEffect.current = window.VANTA.NET({
-              el: vantaRef.current,
-              mouseControls: true,
-              touchControls: true,
-              minHeight: 200.0,
-              minWidth: 200.0,
-              scale: 1.0,
-              scaleMobile: 1.0,
-              color: 0x1e3a8a,
-              backgroundColor: 0xf8fafc,
-              points: 12.0,
-              maxDistance: 25.0,
-              spacing: 18.0,
-            });
-          }
-        }}
+        onLoad={initVanta}
       />
       
       <section
