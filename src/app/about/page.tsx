@@ -8,6 +8,7 @@ export default function AboutPage() {
       {/* Spacer to avoid content being hidden behind fixed navbar */}
       <div className="pt-6 md:pt-10" />
       <AboutUs />
+
     </main>
   );
 }

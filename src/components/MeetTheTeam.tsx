@@ -1,156 +1,55 @@
-import React from 'react';
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+"use client";
 
-interface TeamMemberProps {
-  name: string;
-  role: string;
-  imageUrl: string;
+import React from "react";
+
+export default function Home() {
+  return (
+    <main className="relative w-full h-screen bg-gradient-to-b from-neutral-700 to-indigo-200 overflow-hidden">
+      {/* Plane */}
+      <div className="absolute left-1/2 top-1/3 -translate-x-1/2 w-48 animate-plane-bounce z-30">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1131.53 379.304"
+          className="w-full h-16 animate-plane-rotate"
+        >
+          <polygon
+            fill="#D8D8D8"
+            points="72.008,0 274.113,140.173 274.113,301.804 390.796,221.102 601.682,367.302 1131.53,0.223"
+          />
+          <polygon
+            fill="#C4C4C3"
+            points="1131.53,0.223 274.113,140.173 274.113,301.804 390.796,221.102"
+          />
+        </svg>
+      </div>
+
+      {/* Clouds */}
+      <div className="absolute inset-0 overflow-hidden">
+        <Cloud className="w-[500px] top-1/4 right-10 animate-cloud-slowest z-20" />
+        <Cloud className="w-[150px] top-1/3 right-1/2 animate-cloud-slow z-10" />
+        <Cloud className="w-[600px] top-10 right-0 animate-cloud-super z-0" />
+        <Cloud className="w-[300px] top-1/2 right-20 animate-cloud-slower z-5" />
+      </div>
+    </main>
+  );
 }
 
-const TeamMemberCard: React.FC<TeamMemberProps> = ({ name, role, imageUrl }) => {
+function Cloud({ className }: { className?: string }) {
   return (
-    <motion.div
-      className="flex flex-col items-center p-4 bg-white rounded-lg shadow-lg cursor-pointer border border-gray-200 relative overflow-hidden"
-      whileHover={{ scale: 1.05, boxShadow: "0 10px 15px rgba(0, 0, 0, 0.1)" }}
-      transition={{ type: "spring", stiffness: 300 }}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 762 331"
+      className={`absolute opacity-80 ${className}`}
     >
-      <div className="relative w-32 h-32 rounded-full mb-4 overflow-hidden border-4 border-blue-200">
-        <Image src={imageUrl} alt={name} layout="fill" objectFit="cover" className="rounded-full" />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 animate-shimmer rounded-full"></div>
-      </div>
-      <h3 className="text-xl font-semibold text-blue-800">{name}</h3>
-      <p className="text-blue-600 text-center">{role}</p>
-    </motion.div>
+      <path
+        fill="#FFFFFF"
+        d="M715.394,228h-16.595c0.79-5.219,1.201-10.562,1.201-16
+        c0-58.542-47.458-106-106-106c-8.198,0-16.178,0.932-23.841,2.693
+        C548.279,45.434,488.199,0,417.5,0c-84.827,0-154.374,65.401-160.98,148.529
+        C245.15,143.684,232.639,141,219.5,141c-49.667,0-90.381,38.315-94.204,87H46.607
+        C20.866,228,0,251.058,0,279.5S20.866,331,46.607,331h668.787
+        C741.133,331,762,307.942,762,279.5S741.133,228,715.394,228z"
+      />
+    </svg>
   );
-};
-
-const MeetTheTeam: React.FC = () => {
-  const teamMembers = [
-    {
-      name: 'John Doe',
-      role: 'CEO & Founder',
-      imageUrl: '/image/schoolboy.png',
-      description: 'Visionary leader with 15+ years of experience in education technology, driving our mission to revolutionize learning.'
-    },
-    {
-      name: 'Jane Smith',
-      role: 'Lead Developer',
-      imageUrl: '/image/schoolgirl.png',
-      description: 'Full-stack developer passionate about creating seamless educational experiences through innovative technology.'
-    },
-    {
-      name: 'Peter Jones',
-      role: 'Marketing Director',
-      imageUrl: '/image/schoolgirls.png',
-      description: 'Marketing strategist dedicated to spreading the word about our transformative educational solutions.'
-    },
-    {
-      name: 'Alice Brown',
-      role: 'Product Manager',
-      imageUrl: '/image/student.png',
-      description: 'Product expert ensuring our solutions meet the evolving needs of students and educators alike.'
-    },
-    {
-      name: 'Bob White',
-      role: 'UI/UX Designer',
-      imageUrl: '/image/teacher.png',
-      description: 'Creative designer focused on creating intuitive and engaging user experiences for all age groups.'
-    },
-    {
-      name: 'Charlie Green',
-      role: 'QA Engineer',
-      imageUrl: '/image/parent.jpeg',
-      description: 'Detail-oriented professional ensuring the highest quality standards for our educational platform.'
-    },
-    {
-      name: 'Diana Prince',
-      role: 'HR Manager',
-      imageUrl: '/image/Principal.png',
-      description: 'People person dedicated to building and nurturing our talented team of education enthusiasts.'
-    },
-    {
-      name: 'Eve Adams',
-      role: 'Financial Analyst',
-      imageUrl: '/image/1.jpeg',
-      description: 'Financial expert ensuring sustainable growth and responsible resource allocation for our mission.'
-    },
-  ];
-
-  const duplicatedTeam = [...teamMembers, ...teamMembers];
-
-  const [selectedMember, setSelectedMember] = useState<number>(0); // Default to first member
-
-  return (
-    <section className="py-20 ">
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center text-gray-900 mb-4">Meet Our Team</h2>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Get to know the passionate individuals behind our mission to transform education
-        </p>
-        
-        <div className="relative">
-          {/* Blue Border Box */}
-          <div className="absolute inset-0 border-4 border-blue-500 rounded-2xl pointer-events-none"></div>
-          
-          {/* Team Members Carousel */}
-          <motion.div
-            className="flex py-8 px-2 space-x-8"
-            initial={{ x: 0 }}
-            animate={{ x: "-50%" }}
-            transition={{
-              x: {
-                repeat: Infinity,
-                repeatType: "loop",
-                duration: 30,
-                ease: "linear",
-              },
-            }}
-            whileHover={{ x: "0%", transition: { duration: 0 } }}
-          >
-            {duplicatedTeam.map((member, index) => (
-              <motion.div
-                key={`${member.name}-${index}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-                className="flex-shrink-0 cursor-pointer"
-                onClick={() => setSelectedMember(index % teamMembers.length)}
-                whileHover={{ y: -10 }}
-              >
-                <TeamMemberCard {...member} />
-              </motion.div>
-            ))}
-          </motion.div>
-          
-          {/* Description Box - Always shows a team member */}
-          <div className="mt-8 bg-white p-4 rounded-lg shadow-md border border-blue-100 max-w-2xl mx-auto">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedMember}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="text-center"
-              >
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {teamMembers[selectedMember].name}
-                  <span className="block text-lg text-blue-600 font-medium mt-1">
-                    {teamMembers[selectedMember].role}
-                  </span>
-                </h3>
-                <p className="mt-3 text-gray-600 text-sm leading-relaxed">
-                  {teamMembers[selectedMember].description}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default MeetTheTeam;
+}

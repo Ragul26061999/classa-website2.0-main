@@ -163,24 +163,51 @@ const AboutUs = () => {
               >
                 <motion.div 
                   initial={{ opacity: 0, x: -40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: [0, 20, 0],
+                  }}
+                  transition={{ 
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                    delay: 0.2
+                  }}
                   className="p-2 rounded-full bg-sky-100/70 backdrop-blur-sm"
                 >
                   <GraduationCap className="h-5 w-5 text-sky-600" />
                 </motion.div>
                 <motion.div 
                   initial={{ opacity: 0, x: -40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: [0, 20, 0],
+                  }}
+                  transition={{ 
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                    delay: 0.3
+                  }}
                   className="p-2 rounded-full bg-indigo-100/70 backdrop-blur-sm"
                 >
                   <BookOpen className="h-5 w-5 text-indigo-600" />
                 </motion.div>
                 <motion.div 
                   initial={{ opacity: 0, x: -40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: [0, 20, 0],
+                  }}
+                  transition={{ 
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                    delay: 0.4
+                  }}
                   className="p-2 rounded-full bg-sky-100/70 backdrop-blur-sm"
                 >
                   <Brain className="h-5 w-5 text-sky-600" />
@@ -214,24 +241,51 @@ const AboutUs = () => {
               >
                 <motion.div 
                   initial={{ opacity: 0, x: -40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: [0, 20, 0],
+                  }}
+                  transition={{ 
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                    delay: 0.6
+                  }}
                   className="p-2 rounded-full bg-emerald-100/70 backdrop-blur-sm"
                 >
                   <Users className="h-5 w-5 text-emerald-600" />
                 </motion.div>
                 <motion.div 
                   initial={{ opacity: 0, x: -40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: [0, 20, 0],
+                  }}
+                  transition={{ 
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                    delay: 0.7
+                  }}
                   className="p-2 rounded-full bg-violet-100/70 backdrop-blur-sm"
                 >
                   <Lightbulb className="h-5 w-5 text-violet-600" />
                 </motion.div>
                 <motion.div 
                   initial={{ opacity: 0, x: -40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
+                  animate={{ 
+                    opacity: 1, 
+                    x: [0, 20, 0],
+                  }}
+                  transition={{ 
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut",
+                    delay: 0.8
+                  }}
                   className="p-2 rounded-full bg-rose-100/70 backdrop-blur-sm"
                 >
                   <Stars className="h-5 w-5 text-rose-600" />
