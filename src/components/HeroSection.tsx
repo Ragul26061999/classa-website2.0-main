@@ -10,10 +10,10 @@ interface HeroSectionProps {
 }
 
 const rotatingTexts = [
-  { text: "Adaptive Learning", image: "/adaptive.png", color: "#007DC6" },
-  { text: "Empowered Teaching", image: "/empowerd.png", color: "#F29553" },
-  { text: "Intelligent Management", image: "/intelligent.png", color: "#EDC531" },
-  { text: "Seamless Administration", image: "/seamless.png", color: "#db2777" },
+  { text: "Adaptive Learning", image: "/adaptive.png", color: "#007DC6", opacity: 0.8 },
+  { text: "Empowered Teaching", image: "/empowerd.png", color: "#F29553", opacity: 0.8 },
+  { text: "Intelligent Management", image: "/intelligent.png", color: "#EDC531", opacity: 0.8 },
+  { text: "Seamless Administration", image: "/seamless.png", color: "#db2777", opacity: 0.8 },
 ];
 
 export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
@@ -89,15 +89,16 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
               alt={rotatingTexts[index].text}
               fill
               className="object-cover"
+              style={{ opacity: rotatingTexts[index].opacity }}
               priority
             />
-            <div className="absolute inset-0 bg-black/60" />
+            <div className="absolute inset-0 bg-black/70" />
           </motion.div>
         </AnimatePresence>
       </div>
 
       {/* Content */}
-      <div ref={contentRef} className="relative z-10 text-center px-6 border border-transparent">
+      <div ref={contentRef} className="relative z-10 text-center pt-20 px-6 border border-transparent">
         <motion.div
           className="absolute"
           style={{
@@ -129,7 +130,7 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
             alt="stars"
             width={48}
             height={48}
-            className="object-contain"
+            className="object-contain -mt-5"
           />
         </motion.div>
         </motion.div>
