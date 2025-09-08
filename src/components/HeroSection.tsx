@@ -70,6 +70,7 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
 
   return (
     <section 
+      id="home"
       ref={heroRef}
       className={`relative w-full h-screen overflow-hidden flex items-center justify-center bg-black text-white ${hideNavbar ? 'pt-0' : ''}`}
     >

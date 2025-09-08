@@ -18,6 +18,16 @@ export default function Navbar() {
       ? "text-[#0070F3] font-bold"
       : `text-${isScrolled ? 'gray-700' : 'blue-700'} hover:text-[#3DA9FC] transition-colors`;
 
+  // Override link colors contextually: when over HeroSection (#home is in view),
+  // use white text with blue hover; otherwise, use default scheme.
+  const contextualLinkClass = (href: string) => {
+    const base = "text-lg font-bold transition-colors";
+    if (!isScrolled) {
+      return isActive(href) ? `text-white ${base}` : `text-white hover:text-[#3DA9FC] ${base}`;
+    }
+    return isActive(href) ? "text-[#0070F3] font-bold" : "text-gray-700 hover:text-[#3DA9FC] transition-colors";
+  };
+
   useEffect(() => {
     const isElementInViewport = (el: Element) => {
       const rect = el.getBoundingClientRect();
@@ -29,7 +39,11 @@ export default function Navbar() {
 
     const handleScroll = () => {
       const hero = document.querySelector('#home');
-      if (!hero) return;
+      if (!hero) {
+        // No hero section on this page -> default to dark scheme
+        setIsScrolled(true);
+        return;
+      }
       
       const scrollPosition = window.scrollY;
       // Add glassy effect when scrolled past 100px or when not over hero
@@ -69,12 +83,12 @@ export default function Navbar() {
 
         {/* Center: Nav links */}
         <nav className="hidden gap-8 md:flex py-2">
-          <Link href="/" className={`${navLinkClass("/")} text-lg font-bold`}>Home</Link>
-          <Link href="/about" className={`${navLinkClass("/about")} text-lg font-bold`}>
+          <Link href="/" className={`${contextualLinkClass("/")}`}>Home</Link>
+          <Link href="/about" className={`${contextualLinkClass("/about")}`}>
             About Us
           </Link>
-          <Link href="/classa" className={`${navLinkClass("/classa")} text-lg font-bold`}>
-            Unified Platform
+          <Link href="/classa" className={`${contextualLinkClass("/classa")}`}>
+            OurSchoolSuite
           </Link>
         </nav>
 
