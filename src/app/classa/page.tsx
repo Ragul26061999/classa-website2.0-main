@@ -52,7 +52,7 @@ const MODULES: Module[] = [
       // { text: "Customize content for local needs → Tailor resources to meet regional standards and cultural contexts.", colorClass: "bg-[#3B82F6]" }
     ],
     image: {
-      src: "/image/Cms.png",
+      src: "images/cms.png",
       alt: "Content Management System"
     },
     accent: { ring: "ring-[#007DC6]", ringSoft: "ring-[#007DC6]/70", dot: "bg-[#007DC6]", gradient: "from-blue-50 to-sky-50" }
@@ -67,7 +67,7 @@ const MODULES: Module[] = [
       // { text: "Generate reports and insights → Comprehensive analytics tools provide insights into student performance and trends.", colorClass: "bg-[#EDC531]" }
     ],
     image: {
-      src: "/image/Lms.png",
+      src: "images/lms.png",
       alt: "Learning Management System"
     },
     accent: { ring: "ring-[#EDC531]", ringSoft: "ring-[#EDC531]/70", dot: "bg-[#EDC531]", gradient: "from-yellow-50 to-amber-50" }
@@ -82,7 +82,7 @@ const MODULES: Module[] = [
       // { text: "Insightful scorecards", colorClass: "bg-[#12881F]" }
     ],
     image: {
-      src: "/image/Ams.png",
+      src: "images/ams.png",
       alt: "Assessment Management System"
     },
     accent: { ring: "ring-[#12881F]", ringSoft: "ring-[#12881F]/70", dot: "bg-[#12881F]", gradient: "from-emerald-50 to-green-50" }
@@ -97,7 +97,7 @@ const MODULES: Module[] = [
       { text: "Multilingual support", colorClass: "bg-[#A422D0]" }
     ],
     image: {
-      src: "/image/Sims.png",
+      src: "images/senseAI.png",
       alt: "SenseAI preview"
     },
     accent: { ring: "ring-[#A422D0]", ringSoft: "ring-[#A422D0]/70", dot: "bg-[#A422D0]", gradient: "from-purple-50 to-fuchsia-50" }
@@ -112,7 +112,7 @@ const MODULES: Module[] = [
       { text: "Staff & inventory", colorClass: "bg-[#F29553]" }
     ],
     image: {
-      src: "/image/Sms.png",
+      src: "images/sms.png",
       alt: "School Management System"
     },
     accent: { ring: "ring-[#F29553]", ringSoft: "ring-[#F29553]/70", dot: "bg-[#F29553]", gradient: "from-orange-50 to-amber-50" }
@@ -134,28 +134,46 @@ const MODULES: Module[] = [
   } 
 ];
 
- const ROLES: { icon: string; title: string; text: string }[] = [
+ import { BarChart3, GraduationCap, Users, BookOpen } from 'lucide-react';
+
+const ROLES: { title: React.ReactNode; text: string }[] = [
   {
-    icon: "🧑‍💼",
-    title: "🧑‍💼Leader",
+    title: (
+      <span className="flex items-center gap-2">
+        <BarChart3 className="w-5 h-5 text-blue-600" />
+        Leader
+      </span>
+    ),
     text:
       "Comprehensive dashboards consolidate critical data into accessible insights, while robust analytics tools deliver real-time performance trends for optimized resource allocation and strategic decision-making.",
   },
   {
-    icon: "👩‍🏫",
-    title: "👩‍🏫 Teachers",
+    title: (
+      <span className="flex items-center gap-2">
+        <BookOpen className="w-5 h-5 text-green-600" />
+        Teachers
+      </span>
+    ),
     text:
       "Quickly create customized lessons and tests with automated grading, deliver precise feedback to boost performance, and seamlessly organize plans while tracking progress and managing class content.",
   },
   {
-    icon: "🧑‍🎓",
-    title: "🧑 Students",
+    title: (
+      <span className="flex items-center gap-2">
+        <GraduationCap className="w-5 h-5 text-purple-600" />
+        Students
+      </span>
+    ),
     text:
       "Personalized learning journeys adapt to individual styles and pace, supported by interactive tools like flashcards, summaries, mnemonics, and quizzes—plus immediate feedback to highlight strengths.",
   },
   {
-    icon: "👨‍👩‍👧",
-    title: "👨‍👩 Parents",
+    title: (
+      <span className="flex items-center gap-2">
+        <Users className="w-5 h-5 text-amber-600" />
+        Parents
+      </span>
+    ),
     text:
       "Clear, timely updates keep parents informed about progress and deadlines, with secure communication channels that foster active engagement and support at home.",
   },
@@ -353,7 +371,7 @@ function ClassaPage() {
                       </ul>
                     </motion.div>
                     <div className="md:col-span-2 rounded-2xl overflow-hidden">
-                      <div className={`relative h-64 md:h-full overflow-hidden rounded-2xl ring-2 ${MODULES[activeModule].accent.ringSoft || MODULES[activeModule].accent.ring} bg-gradient-to-br ${MODULES[activeModule].accent.gradient}`}>
+                      <div className={`relative h-[45vh] md:h-full overflow-hidden rounded-2xl ring-2 ${MODULES[activeModule].accent.ringSoft || MODULES[activeModule].accent.ring} bg-gradient-to-br ${MODULES[activeModule].accent.gradient}`}>
                         <motion.img
                           src={MODULES[activeModule].image.src}
                           alt={MODULES[activeModule].image.alt}
@@ -379,8 +397,8 @@ function ClassaPage() {
               Tailored for Every Role
               <span className="block font-normal">in Your Institution</span>
             </h2>
-            <p className="mt-3 text-slate-600 text-sm md:text-base">
-              <span className="text-sky-600 font-semibold ml-5">CLASSA</span> offers specialized features for each member of your educational community—streamlining collaboration and boosting productivity.
+            <p className="mt-3 text-slate-600 text-sm md:text-base lg:text-lg">
+              <span className="text-sky-600 font-semibold ml-">CLASSA</span> offers specialized features for each member of your educational community—streamlining collaboration and boosting productivity.
             </p>
           </header>
 
@@ -390,7 +408,7 @@ function ClassaPage() {
               const isActive = activeRole === idx;
               return (
                 <button
-                  key={r.title}
+                  key={idx}
                   id={`role-tab-${idx}`}
                   role="tab"
                   aria-selected={isActive}
@@ -405,8 +423,7 @@ function ClassaPage() {
                     (isActive ? "bg-sky-600 text-white border-sky-600" : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200")
                   }
                 >
-                  <span className="text-base">{r.icon}</span>
-                  <span className="font-medium">{r.title}</span>
+                  <span className="font-medium">{typeof r.title === 'string' ? r.title.replace(/^[^\w\s]+/, '') : r.title}</span>
                 </button>
               );
             })}
@@ -466,7 +483,7 @@ function ClassaPage() {
                   const isActive = activeRole === idx;
                   return (
                     <button
-                      key={r.title}
+                      key={idx}
                       id={`role-tab-${idx}`}
                       role="tab"
                       aria-selected={isActive}
@@ -477,14 +494,18 @@ function ClassaPage() {
                       tabIndex={focusedIdx === idx ? 0 : -1}
                       ref={(el) => { desktopTabRefs.current[idx] = el; }}
                       className={`relative group w-full border-l-4 border-transparent hover:border-sky-400 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50 px-6 py-4 text-left flex-1 flex transition-all duration-300 ease-out transform hover:scale-[1.02] hover:shadow-lg ${isActive ? 'border-l-sky-500 bg-gradient-to-r from-sky-100 to-blue-100 shadow-md scale-[1.01]' : 'hover:translate-x-1'}`}
-                      title={r.title}
+                      title={typeof r.title === 'string' ? r.title : 'Role tab'}
                     >
                       {/* Active indicator */}
                       {isActive && (
                         <span className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-sky-400 to-sky-600 rounded-r-full shadow-sm" />
                       )}
                       <span className="flex items-center justify-between w-full relative z-10">
-                        <span className={`text-lg font-semibold tracking-tight transition-colors duration-200 ${isActive ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'}`}>{r.title}</span>
+                        <div className="flex items-center gap-2">
+                          <span className={`text-lg font-semibold tracking-tight transition-colors duration-200 ${isActive ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'}`}>
+                            {r.title}
+                          </span>
+                        </div>
                         <div className={`transition-all duration-300 ease-out flex-shrink-0 ${isActive ? 'rotate-180 scale-110' : 'group-hover:scale-110 group-hover:rotate-90'}`}>
                           {isActive ? (
                             <Minus className="text-sky-600 drop-shadow-sm" size={26} strokeWidth={2.5} />

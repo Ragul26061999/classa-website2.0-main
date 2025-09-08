@@ -2,7 +2,6 @@
 
 import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import PastelDoodles from './ui/PastelDoodles';
 import Image from 'next/image';
 import {
   LayoutGrid,
@@ -151,10 +150,18 @@ const AboutUs = () => {
       
         {/* ===== HERO WITH CARDS ===== */}
         <section className="relative min-h-[70vh] md:min-h-screen flex items-center px-6 overflow-hidden">
-          <PastelDoodles />
+          
           <div className="relative w-full grid md:grid-cols-2 gap-10 items-center z-10">
-            <div className="order-2 md:order-1 text-center md:text-left">
-              {/* Top decorative icons */}
+            <div className="order-2 md:order-1 text-center md:text-left p-6 md:p-10 relative group">
+              {/* Glass background for text */}
+              <div className="absolute inset-0 bg-white/20 backdrop-blur-lg rounded-2xl border border-blue-400/50 shadow-2xl shadow-blue-400/40 group-hover:shadow-3xl group-hover:shadow-blue-400/60 transition-all duration-500 ease-out overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/30 before:to-white/5 before:rounded-2xl before:pointer-events-none after:absolute after:inset-0 after:bg-gradient-to-br after:from-blue-50/10 after:to-indigo-50/5 after:rounded-2xl after:pointer-events-none after:border after:border-white/20 after:backdrop-blur-sm hover:after:opacity-100 hover:after:transition-all hover:after:duration-500" style={{
+                boxShadow: '0 20px 50px -10px rgba(59, 130, 246, 0.2), 0 10px 30px -10px rgba(79, 70, 229, 0.1)'
+              }}>
+                {/* Subtle inner glow effect */}
+                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 mix-blend-overlay"></div>
+              </div>
+              <div className="relative z-10">
+                {/* Top decorative icons */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -291,6 +298,7 @@ const AboutUs = () => {
                   <Stars className="h-5 w-5 text-rose-600" />
                 </motion.div>
               </motion.div>
+              </div>
             </div>
 
             <div className="order-1 md:order-2 flex items-center justify-center md:justify-end mt-20 md:mt-40">
@@ -653,9 +661,10 @@ const AboutUs = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-
-    </section>
+          </div>
+        </section>
+    //   </div>
+    // </section>
 
   );
 
