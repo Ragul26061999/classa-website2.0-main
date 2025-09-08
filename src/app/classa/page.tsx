@@ -397,9 +397,10 @@ function ClassaPage() {
               Tailored for Every Role
               <span className="block font-normal">in Your Institution</span>
             </h2>
-            <p className="mt-3 text-slate-600 text-sm md:text-base lg:text-lg">
-              <span className="text-sky-600 font-semibold ml-">CLASSA</span> offers specialized features for each member of your educational community—streamlining collaboration and boosting productivity.
+            <p className="mt-3 text-slate-600 text-sm md:text-base lg:text-lg ml-5">
+              <span className="text-sky-600 font-semibold ml-">CLASSA</span> offers specialized features for each member of your educational community
             </p>
+            <p className="mt-3 text-slate-600 text-sm md:text-base lg:text-lg ml-5">streamlining collaboration and boosting productivity.</p>
           </header>
 
           {/* Tabs (mobile): horizontal chips */}
