@@ -83,7 +83,7 @@ export default function Navbar() {
 
         {/* Center: Nav links */}
         <nav className="hidden gap-8 md:flex py-2">
-          <Link href="/" className={`${contextualLinkClass("/")}`}>Home</Link>
+          <Link href="/" className={`${contextualLinkClass("/#home")}`}>Home</Link>
           <Link href="/about" className={`${contextualLinkClass("/about")}`}>
             About Us
           </Link>
