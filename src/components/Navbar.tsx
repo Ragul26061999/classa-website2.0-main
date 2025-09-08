@@ -88,7 +88,7 @@ export default function Navbar() {
             About Us
           </Link>
           <Link href="/classa" className={`${contextualLinkClass("/classa")}`}>
-            OurSchoolSuite
+            Our School Suite
           </Link>
         </nav>
 

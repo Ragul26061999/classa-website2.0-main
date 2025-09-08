@@ -41,7 +41,7 @@ export default function Footer() {
                 <Link href="/about" className="hover:text-white">About Us</Link>
               </li>
               <li>
-                <Link href="/classa" className="hover:text-white">Unified Platform</Link>
+                <Link href="/classa" className="hover:text-white">Our School Suite</Link>
               </li>
             </ul>
           </div>
