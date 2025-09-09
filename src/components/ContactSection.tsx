@@ -111,19 +111,39 @@ export default function ContactSection() {
 
               {/* Form */}
               <form
-                className="bg-white px-6 pt-6 pb-8" 
-                // onSubmit={(e) => {
-                //   e.preventDefault();
-                //   const fd = new FormData(e.currentTarget);
-                //   const payload = Object.fromEntries(fd.entries());
-                //   alert(`Submitted!\n\n${JSON.stringify(payload, null, 2)}`);
-                // }}
+                className="bg-white px-6 pt-6 pb-8"
+                action="https://api.web3forms.com/submit"
+                method="POST"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const form = e.currentTarget;
+                  fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    if (data.success) {
+                      alert('Thank you for your message! We will get back to you soon.');
+                      form.reset();
+                    } else {
+                      alert('There was an error sending your message. Please try again.');
+                    }
+                  })
+                  .catch(error => {
+                    console.error('Error:', error);
+                    alert('There was an error sending your message. Please try again.');
+                  });
+                }}
               >
-                <Field label="Full Name" name="fullName" placeholder="Your name" />
-                <Field label="Email" type="email" name="email" placeholder="you@example.com" />
-                <Field label="Phone" name="phone" placeholder="+91 XXXXX XXXXX" />
-                <Field label="School Name" name="school" placeholder="Your school" />
-                <Field label="Address" name="address" placeholder="Street, City, Pincode" />
+                <input type="hidden" name="access_key" value="ec90b4b1-01be-44fb-bbbd-0bba140312de" />
+                <input type="hidden" name="subject" value="New Contact Form Submission" />
+                <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
+                <Field label="Full Name" name="name" placeholder="Your name" required />
+                <Field label="Email" type="email" name="email" placeholder="you@example.com" required />
+                <Field label="Phone" name="phone" placeholder="+91 XXXXX XXXXX" required />
+                <Field label="School Name" name="school" placeholder="Your school" required />
+                <Field label="Address" name="address" placeholder="Street, City, Pincode" required />
 
                 <div className="mt-4 border-t border-zinc-200 pt-6">
                   <motion.button
@@ -150,9 +170,10 @@ interface FieldProps {
   name: string;
   placeholder?: string;
   type?: string;
+  required?: boolean;
 }
 
-function Field({ label, name, placeholder, type = "text" }: FieldProps) {
+function Field({ label, name, placeholder, type = "text", required = false }: FieldProps) {
   const id = name;
   return (
     <div className="mb-4">
@@ -164,7 +185,7 @@ function Field({ label, name, placeholder, type = "text" }: FieldProps) {
         name={name}
         type={type}
         placeholder={placeholder}
-        required
+        required={required}
         className="block w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-zinc-900 placeholder-zinc-400 outline-none focus:ring-2 focus:ring-[#4aa8ff] focus:border-[#4aa8ff] transition"
       />
     </div>
