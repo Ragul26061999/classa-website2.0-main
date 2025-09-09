@@ -20,45 +20,11 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  min-height: 100vh;
   overflow-x: hidden;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Responsive media */
-img, video, canvas, svg {
-  max-width: 100%;
-  height: auto;
-  vertical-align: middle;
-}
-
-/* Better typography for mobile */
-@media (max-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-/* Prevent horizontal overflow */
-* {
-  box-sizing: border-box;
 }
 
 /* Custom animations */
