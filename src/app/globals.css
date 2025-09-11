@@ -59,6 +59,7 @@ body {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden; /* Prevent horizontal overflow on all pages */
 }
 
 /* Improve font rasterization globally */

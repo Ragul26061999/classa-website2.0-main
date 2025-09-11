@@ -99,7 +99,7 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
       </div>
 
       {/* Content */}
-      <div ref={contentRef} className="relative z-10 text-center pt-20 px-6 border border-transparent">
+      <div ref={contentRef} className="relative z-10 text-center pt-20 px-4 sm:px-6 md:px-8 border border-transparent">
         <motion.div
           className="absolute"
           style={{
@@ -111,7 +111,7 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
             offsetDistance: "100%",
           }}
           transition={{
-            duration: 10,
+            duration: 12,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -121,7 +121,7 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
             rotate: 360,
           }}
           transition={{
-            duration: 4,
+            duration: 6,
             repeat: Infinity,
             ease: "linear",
           }}
@@ -131,7 +131,7 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
             alt="stars"
             width={48}
             height={48}
-            className="object-contain -mt-5"
+            className="object-contain -mt-5 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
           />
         </motion.div>
         </motion.div>
@@ -157,16 +157,16 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
           institutional management, and data-driven insights to elevate learning.
         </p>
 
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button 
             onClick={() => router.push('/#contact')}
-            className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-400 transition"
+            className="px-4 sm:px-6 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-400 transition text-sm sm:text-base w-full sm:w-auto"
           >
             Book a Demo
           </button>
           <button 
             onClick={() => router.push('/classa')}
-            className="px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition"
+            className="px-4 sm:px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition text-sm sm:text-base w-full sm:w-auto"
           >
             Explore the Module
           </button>
