@@ -6,6 +6,15 @@
   --foreground: #171717;
 }
 
+/* Global media responsiveness */
+@layer base {
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -25,6 +34,7 @@ body {
   color: var(--foreground);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
+  width: 100%;
 }
 
 /* Custom animations */
@@ -59,6 +69,10 @@ body {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 /* Improve font rasterization globally */
@@ -66,6 +80,9 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* Custom gradient text */

@@ -218,10 +218,10 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, col
   return (
     <section className="py-2 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-4">
+        <h2 className="text-3xl sm:text-4xl font-bold text-center mb-4">
           <span style={{ color: '#007DC6' }}>NextGen Learn:</span> <span className="text-black">Shaping Future Education</span>
         </h2>
-        <p className="text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
+        <p className="text-base sm:text-xl text-center text-gray-600 mb-12 max-w-3xl mx-auto">
           Discover how our innovative features are transforming the learning experience for students and educators alike.
         </p>
 
@@ -236,13 +236,13 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon, col
           </div>
 
           <button
-            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md focus:outline-none"
+            className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-1 sm:p-2 rounded-full shadow-md focus:outline-none z-10"
             onClick={() => handleScroll('left')}
           >
             <ArrowLeft className="text-gray-700" />
           </button>
           <button
-            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-md focus:outline-none"
+            className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-1 sm:p-2 rounded-full shadow-md focus:outline-none z-10"
             onClick={() => handleScroll('right')}
           >
             <ArrowRight className="text-gray-700" />

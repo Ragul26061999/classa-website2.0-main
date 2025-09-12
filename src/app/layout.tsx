@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${raleway.variable} font-sans antialiased scroll-smooth`}
+        className={`${raleway.variable} font-sans antialiased scroll-smooth overflow-x-hidden w-full`}
       >
         {children}
         <Footer />

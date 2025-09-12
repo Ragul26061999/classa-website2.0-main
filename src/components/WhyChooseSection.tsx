@@ -516,7 +516,7 @@ export default function WhyChooseSection() {
 
       {/* background gradient */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(at_20%_10%,#e0f2fe,transparent_30%)]" />
-      <div className="mx-auto max-w-6xl px-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <div className="relative lg:min-h-[250vh] -pb-2">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -537,11 +537,11 @@ export default function WhyChooseSection() {
       </motion.div>
 
       {/* content */}
-      <div className="grid grid-cols-12 items-start gap-10 mt-16">
-        <div className="col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 lg:self-start mt-16">
+      <div className="grid grid-cols-12 items-start gap-6 md:gap-8 lg:gap-10 mt-10 md:mt-16">
+        <div className="col-span-12 lg:col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 lg:self-start mt-8 md:mt-16">
           <HeroVisual active={active} scheme={pastelSchemes[active]} />
         </div>
-        <div className="col-span-6">
+        <div className="col-span-12 lg:col-span-6">
           <div className="relative lg:min-h-[300vh] ">
             <FeatureCard index={0} icon={Brain} title="AI That Works for You" onInView={setActive} scheme={pastelSchemes[0]}>
               Adaptive learning paths, question generation, and feedback tuned to each learner — not just a chatbot.

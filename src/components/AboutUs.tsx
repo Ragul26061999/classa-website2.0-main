@@ -149,24 +149,23 @@ const AboutUs = () => {
       <div className="max-w-7xl mx-auto">
       
         {/* ===== HERO WITH CARDS ===== */}
-        <section className="relative min-h-[70vh] md:min-h-screen flex items-center px-6 overflow-hidden">
-          
-          <div className="relative w-full grid md:grid-cols-2 gap-10 items-center z-10">
-            <div className="order-2 md:order-1 text-center md:text-left p-6 md:p-10 relative group">
+        <section className="relative min-h-[90vh] md:min-h-screen flex items-start md:items-center px-2 sm:px-4 md:px-6 overflow-visible md:overflow-hidden">
+          <div className="relative w-full grid md:grid-cols-2 gap-4 md:gap-10 items-start md:items-center z-10 py-6 md:py-0">
+            <div className="order-2 md:order-1 text-center md:text-left px-3 py-6 sm:p-6 md:p-10 relative group w-full max-w-[calc(100%-1rem)] md:max-w-none mx-auto md:mx-0 mr-40 -ml-10">
               {/* Glass background for text */}
-              <div className="absolute inset-0 bg-white/20 backdrop-blur-lg rounded-2xl border border-blue-400/50 shadow-2xl shadow-blue-400/40 group-hover:shadow-3xl group-hover:shadow-blue-400/60 transition-all duration-500 ease-out overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/30 before:to-white/5 before:rounded-2xl before:pointer-events-none after:absolute after:inset-0 after:bg-gradient-to-br after:from-blue-50/10 after:to-indigo-50/5 after:rounded-2xl after:pointer-events-none after:border after:border-white/20 after:backdrop-blur-sm hover:after:opacity-100 hover:after:transition-all hover:after:duration-500" style={{
-                boxShadow: '0 20px 50px -10px rgba(59, 130, 246, 0.2), 0 10px 30px -10px rgba(79, 70, 229, 0.1)'
+              <div className="absolute inset-0 bg-white/10 md:bg-white/20 backdrop-blur-lg rounded-2xl border-0 md:border border-blue-400/50 shadow-lg md:shadow-2xl shadow-blue-400/20 md:shadow-blue-400/40 group-hover:shadow-3xl group-hover:shadow-blue-400/60 transition-all duration-500 ease-out overflow-visible md:overflow-hidden before:absolute before:inset-0 before:bg-gradient-to-br before:from-white/20 before:to-white/5 md:before:from-white/30 before:to-white/5 before:rounded-2xl before:pointer-events-none after:absolute after:inset-0 after:bg-gradient-to-br after:from-blue-50/5 after:to-indigo-50/3 md:after:from-blue-50/10 md:after:to-indigo-50/5 after:rounded-2xl after:pointer-events-none after:border-0 md:after:border after:border-white/20 after:backdrop-blur-sm hover:after:opacity-100 hover:after:transition-all hover:after:duration-500" style={{
+                boxShadow: '0 10px 30px -5px rgba(59, 130, 246, 0.1), 0 5px 15px -5px rgba(79, 70, 229, 0.05)'
               }}>
-                {/* Subtle inner glow effect */}
-                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 mix-blend-overlay"></div>
+                {/* Subtle inner glow effect - hidden on mobile */}
+                <div className="hidden md:block absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10 mix-blend-overlay"></div>
               </div>
-              <div className="relative z-10">
+              <div className="relative z-10 px-2 sm:px-0">
                 {/* Top decorative icons */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="flex items-center justify-center md:justify-start gap-3 mb-6"
+                className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 mb-4 sm:mb-6"
               >
                 <motion.div 
                   initial={{ opacity: 0, x: -40 }}
@@ -221,23 +220,24 @@ const AboutUs = () => {
                 </motion.div>
               </motion.div>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-700 via-sky-600 to-indigo-700"
-              >
-                Who We Are
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.15 }}
-                className="mt-6 text-[1.05rem] text-gray-600 leading-relaxed"
-              >
-                CLASSA is a Next-Generation education technology platform designed to
-                streamline academic delivery, student support, and school management with one unified AI-driven system.
-              </motion.p>
+              <motion.div className="space-y-3 md:space-y-4">
+                <motion.h1
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-2xl sm:text-3xl md:text-5xl font-bold md:font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-sky-700 via-sky-600 to-indigo-700"
+                >
+                  Who We Are
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.1 }}
+                  className="text-xs xs:text-sm sm:text-base md:text-[1.05rem] text-gray-600 leading-tight xs:leading-snug md:leading-relaxed"
+                >
+                  CLASSA is a Next-Gen education platform that streamlines academics, student support, and school management with AI-driven technology.
+                </motion.p>
+              </motion.div>
 
               {/* Bottom decorative icons */}
               <motion.div
@@ -301,7 +301,7 @@ const AboutUs = () => {
               </div>
             </div>
 
-            <div className="order-1 md:order-2 flex items-center justify-center md:justify-end mt-20 md:mt-40">
+            <div className="order-1 md:order-2 flex items-center justify-center md:justify-end mt-32 mr-10 md:ml-0 md:mt-40">
               <CardSwap
                 width={400}
                 height={300}

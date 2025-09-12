@@ -8,22 +8,22 @@ export default function ContactSection() {
   
   return (
     <section id="contact" className="w-full bg-white text-zinc-900 overflow-hidden scroll-mt-24">
-      <div className="mx-auto max-w-7xl px-6 py-16 md:pb-50">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-24 lg:min-h-[80vh] flex flex-col lg:items-start lg:justify-center relative">
         {/* Heading */}
         <motion.div
-          className="mb-10"
+          className="w-full lg:max-w-4xl mx-auto lg:mx-0 text-center lg:text-left lg:pl-8 xl:pl-12 2xl:pl-24"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl font-semibold tracking-tight leading-tight bg-gradient-to-r from-[#9333ea] to-[#6b21a8] via-[#c084fc] text-transparent bg-clip-text">Easy to Reach</h2>
-          <p className="mt-1 text-4xl font-light bg-gradient-to-r from-[#a855f7] to-[#818cf8] via-[#60a5fa] text-transparent bg-clip-text ml-20">Ready to Help</p>
+          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-tight bg-gradient-to-r from-[#9333ea] to-[#6b21a8] via-[#c084fc] text-transparent bg-clip-text">Easy to Reach</h2>
+          <p className="mt-1 text-2xl sm:text-4xl font-light bg-gradient-to-r from-[#a855f7] to-[#818cf8] via-[#60a5fa] text-transparent bg-clip-text lg:ml-0 sm:ml-20">Ready to Help</p>
           <p className="mt-6 text-zinc-600">Get in Touch with the CLASSA Team</p>
         </motion.div>
 
         {/* Content Row */}
-        <div className="relative">
+        <div className="relative w-full">
           {/* Left: Image + Info cards */}
           <motion.div
             className="relative"
@@ -36,7 +36,7 @@ export default function ContactSection() {
               <img
                 src="/image/contactus.png"
                 alt="Classroom chairs"
-                className="h-[520px] w-full object-cover object-[12%_50%] sm:object-[10%_50%] md:object-[8%_50%] xl:object-[6%_50%] saturate-[0.9] contrast-[0.98] brightness-[1.02]"
+                className="h-64 sm:h-[520px] lg:h-[600px] w-full object-cover object-[12%_50%] sm:object-[10%_50%] md:object-[8%_50%] xl:object-[6%_50%] saturate-[0.9] contrast-[0.98] brightness-[1.02]"
               />
               {/* Subtle bottom gradient to improve legibility of overlay cards, mimicking the sample */}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/25" />
@@ -44,7 +44,7 @@ export default function ContactSection() {
 
             {/* Overlay: Challenge/Idea card */}
             <motion.div
-              className="absolute left-8 -bottom-40 w-[520px]"
+              className="mt-4 lg:absolute lg:left-8 lg:-bottom-20 w-full lg:w-[520px] px-2 lg:px-0"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
@@ -81,7 +81,7 @@ export default function ContactSection() {
 
           {/* Right: Form Card */}
           <motion.div
-            className="relative md:absolute md:right-6 md:top-6"
+            className="relative lg:absolute lg:right-6 lg:top-1/2 lg:-translate-y-1/2 mt-16 lg:mt-0 w-full lg:max-w-md mx-auto"
             initial={{ opacity: 0, x: 60 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}

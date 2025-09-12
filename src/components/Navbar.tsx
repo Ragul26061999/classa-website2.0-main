@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Menu, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   const isActive = (href: string) =>
@@ -62,15 +63,14 @@ export default function Navbar() {
     <header
       className="fixed top-0 left-0 right-0 z-50 bg-white/20 backdrop-blur-lg shadow-lg border-b border-white/20 transition-all duration-300"
       style={{
-        transform: 'var(--navbar-hidden, none)',
+        transform: 'translateY(var(--navbar-hidden, 0))',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         backgroundColor: 'rgba(255, 255, 255, 0.2)'
       }}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        {/* Left: Logo + brand */}
-        <Link href="/#home" className="flex items-center gap-3 -ml-20">
+        <Link href="/#home" className="flex items-center gap-3 md:-ml-20">
           <Image
             src="/image/classa logo.png"
             alt="CLASSA logo"
@@ -92,10 +92,40 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* Right: CTA */}
+        {/* Mobile hamburger menu */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden p-2 text-[#3DA9FC] hover:text-blue-600 transition-colors"
+        >
+          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
+
+        {/* Mobile menu */}
+        {isMobileMenuOpen && (
+          <div className="absolute top-full left-0 right-0 bg-[#3DA9FC] text-white backdrop-blur-lg shadow-lg md:hidden border-t border-white/20">
+            <nav className="flex flex-col gap-4 px-4 py-4">
+              <Link href="/" className={`${contextualLinkClass("/#home")} block text-white hover:text-white/90`} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+              <Link href="/about" className={`${contextualLinkClass("/about")} block text-white hover:text-white/90`} onClick={() => setIsMobileMenuOpen(false)}>
+                About Us
+              </Link>
+              <Link href="/classa" className={`${contextualLinkClass("/classa")} block text-white hover:text-white/90`} onClick={() => setIsMobileMenuOpen(false)}>
+                Our School Suite
+              </Link>
+              <Link
+                href="/#contact"
+                className="mt-4 w-full text-center inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0B63B2] shadow-sm hover:bg-white/90 transition-all duration-200"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact Us <ArrowRight className="h-4 w-4" />
+              </Link>
+            </nav>
+          </div>
+        )}
+
+        {/* Desktop CTA */}
         <Link
           href="/#contact"
-          className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200 -mr-20"
+          className="hidden md:inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200 md:-mr-20"
         >
           Contact Us <ArrowRight className="h-4 w-4" />
         </Link>

@@ -5,10 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-interface HeroSectionProps {
-  hideNavbar?: boolean;
-}
-
 const rotatingTexts = [
   { text: "Adaptive Learning", image: "/adaptive.png", color: "#007DC6", opacity: 0.8 },
   { text: "Empowered Teaching", image: "/empowerd.png", color: "#F29553", opacity: 0.8 },
@@ -16,10 +12,9 @@ const rotatingTexts = [
   { text: "Seamless Administration", image: "/seamless.png", color: "#db2777", opacity: 0.8 },
 ];
 
-export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
+export default function HeroSection() {
   const router = useRouter();
   const heroRef = useRef<HTMLElement>(null);
-  const [isNavbarHidden, setIsNavbarHidden] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const [path, setPath] = useState("");
 
@@ -30,34 +25,6 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
     }
   }, []);
 
-  useEffect(() => {
-    if (!hideNavbar || !heroRef.current) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsNavbarHidden(entry.intersectionRatio < 1);
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: [0, 1]
-      }
-    );
-
-    observer.observe(heroRef.current);
-
-    return () => {
-      if (heroRef.current) {
-        observer.unobserve(heroRef.current);
-      }
-    };
-  }, [hideNavbar]);
-
-  useEffect(() => {
-    if (hideNavbar) {
-      document.body.style.setProperty('--navbar-hidden', isNavbarHidden ? '0' : '-100%');
-    }
-  }, [isNavbarHidden, hideNavbar]);
   const [index, setIndex] = useState(0);
 
   // Rotate every 3 seconds
@@ -72,7 +39,7 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
     <section 
       id="home"
       ref={heroRef}
-      className={`relative w-full h-screen overflow-hidden flex items-center justify-center bg-black text-white ${hideNavbar ? 'pt-0' : ''}`}
+      className="relative w-full h-screen overflow-hidden flex items-center justify-center bg-black text-white"
     >
       {/* Background Images */}
       <div className="absolute inset-0">
@@ -99,42 +66,44 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
       </div>
 
       {/* Content */}
-      <div ref={contentRef} className="relative z-10 text-center pt-20 px-6 border border-transparent">
-        <motion.div
-          className="absolute"
-          style={{
-            width: 44,
-            height: 44,
-            offsetPath: path ? `path('${path}')` : undefined,
-          }}
-          animate={{
-            offsetDistance: "100%",
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        >
+      <div ref={contentRef} className="relative z-10 text-center pt-12 md:pt-20 px-4 sm:px-6 border border-transparent">
+        <div className="hidden md:block">
           <motion.div
-          animate={{
-            rotate: 360,
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        >
-          <Image
-            src="/image/stars.png"
-            alt="stars"
-            width={48}
-            height={48}
-            className="object-contain -mt-5"
-          />
-        </motion.div>
-        </motion.div>
+            className="absolute"
+            style={{
+              width: 44,
+              height: 44,
+              offsetPath: path ? `path('${path}')` : undefined,
+            }}
+            animate={{
+              offsetDistance: "100%",
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            <motion.div
+              animate={{
+                rotate: 360,
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              <Image
+                src="/image/stars.png"
+                alt="stars"
+                width={48}
+                height={48}
+                className="object-contain -mt-5"
+              />
+            </motion.div>
+          </motion.div>
+        </div>
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
           Empowering Institutions with{" "}
           <AnimatePresence mode="wait">
@@ -152,21 +121,21 @@ export default function HeroSection({ hideNavbar = false }: HeroSectionProps) {
           </AnimatePresence>
         </h1>
 
-        <p className="max-w-2xl mx-auto text-lg md:text-xl mb-8">
+        <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl mb-8">
           A Next-Gen Edtech ecosystem integrating smart classrooms,
           institutional management, and data-driven insights to elevate learning.
         </p>
 
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
           <button 
             onClick={() => router.push('/#contact')}
-            className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-400 transition"
+            className="px-4 py-2 sm:px-6 sm:py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-400 transition"
           >
             Book a Demo
           </button>
           <button 
             onClick={() => router.push('/classa')}
-            className="px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition"
+            className="px-4 py-2 sm:px-6 sm:py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition"
           >
             Explore the Module
           </button>

@@ -257,9 +257,9 @@ function ClassaPage() {
       <HeroSection_copy />
 
       {/* Modules */}
-      <section ref={modulesRef} aria-labelledby="modules" className="relative h-[300vh]">
-        <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+      <section ref={modulesRef} aria-labelledby="modules" className="relative py-12 md:py-20 overflow-x-hidden">
+        <div className="min-h-screen flex items-center py-12">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 pt-35">Our Modules</h2>
             
             {/* CLASSA Buttons */}
@@ -300,59 +300,61 @@ function ClassaPage() {
             </div>
 
             {/* Module Display */}
-            <div className="relative min-h-[500px]">
+            <div className="relative w-full">
               <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeModule}
-                    initial={{ opacity: 0, y: 30 }}
+                <motion.div
+                  key={activeModule}
+                  className="grid grid-cols-1 md:grid-cols-5 gap-8 py-6 w-full min-h-[500px]"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0,
+                    transition: { 
+                      duration: 0.5,
+                      ease: [0.16, 1, 0.3, 1] 
+                    } 
+                  }}
+                  exit={{ 
+                    opacity: 0, 
+                    y: -20,
+                    transition: { 
+                      duration: 0.3,
+                      ease: [0.5, 0, 1, 1] 
+                    } 
+                  }}
+                >
+                  {/* Content Panel */}
+                  <motion.div 
+                    className="md:col-span-3 rounded-lg p-6 relative overflow-y-auto max-h-[70vh] group"
+                    style={{
+                      border: `2px solid ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}`,
+                      boxShadow: `0 0 0 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}20`
+                    }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ 
                       opacity: 1, 
                       y: 0,
+                      boxShadow: `0 0 20px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}40`,
                       transition: { 
                         duration: 0.5,
                         ease: [0.16, 1, 0.3, 1] 
                       } 
                     }}
-                    exit={{ 
-                      opacity: 0, 
-                      y: -20,
-                      transition: { 
-                        duration: 0.3,
-                        ease: [0.5, 0, 1, 1] 
-                      } 
+                    whileHover={{
+                      boxShadow: `0 0 30px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}60`,
+                      transition: { duration: 0.3 }
                     }}
-                    className="grid md:grid-cols-5 gap-8 py-6"
                   >
-                    <motion.div 
-                      className="md:col-span-3 rounded-lg p-6 relative overflow-hidden group"
-                      style={{
-                        border: `2px solid ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}`,
-                        boxShadow: `0 0 0 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}20`
-                      }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ 
-                        opacity: 1, 
-                        y: 0,
-                        boxShadow: `0 0 20px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}40`,
-                        transition: { 
-                          duration: 0.5,
-                          ease: [0.16, 1, 0.3, 1] 
-                        } 
-                      }}
-                      whileHover={{
-                        boxShadow: `0 0 30px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}60`,
-                        transition: { duration: 0.3 }
-                      }}
-                    >
-                      <div className="absolute inset-0 overflow-hidden">
-                        <div 
-                          className="absolute inset-0 opacity-30 transition-opacity duration-500"
-                          style={{
-                            background: `linear-gradient(90deg, transparent, ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}, transparent)`,
-                            animation: 'shimmer 3s infinite',
-                          }}
-                        />
-                      </div>
+                    <div className="absolute inset-0 overflow-hidden">
+                      <div 
+                        className="absolute inset-0 opacity-30 transition-opacity duration-500"
+                        style={{
+                          background: `linear-gradient(90deg, transparent, ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}, transparent)`,
+                          animation: 'shimmer 3s infinite',
+                        }}
+                      />
+                    </div>
+                    <div className="relative z-10">
                       <h3 className="text-2xl font-bold text-gray-900 mb-4">
                         {MODULES[activeModule].title}
                       </h3>
@@ -365,28 +367,42 @@ function ClassaPage() {
                             <span className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${MODULES[activeModule].accent.dot} text-white shadow-sm`}>
                               <Check size={14} strokeWidth={3} />
                             </span>
-                            <span>{bullet.text}</span>
+                            <span className="text-gray-600">{bullet.text}</span>
                           </li>
                         ))}
                       </ul>
-                    </motion.div>
-                    <div className="md:col-span-2 rounded-2xl overflow-hidden">
-                      <div className={`relative h-[45vh] md:h-full overflow-hidden rounded-2xl ring-2 ${MODULES[activeModule].accent.ringSoft || MODULES[activeModule].accent.ring} bg-gradient-to-br ${MODULES[activeModule].accent.gradient}`}>
-                        <motion.img
+                    </div>
+                  </motion.div>
+
+                  {/* Image Panel */}
+                  <div className="md:col-span-2 relative h-full hidden md:block">
+                    <div className="sticky top-6 w-full h-full flex items-center">
+                      <motion.div 
+                        className="w-full rounded-xl overflow-hidden"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ 
+                          opacity: 1, 
+                          scale: 1, 
+                          transition: { 
+                            delay: 0.2, 
+                            duration: 0.6 
+                          } 
+                        }}
+                      >
+                        <img
                           src={MODULES[activeModule].image.src}
                           alt={MODULES[activeModule].image.alt}
                           loading="lazy"
-                          initial={{ opacity: 0, scale: 1.1 }}
-                          animate={{ opacity: 1, scale: 1, transition: { delay: 0.2, duration: 0.6 } }}
+                          className="w-full h-auto rounded-lg shadow-lg"
                         />
-                      </div>
+                      </motion.div>
                     </div>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
-        {/* </div> */}
+        </div>
       </section>
 
       {/* Tailored for Every Role */}
