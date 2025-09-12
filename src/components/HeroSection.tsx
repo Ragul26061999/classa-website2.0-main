@@ -66,44 +66,43 @@ export default function HeroSection() {
       </div>
 
       {/* Content */}
-      <div ref={contentRef} className="relative z-10 text-center pt-12 md:pt-20 px-4 sm:px-6 border border-transparent">
-        <div className="hidden md:block">
+      <div ref={contentRef} className="relative z-10 text-center pt-12 md:pt-20 px-4 sm:px-6 md:px-8 border border-transparent">
+        <motion.div
+          className="absolute"
+          style={{
+            width: 44,
+            height: 44,
+            offsetPath: path ? `path('${path}')` : undefined,
+          }}
+          animate={{
+            offsetDistance: "100%",
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        >
           <motion.div
-            className="absolute"
-            style={{
-              width: 44,
-              height: 44,
-              offsetPath: path ? `path('${path}')` : undefined,
-            }}
             animate={{
-              offsetDistance: "100%",
+              rotate: 360,
             }}
             transition={{
-              duration: 10,
+              duration: 6,
               repeat: Infinity,
               ease: "linear",
             }}
           >
-            <motion.div
-              animate={{
-                rotate: 360,
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-            >
-              <Image
-                src="/image/stars.png"
-                alt="stars"
-                width={48}
-                height={48}
-                className="object-contain -mt-5"
-              />
-            </motion.div>
+            <Image
+              src="/image/stars.png"
+              alt="stars"
+              width={48}
+              height={48}
+              className="object-contain -mt-5 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
+              priority
+            />
           </motion.div>
-        </div>
+        </motion.div>
         <h1 className="text-4xl md:text-6xl font-bold mb-4">
           Empowering Institutions with{" "}
           <AnimatePresence mode="wait">
@@ -126,16 +125,16 @@ export default function HeroSection() {
           institutional management, and data-driven insights to elevate learning.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <button 
             onClick={() => router.push('/#contact')}
-            className="px-4 py-2 sm:px-6 sm:py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-400 transition"
+            className="px-4 sm:px-6 py-3 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-400 transition text-sm sm:text-base w-full sm:w-auto"
           >
             Book a Demo
           </button>
           <button 
             onClick={() => router.push('/classa')}
-            className="px-4 py-2 sm:px-6 sm:py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition"
+            className="px-4 sm:px-6 py-3 bg-white/10 border border-white/20 rounded-xl hover:bg-white/20 transition text-sm sm:text-base w-full sm:w-auto"
           >
             Explore the Module
           </button>

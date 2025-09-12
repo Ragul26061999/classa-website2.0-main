@@ -69,10 +69,10 @@ body {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden; /* Prevent horizontal overflow on all pages */
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
 }
 
 /* Improve font rasterization globally */
@@ -80,9 +80,6 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  width: 100%;
-  margin: 0;
-  padding: 0;
 }
 
 /* Custom gradient text */

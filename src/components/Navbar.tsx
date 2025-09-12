@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Menu, X } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
@@ -24,18 +24,20 @@ export default function Navbar() {
   const contextualLinkClass = (href: string) => {
     const base = "text-lg font-bold transition-colors";
     if (!isScrolled) {
-      return isActive(href) ? `text-white ${base}` : `text-white hover:text-[#3DA9FC] ${base}`;
+      return isActive(href) 
+        ? `text-white ${base}` 
+        : `text-white hover:text-[#3DA9FC] ${base}`;
     }
-    return isActive(href) ? "text-[#0070F3] font-bold" : "text-gray-700 hover:text-[#3DA9FC] transition-colors";
+    return isActive(href) 
+      ? "text-[#0070F3] font-bold" 
+      : "text-gray-700 hover:text-[#3DA9FC] transition-colors";
   };
 
   useEffect(() => {
-    const isElementInViewport = (el: Element) => {
+    const isElementInViewport = (el: Element | null): boolean => {
+      if (!el) return false;
       const rect = el.getBoundingClientRect();
-      return (
-        rect.top <= 100 && // 100px from top of viewport
-        rect.bottom >= 0
-      );
+      return rect.top <= 100 && rect.bottom >= 0;
     };
 
     const handleScroll = () => {
@@ -57,7 +59,7 @@ export default function Navbar() {
     // Add scroll listener
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [pathname]); // Add pathname as a dependency since it's used in the effect
+  }, [pathname]);
 
   return (
     <header
@@ -69,67 +71,90 @@ export default function Navbar() {
         backgroundColor: 'rgba(255, 255, 255, 0.2)'
       }}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+      <div className="mx-4 md:mx-10 lg:mx-20 flex max-w-6xl items-center justify-between px-4 py-4">
+        {/* Logo */}
         <Link href="/#home" className="flex items-center gap-3 md:-ml-20">
           <Image
             src="/image/classa logo.png"
             alt="CLASSA logo"
             width={160}
             height={160}
-            // className="rounded-md ring-1 ring-black/5"
             priority
           />
         </Link>
 
-        {/* Center: Nav links */}
+        {/* Desktop Navigation */}
         <nav className="hidden gap-8 md:flex py-2">
-          <Link href="/" className={`${contextualLinkClass("/#home")}`}>Home</Link>
-          <Link href="/about" className={`${contextualLinkClass("/about")}`}>
+          <Link href="/" className={contextualLinkClass("/#home")}>
+            Home
+          </Link>
+          <Link href="/about" className={contextualLinkClass("/about")}>
             About Us
           </Link>
-          <Link href="/classa" className={`${contextualLinkClass("/classa")}`}>
+          <Link href="/classa" className={contextualLinkClass("/classa")}>
             Our School Suite
           </Link>
         </nav>
 
-        {/* Mobile hamburger menu */}
+        {/* Mobile Menu Button */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           className="md:hidden p-2 text-[#3DA9FC] hover:text-blue-600 transition-colors"
+          aria-label="Toggle mobile menu"
         >
-          {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isMobileMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
         </button>
-
-        {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-[#3DA9FC] text-white backdrop-blur-lg shadow-lg md:hidden border-t border-white/20">
-            <nav className="flex flex-col gap-4 px-4 py-4">
-              <Link href="/" className={`${contextualLinkClass("/#home")} block text-white hover:text-white/90`} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-              <Link href="/about" className={`${contextualLinkClass("/about")} block text-white hover:text-white/90`} onClick={() => setIsMobileMenuOpen(false)}>
-                About Us
-              </Link>
-              <Link href="/classa" className={`${contextualLinkClass("/classa")} block text-white hover:text-white/90`} onClick={() => setIsMobileMenuOpen(false)}>
-                Our School Suite
-              </Link>
-              <Link
-                href="/#contact"
-                className="mt-4 w-full text-center inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0B63B2] shadow-sm hover:bg-white/90 transition-all duration-200"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Contact Us <ArrowRight className="h-4 w-4" />
-              </Link>
-            </nav>
-          </div>
-        )}
 
         {/* Desktop CTA */}
         <Link
           href="/#contact"
-          className="hidden md:inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200 md:-mr-20"
+          className="hidden md:inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200"
         >
           Contact Us <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg">
+          <nav className="flex flex-col space-y-4 p-6">
+            <Link
+              href="/"
+              className={`${contextualLinkClass("/#home")} py-2 text-lg`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link
+              href="/about"
+              className={`${contextualLinkClass("/about")} py-2 text-lg`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              About Us
+            </Link>
+            <Link
+              href="/classa"
+              className={`${contextualLinkClass("/classa")} py-2 text-lg`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Our School Suite
+            </Link>
+            <div className="pt-4 border-t border-gray-200">
+              <Link
+                href="/#contact"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#3DA9FC] px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-[#0070F3] transition-all duration-200 w-full"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact Us <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
