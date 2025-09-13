@@ -88,13 +88,23 @@ interface FeatureCardProps {
 function FeatureCard({ icon: Icon, title, children, index, onInView, scheme }: FeatureCardProps) {
   const [isActive, setIsActive] = useState(false);
   const scrollDirection = useScrollDirection();
-
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const update = () => setIsDesktop(window.innerWidth >= 1024);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
   return (
     <motion.div
       custom={{ index, direction: scrollDirection }}
       initial="hidden"
       animate={isActive ? "show" : "hidden"}
-      viewport={{
+      viewport={isDesktop ? {
+        amount: 0.5,
+        margin: "-40% 0px -40% 0px",
+        once: false
+      } : {
         amount: 0.4,
         margin: "-20% 0px -20% 0px",
         once: false
@@ -236,7 +246,7 @@ function HeroVisual({ active, scheme }: { active: number; scheme: Scheme }) {
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={{ amount: 0.1, once: true }}
         transition={{ duration: 0.6 }}
         className={`rounded-3xl border bg-white/80 p-6 shadow-xl backdrop-blur-sm ${scheme.border}`}
       >

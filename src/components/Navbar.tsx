@@ -71,30 +71,33 @@ export default function Navbar() {
         backgroundColor: 'rgba(255, 255, 255, 0.2)'
       }}
     >
-      <div className="mx-4 md:mx-10 lg:mx-20 flex max-w-6xl items-center justify-between px-4 py-4">
-        {/* Logo */}
-        <Link href="/#home" className="flex items-center gap-3 md:-ml-20">
+      <div className="mx-4 md:mx-10 lg:mx-20 flex max-w-6xl items-center justify-between px-4 py-4 w-full">
+        {/* Logo - Hidden on desktop */}
+        <Link href="/#home" className="flex items-center gap-3 md:absolute md:left-10">
           <Image
             src="/image/classa logo.png"
             alt="CLASSA logo"
             width={160}
             height={160}
             priority
+            className="h-10 w-auto"
           />
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden gap-8 md:flex py-2">
-          <Link href="/" className={contextualLinkClass("/#home")}>
-            Home
-          </Link>
-          <Link href="/about" className={contextualLinkClass("/about")}>
-            About Us
-          </Link>
-          <Link href="/classa" className={contextualLinkClass("/classa")}>
-            Our School Suite
-          </Link>
-        </nav>
+        {/* Desktop Navigation - Centered with right shift */}
+        <div className="hidden md:flex items-center justify-center flex-1">
+          <nav className="flex gap-8 py-2 ml-50">
+            <Link href="/" className={contextualLinkClass("/#home")}>
+              Home
+            </Link>
+            <Link href="/about" className={contextualLinkClass("/about")}>
+              About Us
+            </Link>
+            <Link href="/classa" className={contextualLinkClass("/classa")}>
+              Our School Suite
+            </Link>
+          </nav>
+        </div>
 
         {/* Mobile Menu Button */}
         <button
@@ -109,18 +112,20 @@ export default function Navbar() {
           )}
         </button>
 
-        {/* Desktop CTA */}
-        <Link
-          href="/#contact"
-          className="hidden md:inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200"
-        >
-          Contact Us <ArrowRight className="h-4 w-4" />
-        </Link>
+        {/* Desktop CTA - Right Aligned */}
+        <div className="hidden md:block">
+          <Link
+            href="/#contact"
+            className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200 -mr-40"
+          >
+            Contact Us <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
 
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 shadow-lg">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-blue-200 backdrop-blur-lg border-t border-gray-200 shadow-lg">
           <nav className="flex flex-col space-y-4 p-6">
             <Link
               href="/"
