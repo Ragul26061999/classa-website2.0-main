@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Brain, Sparkles, BarChart3, Users2, MessageSquareHeart, Globe2, LucideIcon } from "lucide-react";
 
@@ -83,9 +83,12 @@ interface FeatureCardProps {
   index: number;
   onInView: (index: number) => void;
   scheme: Scheme;
+  activeIndex: number;
+  // provide the outer card element to parent for alignment calculations
+  registerRef?: (index: number, el: HTMLDivElement | null) => void;
 }
 
-function FeatureCard({ icon: Icon, title, children, index, onInView, scheme }: FeatureCardProps) {
+function FeatureCard({ icon: Icon, title, children, index, onInView, scheme, activeIndex, registerRef }: FeatureCardProps) {
   const [isActive, setIsActive] = useState(false);
   const scrollDirection = useScrollDirection();
   const [isDesktop, setIsDesktop] = useState(false);
@@ -98,14 +101,23 @@ function FeatureCard({ icon: Icon, title, children, index, onInView, scheme }: F
     return () => window.removeEventListener('resize', update);
   }, []);
 
+  // expose this card's DOM node to parent for alignment calculations
+  useEffect(() => {
+    if (!registerRef) return;
+    registerRef(index, cardRef.current);
+    return () => registerRef(index, null);
+  }, [index, registerRef]);
+
   // Handle intersection observer for scroll animations
   useEffect(() => {
     if (!isDesktop || !cardRef.current) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsActive(true);
+        const isIntersecting = entry.isIntersecting;
+        setIsActive(isIntersecting);
+        
+        if (isIntersecting) {
           onInView(index);
         } else if (scrollDirection === 'up') {
           const prevIndex = Math.max(0, index - 1);
@@ -154,15 +166,17 @@ function FeatureCard({ icon: Icon, title, children, index, onInView, scheme }: F
           }
         }
       }}
-      className={`group relative overflow-hidden rounded-2xl border bg-white/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-lg max-w-lg mx-auto lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 ${scheme.border}`}
+      className={`group relative overflow-hidden rounded-2xl border bg-white/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-lg max-w-lg mx-auto lg:sticky lg:top-[calc(50vh+3rem)] ${scheme.border}`}
       style={{
-        zIndex: 50 - index, // Lower index means higher in the stack
+        zIndex: activeIndex === index ? 60 : 50 - index, // Active card gets highest z-index
         marginTop: index === 0 ? 0 : "8rem",
-        willChange: 'transform, opacity' // Optimize for animations
+        willChange: 'transform, opacity',
+        opacity: activeIndex === index ? 1 : 0.35,
+        pointerEvents: activeIndex === index ? 'auto' : 'none'
       }}
     >
       <div className={`absolute -right-8 -top-8 h-28 w-28 rounded-full bg-gradient-to-br opacity-60 blur-2xl transition-opacity duration-300 ${scheme.blobFrom} ${scheme.blobTo} ${isActive ? 'opacity-60' : 'opacity-20'}`} />
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3" data-card-header>
         <motion.div 
           className={`grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-md ${scheme.iconFrom} ${scheme.iconTo}`}
           animate={isActive ? {
@@ -551,9 +565,52 @@ function  ShieldIcon() {
 
 // ---- Desktop Section (hidden on mobile) ----
 const WhyChooseSection = () => {
-  const [active, setActive] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
+  // Registry of feature card DOM nodes by index
+  const cardNodesRef = useRef<Record<number, HTMLDivElement | null>>({});
+  const [heroOffset, setHeroOffset] = useState(0);
+  // Fine-tune vertical alignment between HeroVisual and the card's title row
+  const HERO_CALIBRATE = -12; // tweak +/- few px until perfectly aligned on your screen
+
+  // Allow children to register their DOM nodes
+  const registerRef = (index: number, el: HTMLDivElement | null) => {
+    cardNodesRef.current[index] = el;
+  };
+
+  // Measure the distance from the first card to the active card and apply to HeroVisual
+  const computeHeroOffset = () => {
+    const first = cardNodesRef.current[0];
+    const active = cardNodesRef.current[activeIndex];
+    if (!first || !active) return;
+
+    // Prefer aligning by the header row inside each card
+    const firstHeader = first.querySelector('[data-card-header]') as HTMLElement | null;
+    const activeHeader = active.querySelector('[data-card-header]') as HTMLElement | null;
+
+    const baseRect = (firstHeader ?? first).getBoundingClientRect();
+    const activeRect = (activeHeader ?? active).getBoundingClientRect();
+
+    // Distance between active and first header tops in the viewport
+    const delta = activeRect.top - baseRect.top;
+    const computed = Math.round(delta + HERO_CALIBRATE);
+    setHeroOffset(computed);
+  };
+
+  useLayoutEffect(() => {
+    computeHeroOffset();
+  }, [activeIndex]);
+
+  useEffect(() => {
+    const handler = () => computeHeroOffset();
+    window.addEventListener('resize', handler, { passive: true } as any);
+    window.addEventListener('scroll', handler, { passive: true } as any);
+    return () => {
+      window.removeEventListener('resize', handler as any);
+      window.removeEventListener('scroll', handler as any);
+    };
+  }, [activeIndex]);
   return (
-    <section id="classa" className="relative isolate w-full py-20 scroll-mt-24 bg-[#F7FAFC] hidden lg:block">
+    <section id="classa" className="relative isolate w-full py-10 scroll-mt-24 bg-[#F7FAFC] hidden lg:block ">
       {/* background gradient */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(at_20%_10%,#e0f2fe,transparent_30%)]" />
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -586,28 +643,68 @@ const WhyChooseSection = () => {
       {/* content */}
       <div className="grid grid-cols-12 items-start gap-6 md:gap-8 lg:gap-10 mt-10 md:mt-16" style={{ position: 'relative' }}>
         <motion.div 
-          className="col-span-12 lg:col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 lg:self-start mt-8 md:mt-16"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
+          className="col-span-12 lg:col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:self-start"
+          initial={{ opacity: 0, x: -20, y: 0 }}
+          animate={{ opacity: 1, x: 0, y: heroOffset }}
+          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
         >
-          <HeroVisual active={active} scheme={pastelSchemes[active]} />
+          <HeroVisual active={activeIndex} scheme={pastelSchemes[activeIndex]} />
         </motion.div>
         <div className="col-span-12 lg:col-span-6">
           <div className="relative">
-            <FeatureCard index={0} icon={Brain} title="AI That Works for You" onInView={setActive} scheme={pastelSchemes[0]}>
+            <FeatureCard 
+              index={0} 
+              icon={Brain} 
+              title="AI That Works for You" 
+              onInView={setActiveIndex} 
+              scheme={pastelSchemes[0]}
+              activeIndex={activeIndex}
+              registerRef={registerRef}
+            >
               Adaptive learning paths, question generation, and feedback tuned to each learner — not just a chatbot.
             </FeatureCard>
-            <FeatureCard index={1} icon={Globe2} title="Built for India" onInView={setActive} scheme={pastelSchemes[1]}>
+            <FeatureCard 
+              index={1} 
+              icon={Globe2} 
+              title="Built for India" 
+              onInView={setActiveIndex} 
+              scheme={pastelSchemes[1]}
+              activeIndex={activeIndex}
+              registerRef={registerRef}
+            >
               Covers CBSE/State boards with multilingual support and low-bandwidth optimizations.
             </FeatureCard>
-            <FeatureCard index={2} icon={BarChart3} title="Boost Results" onInView={setActive} scheme={pastelSchemes[2]}>
+            <FeatureCard 
+              index={2} 
+              icon={BarChart3} 
+              title="Boost Results" 
+              onInView={setActiveIndex} 
+              scheme={pastelSchemes[2]}
+              activeIndex={activeIndex}
+              registerRef={registerRef}
+            >
               Track mastery and growth with live dashboards and evidence-based interventions.
             </FeatureCard>
-            <FeatureCard index={3} icon={Users2} title="Teachers Love It" onInView={setActive} scheme={pastelSchemes[3]}>
+            <FeatureCard 
+              index={3} 
+              icon={Users2} 
+              title="Teachers Love It" 
+              onInView={setActiveIndex} 
+              scheme={pastelSchemes[3]}
+              activeIndex={activeIndex}
+              registerRef={registerRef}
+            >
               Save hours with auto-generated lesson plans, worksheets, and analytics you&apos;ll actually use.
             </FeatureCard>
-            <FeatureCard index={4} icon={MessageSquareHeart} title="Parents Stay Connected" onInView={setActive} scheme={pastelSchemes[4]}>
+            <FeatureCard 
+              index={4} 
+              icon={MessageSquareHeart} 
+              title="Parents Stay Connected" 
+              onInView={setActiveIndex} 
+              scheme={pastelSchemes[4]}
+              activeIndex={activeIndex}
+              registerRef={registerRef}
+            >
               Simple progress reports and alerts keep families informed without extra work.
             </FeatureCard>
           </div>
