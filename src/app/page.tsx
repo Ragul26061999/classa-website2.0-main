@@ -1,5 +1,5 @@
 import HeroSection from '@/components/HeroSection';
-import WhyChooseSection from '@/components/WhyChooseSection';
+import ResponsiveWhyChooseSection from '@/components/ResponsiveWhyChooseSection';
 import ContactSection from '@/components/ContactSection';
 import Navbar from '@/components/Navbar';
 import NextGenLearn from '@/components/NextGenLearn';
@@ -9,7 +9,7 @@ export default function Home() {
     <main className="min-h-screen bg-white overflow-x-hidden w-full">
       <Navbar />
       <HeroSection />
-      <WhyChooseSection />
+      <ResponsiveWhyChooseSection />
       <NextGenLearn />
       <ContactSection />
       {/* <CardsSection/> */}

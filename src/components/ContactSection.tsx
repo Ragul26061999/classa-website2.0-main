@@ -19,7 +19,7 @@ export default function ContactSection() {
         >
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-tight bg-gradient-to-r from-[#9333ea] to-[#6b21a8] via-[#c084fc] text-transparent bg-clip-text">Easy to Reach</h2>
           <p className="mt-1 text-2xl sm:text-4xl font-light bg-gradient-to-r from-[#a855f7] to-[#818cf8] via-[#60a5fa] text-transparent bg-clip-text lg:ml-0 sm:ml-20">Ready to Help</p>
-          <p className="mt-6 text-zinc-600">Get in Touch with the CLASSA Team</p>
+          <p className="mt-6 text-zinc-600 pb-5">Get in Touch with the CLASSA Team</p>
         </motion.div>
 
         {/* Content Row */}
@@ -36,7 +36,7 @@ export default function ContactSection() {
               <img
                 src="/image/contactus.png"
                 alt="Classroom chairs"
-                className="h-64 sm:h-[520px] lg:h-[600px] w-full object-cover object-[12%_50%] sm:object-[10%_50%] md:object-[8%_50%] xl:object-[6%_50%] saturate-[0.9] contrast-[0.98] brightness-[1.02]"
+                className="h-60 sm:h-[520px] lg:h-[600px] w-full object-cover object-[12%_50%] sm:object-[10%_50%] md:object-[8%_50%] xl:object-[6%_50%] saturate-[0.9] contrast-[0.98] brightness-[1.02]"
               />
               {/* Subtle bottom gradient to improve legibility of overlay cards, mimicking the sample */}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-black/25" />
@@ -81,7 +81,7 @@ export default function ContactSection() {
 
           {/* Right: Form Card */}
           <motion.div
-            className="relative lg:absolute lg:right-6 lg:top-1/2 lg:-translate-y-1/2 mt-16 lg:mt-0 w-full lg:max-w-md mx-auto"
+            className="relative lg:absolute lg:right-30 lg:top-1/2 lg:-translate-y-1/2 mt-16 lg:mt-0 w-full lg:max-w-md mx-auto "
             initial={{ opacity: 0, x: 60 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7 }}

@@ -116,7 +116,7 @@ export default function Navbar() {
         <div className="hidden md:block">
           <Link
             href="/#contact"
-            className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200 -mr-40"
+            className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-3 text-sm font-semibold text-gray-800 ring-1 ring-gray-200 shadow-sm hover:bg-[#3DA9FC] hover:text-white hover:ring-transparent hover:shadow-md transition-all duration-200 "
           >
             Contact Us <ArrowRight className="h-4 w-4" />
           </Link>

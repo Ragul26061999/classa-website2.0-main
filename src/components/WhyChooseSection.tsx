@@ -89,53 +89,61 @@ function FeatureCard({ icon: Icon, title, children, index, onInView, scheme }: F
   const [isActive, setIsActive] = useState(false);
   const scrollDirection = useScrollDirection();
   const [isDesktop, setIsDesktop] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const update = () => setIsDesktop(window.innerWidth >= 1024);
     update();
     window.addEventListener('resize', update);
     return () => window.removeEventListener('resize', update);
   }, []);
-  return (
-    <motion.div
-      custom={{ index, direction: scrollDirection }}
-      initial="hidden"
-      animate={isActive ? "show" : "hidden"}
-      viewport={isDesktop ? {
-        amount: 0.5,
-        margin: "-40% 0px -40% 0px",
-        once: false
-      } : {
-        amount: 0.4,
-        margin: "-20% 0px -20% 0px",
-        once: false
-      }}
-      onViewportEnter={(entry) => {
-        if (entry) {
+
+  // Handle intersection observer for scroll animations
+  useEffect(() => {
+    if (!isDesktop || !cardRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setIsActive(true);
           onInView(index);
-        }
-      }}
-      onViewportLeave={(entry) => {
-        if (entry && scrollDirection === 'up') {
-          // When scrolling up and leaving viewport, activate previous card
+        } else if (scrollDirection === 'up') {
           const prevIndex = Math.max(0, index - 1);
           onInView(prevIndex);
         }
-      }}
+      },
+      {
+        threshold: 0.5,
+        rootMargin: '-40% 0px -40% 0px'
+      }
+    );
+
+    observer.observe(cardRef.current);
+    return () => observer.disconnect();
+  }, [isDesktop, index, onInView, scrollDirection]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      initial="hidden"
+      animate={isActive ? "show" : "hidden"}
       variants={{
-        hidden: (custom) => ({
+        hidden: {
           opacity: 0.6,
-          y: custom.direction === 'down' ? 40 : -40,
+          y: 40,
           scale: 0.95,
-          transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] }
-        }),
-        show: (custom) => ({
+          transition: { 
+            duration: 0.4, 
+            ease: [0.4, 0, 0.2, 1] 
+          }
+        },
+        show: {
           opacity: 1,
           y: 0,
           scale: 1,
           transition: {
             duration: 0.6,
-            delay: custom.index * 0.08,
+            delay: index * 0.08,
             ease: [0.4, 0, 0.2, 1],
             y: {
               type: 'spring',
@@ -144,27 +152,50 @@ function FeatureCard({ icon: Icon, title, children, index, onInView, scheme }: F
               mass: 0.8
             }
           }
-        })
+        }
       }}
       className={`group relative overflow-hidden rounded-2xl border bg-white/70 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-lg max-w-lg mx-auto lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 ${scheme.border}`}
       style={{
-        zIndex: 20 + index,
+        zIndex: 50 - index, // Lower index means higher in the stack
         marginTop: index === 0 ? 0 : "8rem",
-        opacity: isActive ? 1 : 0.7,
-        scale: isActive ? 1 : 0.96,
-        transform: isActive ? 'translateY(0)' : (scrollDirection === 'down' ? 'translateY(20px)' : 'translateY(-20px)'),
-        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-      } as React.CSSProperties}
+        willChange: 'transform, opacity' // Optimize for animations
+      }}
     >
-      <div className={`absolute -right-8 -top-8 h-28 w-28 rounded-full bg-gradient-to-br opacity-60 blur-2xl ${scheme.blobFrom} ${scheme.blobTo}`} />
+      <div className={`absolute -right-8 -top-8 h-28 w-28 rounded-full bg-gradient-to-br opacity-60 blur-2xl transition-opacity duration-300 ${scheme.blobFrom} ${scheme.blobTo} ${isActive ? 'opacity-60' : 'opacity-20'}`} />
       <div className="flex items-center gap-3">
-        <div className={`grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-md ${scheme.iconFrom} ${scheme.iconTo}`}>
+        <motion.div 
+          className={`grid h-11 w-11 place-items-center rounded-xl bg-gradient-to-br text-white shadow-md ${scheme.iconFrom} ${scheme.iconTo}`}
+          animate={isActive ? {
+            rotate: [0, 5, -5, 0],
+            scale: [1, 1.1, 1],
+            transition: { duration: 0.6 }
+          } : {}}
+        >
           <Icon size={22} />
-        </div>
-        <h4 className={`text-lg font-semibold tracking-tight ${scheme.text}`}>{title}</h4>
+        </motion.div>
+        <h4 className={`text-lg font-semibold tracking-tight ${scheme.text}`}>
+          {title}
+        </h4>
       </div>
-      <p className="mt-3 text-sm leading-6 text-slate-600">{children}</p>
-      <div className={`mt-4 h-1 w-0 bg-gradient-to-r transition-all duration-500 group-hover:w-full ${scheme.underlineFrom} ${scheme.underlineTo}`} />
+      <motion.p 
+        className="mt-3 text-sm leading-6 text-slate-600"
+        initial={{ opacity: 0, y: 10 }}
+        animate={isActive ? { 
+          opacity: 1, 
+          y: 0,
+          transition: { delay: 0.2, duration: 0.4 }
+        } : {}}
+      >
+        {children}
+      </motion.p>
+      <motion.div 
+        className={`h-1 bg-gradient-to-r ${scheme.underlineFrom} ${scheme.underlineTo}`}
+        initial={{ width: 0 }}
+        animate={isActive ? { 
+          width: '100%',
+          transition: { delay: 0.3, duration: 0.6, ease: 'easeOut' }
+        } : {}}
+      />
     </motion.div>
   );
 }
@@ -518,16 +549,22 @@ function  ShieldIcon() {
   );
 }
 
-// ---- Main Section ----
-export default function WhyChooseSection() {
+// ---- Desktop Section (hidden on mobile) ----
+const WhyChooseSection = () => {
   const [active, setActive] = useState(0);
   return (
-    <section id="classa" className="relative isolate w-full py-20 scroll-mt-24 bg-[#F7FAFC]">
-
+    <section id="classa" className="relative isolate w-full py-20 scroll-mt-24 bg-[#F7FAFC] hidden lg:block">
       {/* background gradient */}
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(at_20%_10%,#e0f2fe,transparent_30%)]" />
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <div className="relative lg:min-h-[250vh] -pb-2">
+      <div 
+        className="relative -pb-2"
+        style={{
+          minHeight: '300vh',
+          perspective: '1000px',
+          transformStyle: 'preserve-3d'
+        }}
+      >
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -547,12 +584,17 @@ export default function WhyChooseSection() {
       </motion.div>
 
       {/* content */}
-      <div className="grid grid-cols-12 items-start gap-6 md:gap-8 lg:gap-10 mt-10 md:mt-16">
-        <div className="col-span-12 lg:col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 lg:self-start mt-8 md:mt-16">
+      <div className="grid grid-cols-12 items-start gap-6 md:gap-8 lg:gap-10 mt-10 md:mt-16" style={{ position: 'relative' }}>
+        <motion.div 
+          className="col-span-12 lg:col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:-translate-y-1/2 lg:self-start mt-8 md:mt-16"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
           <HeroVisual active={active} scheme={pastelSchemes[active]} />
-        </div>
+        </motion.div>
         <div className="col-span-12 lg:col-span-6">
-          <div className="relative lg:min-h-[300vh] ">
+          <div className="relative">
             <FeatureCard index={0} icon={Brain} title="AI That Works for You" onInView={setActive} scheme={pastelSchemes[0]}>
               Adaptive learning paths, question generation, and feedback tuned to each learner — not just a chatbot.
             </FeatureCard>
@@ -578,3 +620,6 @@ export default function WhyChooseSection() {
     </section>
   );
 }
+
+export { WhyChooseSection };
+export default WhyChooseSection;

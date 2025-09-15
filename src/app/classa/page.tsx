@@ -2,8 +2,14 @@
 import Navbar from "@/components/Navbar";
 import HeroSection_copy from "@/components/HeroSection_copy";
 import { Check, Plus, Minus } from "lucide-react";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from 'react';
+
+declare global {
+  interface Window {
+    scrollAnimationId: number | null;
+  }
+}
 import type React from "react";
 
 type Bullet = { text: string; colorClass: string };
@@ -181,7 +187,41 @@ const ROLES: { title: React.ReactNode; text: string }[] = [
 
 function ClassaPage() {
   const [activeRole, setActiveRole] = useState(-1);
-  const [activeModule, setActiveModule] = useState<number>(0);
+  const [activeModule, setActiveModule] = useState(0);
+  const moduleRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  
+  // Create refs array and track inView state
+  const [inViewRefs, setInViewRefs] = useState<boolean[]>([]);
+  
+  // Initialize refs
+  useEffect(() => {
+    setInViewRefs(Array(MODULES.length).fill(false));
+  }, []);
+  
+  // Handle intersection observer for each module
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          const index = moduleRefs.current.findIndex(ref => ref === entry.target);
+          if (index !== -1) {
+            setInViewRefs(prev => {
+              const newInView = [...prev];
+              newInView[index] = entry.isIntersecting;
+              return newInView;
+            });
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    
+    moduleRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+    
+    return () => observer.disconnect();
+  }, []);
   const modulesRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ 
     target: modulesRef,
@@ -217,11 +257,104 @@ function ClassaPage() {
     }
   }, [activeRole]);
 
+  // Initialize scroll animation state
+  const animationRef = useRef<number | null>(null);
+
+  const smoothScrollTo = (targetPosition: number, duration = 2500) => {
+    const startPosition = window.pageYOffset;
+    const distance = targetPosition - startPosition;
+    let startTime: number | null = null;
+    const MIN_SCROLL_DISTANCE = 50; // Minimum distance to trigger smooth scroll
+
+    // Cancel any ongoing scroll animation
+    if (animationRef.current !== null) {
+      cancelAnimationFrame(animationRef.current);
+    }
+
+    // If the distance is very small, don't animate
+    if (Math.abs(distance) < MIN_SCROLL_DISTANCE) {
+      window.scrollTo(0, targetPosition);
+      return;
+    }
+
+    const animation = (currentTime: number) => {
+      if (startTime === null) startTime = currentTime;
+      const timeElapsed = currentTime - startTime;
+      const progress = Math.min(timeElapsed / duration, 1);
+      
+      // Custom easing function for extremely smooth movement
+      const ease = (t: number) => {
+        // Very slow start and end, with a very gentle middle
+        if (t < 0.2) return 0.5 * Math.pow(t / 0.2, 3);
+        if (t < 0.8) return 0.5 + 0.4 * ((t - 0.2) / 0.6);
+        return 0.9 + 0.1 * (1 - Math.pow(1 - ((t - 0.8) / 0.2), 4));
+      };
+      
+      const run = startPosition + distance * ease(progress);
+      window.scrollTo(0, run);
+      
+      if (progress < 1) {
+        animationRef.current = requestAnimationFrame(animation);
+      }
+    };
+
+    // Add a delay before starting the animation for better performance
+    setTimeout(() => {
+      // Check if we're already at the target position
+      if (Math.abs(window.pageYOffset - targetPosition) > 5) {
+        animationRef.current = requestAnimationFrame(animation);
+      }
+    }, 80);
+  };
+
+  const scrollToModule = (index: number) => {
+    setActiveModule(index);
+    const element = document.getElementById(`module-${index}`);
+    const header = document.querySelector('header');
+    const headerHeight = header ? header.offsetHeight : 0;
+    
+    if (element) {
+      // Calculate the exact position to scroll to with even more spacing
+      const elementRect = element.getBoundingClientRect();
+      const elementPosition = elementRect.top + window.pageYOffset;
+      
+      // Increased spacing and added dynamic calculation based on viewport height
+      const viewportHeight = window.innerHeight;
+      const elementHeight = elementRect.height;
+      const dynamicOffset = Math.min(100, viewportHeight * 0.15); // 15% of viewport or 100px max
+      const offsetPosition = Math.max(0, elementPosition - (headerHeight + dynamicOffset));
+      
+      // Add a delay before starting scroll to ensure smooth transition
+      setTimeout(() => {
+        // Only scroll if we're not already at the target position
+        if (Math.abs(window.pageYOffset - offsetPosition) > 10) {
+          smoothScrollTo(offsetPosition);
+        }
+      }, 20);
+      
+      // More aggressive visibility checking
+      const checkVisibility = () => {
+        const currentScroll = window.scrollY;
+        const elementTop = elementPosition - headerHeight - 80; // Increased buffer
+        const elementBottom = elementTop + elementRect.height + headerHeight + 100; // Increased buffer
+        
+        if (currentScroll < elementTop || currentScroll > elementBottom) {
+          // If scrolled away, adjust position with a slightly longer duration
+          smoothScrollTo(offsetPosition);
+        }
+      };
+      
+      // More frequent checking during scroll
+      const scrollCheckInterval = setInterval(checkVisibility, 80);
+      setTimeout(() => clearInterval(scrollCheckInterval), 3000); // Longer check duration
+    }
+  };
+
   function handleKeyDown(
-    e: React.KeyboardEvent<HTMLButtonElement>,
+    e: React.KeyboardEvent,
     idx: number,
-    orientation: 'horizontal' | 'vertical',
-    scope: 'mobile' | 'desktop'
+    orientation: 'horizontal' | 'vertical' = 'horizontal',
+    scope: 'desktop' | 'mobile' = 'desktop'
   ) {
     const key = e.key;
     const last = ROLES.length - 1;
@@ -231,7 +364,23 @@ function ClassaPage() {
     const go = (n: number) => {
       setFocusedIdx(n);
       const target = refs[n];
-      if (target) requestAnimationFrame(() => target.focus());
+      if (target) {
+        requestAnimationFrame(() => {
+          target.focus();
+          // Slightly increased delay for better focus handling
+          setTimeout(() => {
+            const element = document.getElementById(`module-${n}`);
+            if (element) {
+              const headerOffset = 120; // Increased for better spacing
+              const elementPosition = element.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+              
+              // Use our custom smooth scroll function
+              smoothScrollTo(offsetPosition);
+            }
+          }, 75); // Increased from 50ms to 75ms for better timing
+        });
+      }
     };
 
     if (orientation === 'horizontal') {
@@ -257,13 +406,12 @@ function ClassaPage() {
       <HeroSection_copy />
 
       {/* Modules */}
-      <section ref={modulesRef} aria-labelledby="modules" className="relative py-12 md:py-20 overflow-x-hidden">
-        <div className="min-h-screen flex items-center py-12">
-          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 pt-35">Our Modules</h2>
-            
-            {/* CLASSA Buttons */}
-            <div className="flex justify-center space-x-2 md:space-x-4 mb-12 flex-wrap">
+      <section ref={modulesRef} aria-labelledby="modules" className="sticky top-16 z-10 bg-white shadow-sm py-4 md:py-6 border-b border-gray-100">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900">Our Modules</h2>
+          
+          {/* CLASSA Buttons */}
+          <div className="flex justify-center space-x-2 md:space-x-4 mt-4 flex-wrap">
               {['C', 'L', 'A', 'S', 'S', 'A'].map((letter, index) => {
                 const color = [
                   'bg-[#007DC6]', // C - Blue
@@ -274,23 +422,35 @@ function ClassaPage() {
                   'bg-[#E75C5C]'  // A - Red
                 ][index];
                 
+                const isActive = inViewRefs[index] || activeModule === index;
+                
                 return (
                   <motion.button
+                    ref={el => {
+                      if (el) moduleRefs.current[index] = el;
+                    }}
                     key={index}
-                    className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold ${
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold transition-all duration-300 ${
                       activeModule === index 
                         ? `text-white shadow-2xl ${color}`
                         : 'bg-white text-gray-700 shadow-md hover:shadow-lg'
                     }`}
                     aria-label={`Show ${MODULES[index].title}`}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{
-                      scale: activeModule === index ? 1.15 : 1,
+                      opacity: isActive ? 1 : 0.7,
+                      scale: activeModule === index ? 1.15 : isActive ? 1.05 : 1,
                       y: activeModule === index ? -8 : 0,
                       transition: {
                         type: 'spring',
                         stiffness: 300,
-                        damping: 15
+                        damping: 15,
+                        delay: index * 0.1
                       }
+                    }}
+                    whileHover={{
+                      scale: 1.1,
+                      transition: { duration: 0.2 }
                     }}
                   >
                     <motion.span>{letter}</motion.span>
@@ -300,52 +460,59 @@ function ClassaPage() {
             </div>
 
             {/* Module Display */}
-            <div className="relative w-full">
+            <div className="relative w-full" ref={modulesRef}>
               <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeModule}
-                  className="grid grid-cols-1 md:grid-cols-5 gap-8 py-6 w-full min-h-[500px]"
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: 0,
-                    transition: { 
-                      duration: 0.5,
-                      ease: [0.16, 1, 0.3, 1] 
-                    } 
-                  }}
-                  exit={{ 
-                    opacity: 0, 
-                    y: -20,
-                    transition: { 
-                      duration: 0.3,
-                      ease: [0.5, 0, 1, 1] 
-                    } 
-                  }}
-                >
-                  {/* Content Panel */}
-                  <motion.div 
-                    className="md:col-span-3 rounded-lg p-6 relative overflow-y-auto max-h-[70vh] group"
-                    style={{
-                      border: `2px solid ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}`,
-                      boxShadow: `0 0 0 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}20`
-                    }}
-                    initial={{ opacity: 0, y: 20 }}
+                {MODULES.map((module, index) => (
+                  <motion.div
+                    key={index}
+                    className="grid grid-cols-1 md:grid-cols-5 gap-8 py-6 w-full min-h-[500px]"
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ 
-                      opacity: 1, 
-                      y: 0,
-                      boxShadow: `0 0 20px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}40`,
+                      opacity: activeModule === index ? 1 : 0,
+                      y: activeModule === index ? 0 : 30,
+                      height: activeModule === index ? 'auto' : 0,
                       transition: { 
                         duration: 0.5,
                         ease: [0.16, 1, 0.3, 1] 
                       } 
+                    }}
+                    exit={{ 
+                      opacity: 0, 
+                      y: -20,
+                      transition: { 
+                        duration: 0.3,
+                        ease: [0.5, 0, 1, 1] 
+                      } 
+                    }}
+                    style={{
+                      position: activeModule === index ? 'relative' : 'absolute',
+                      visibility: activeModule === index ? 'visible' : 'hidden'
+                    }}
+                >
+                  {/* Content Panel */}
+                  <motion.div 
+                    className="md:col-span-3 rounded-lg p-4 md:p-6 relative overflow-y-auto group h-auto"
+                    style={{
+                      border: `2px solid ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}`,
+                      boxShadow: `0 0 20px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}40`
+                    }}
+                    initial={{ opacity: 0, x: -20, y: 20 }}
+                    animate={{ 
+                      opacity: activeModule === index ? 1 : 0,
+                      x: activeModule === index ? 0 : -20,
+                      y: activeModule === index ? 0 : 20,
+                      transition: {
+                        duration: 0.5,
+                        ease: [0.16, 1, 0.3, 1],
+                        delay: 0.2
+                      }
                     }}
                     whileHover={{
                       boxShadow: `0 0 30px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}60`,
                       transition: { duration: 0.3 }
                     }}
                   >
-                    <div className="absolute inset-0 overflow-hidden">
+                    <div className="relative ">
                       <div 
                         className="absolute inset-0 opacity-30 transition-opacity duration-500"
                         style={{
@@ -375,7 +542,18 @@ function ClassaPage() {
                   </motion.div>
 
                   {/* Image Panel */}
-                  <div className="md:col-span-2 relative h-full hidden md:block">
+                  <motion.div 
+                    className="md:col-span-2 relative h-full"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{
+                      opacity: activeModule === index ? 1 : 0,
+                      x: activeModule === index ? 0 : 20,
+                      transition: {
+                        delay: 0.3,
+                        duration: 0.5
+                      }
+                    }}
+                  >
                     <div className="sticky top-6 w-full h-full flex items-center">
                       <motion.div 
                         className="w-full rounded-xl overflow-hidden"
@@ -397,16 +575,17 @@ function ClassaPage() {
                         />
                       </motion.div>
                     </div>
-                  </div>
+                  </motion.div>
                 </motion.div>
+                ))}
               </AnimatePresence>
             </div>
           </div>
-        </div>
+        {/* </div> */}
       </section>
 
       {/* Tailored for Every Role */}
-      <section aria-labelledby="roles" className="relative py-2 mt-4 min-h-[80vh]">
+      <section aria-labelledby="roles" className="relative pt-24 pb-12 min-h-[80vh]">
         <div className="mx-auto px-4 lg:px-6">
           <header className="max-w-6xl">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 ml-5">
@@ -449,7 +628,7 @@ function ClassaPage() {
           <div className="mt-10 grid gap-10 lg:grid-cols-10">
             {/* Left: image with frosted glass content overlay (smaller) */}
             <div className="relative lg:col-span-7 self-start mx-auto w-full max-w-4xl" ref={imageAreaRef}>
-              <div className="relative overflow-hidden rounded-2xl ring-2 ring-sky-300 shadow-lg shadow-sky-100">
+              <div className="relative h-full w-full rounded-lg">
                 <div className="aspect-[16/9] w-full lg:aspect-auto lg:h-[380px]">
                   <AnimatePresence mode="wait">
                     <motion.img
