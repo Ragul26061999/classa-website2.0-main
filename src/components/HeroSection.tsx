@@ -68,7 +68,7 @@ export default function HeroSection() {
       {/* Content */}
       <div ref={contentRef} className="relative z-10 text-center pt-12 md:pt-20 px-4 sm:px-6 md:px-8 border border-transparent">
         <motion.div
-          className="absolute"
+          className="absolute hidden md:block"
           style={{
             width: 44,
             height: 44,
