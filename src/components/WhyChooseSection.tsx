@@ -641,7 +641,7 @@ const WhyChooseSection = () => {
       </motion.div>
 
       {/* content */}
-      <div className="grid grid-cols-12 items-start gap-6 md:gap-8 lg:gap-10 mt-10 md:mt-16" style={{ position: 'relative' }}>
+      <div className="grid grid-cols-12 items-start gap-6 md:gap-8 lg:gap-10 " style={{ position: 'relative' }}>{/*mt-10 md:mt-16*/}
         <motion.div 
           className="col-span-12 lg:col-span-6 lg:sticky lg:top-[calc(50vh+3rem)] lg:self-start"
           initial={{ opacity: 0, x: -20, y: 0 }}
