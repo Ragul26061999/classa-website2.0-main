@@ -149,7 +149,7 @@ const AboutUs = () => {
       <div className="max-w-7xl mx-auto">
       
         {/* ===== HERO WITH CARDS ===== */}
-        <section className="relative min-h-[90vh] md:min-h-screen flex items-start md:items-center px-2 sm:px-4 md:px-6 overflow-visible md:overflow-hidden">
+        <section className="relative min-h-[90vh] md:min-h-screen hidden md:flex items-start md:items-center px-2 sm:px-4 md:px-6 overflow-visible md:overflow-hidden">
           <div className="relative w-full grid md:grid-cols-2 gap-4 md:gap-10 items-start md:items-center z-10 py-6 md:py-0">
             <div className="order-2 md:order-1 text-center md:text-left px-3 py-6 sm:p-6 md:p-10 relative group w-full max-w-[calc(100%-1rem)] md:max-w-none mx-auto md:mx-0 mr-40 -ml-10">
               {/* Glass background for text */}
@@ -366,6 +366,88 @@ const AboutUs = () => {
           </div>
         </section>
 
+        {/* Mobile-only About Section */}
+        <section className="md:hidden relative px-4 py-8 mt-10">
+          <div className="max-w-7xl mx-auto">
+            <motion.h2
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ amount: 0.3, once: false }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="text-2xl font-bold text-slate-900 text-center"
+            >
+              About CLASSA
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ amount: 0.3, once: false }}
+              transition={{ duration: 0.45, delay: 0.05 }}
+              className="mt-3 text-slate-600 text-sm text-center"
+            >
+              Smarter learning, streamlined administration, and real results for students, teachers, leaders, and parents.
+            </motion.p>
+
+            <div className="mt-6 space-y-4">
+              {/* Value cards */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ amount: 0.2, once: false }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="rounded-xl border border-slate-100 bg-white shadow-sm p-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-sky-100 text-sky-600">
+                    <GraduationCap className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-base font-semibold text-slate-900">Built for Learning</h3>
+                </div>
+                <p className="mt-2 text-sm text-slate-600">
+                  Adaptive tools, multilingual content, and insights that help every learner progress.
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ amount: 0.2, once: false }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="rounded-xl border border-slate-100 bg-white shadow-sm p-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-violet-100 text-violet-600">
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-base font-semibold text-slate-900">Simplify Teaching</h3>
+                </div>
+                <p className="mt-2 text-sm text-slate-600">
+                  Plan lessons, manage assessments, and track progress in one place.
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ amount: 0.2, once: false }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                className="rounded-xl border border-slate-100 bg-white shadow-sm p-4"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-emerald-100 text-emerald-600">
+                    <Brain className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-base font-semibold text-slate-900">Actionable Insights</h3>
+                </div>
+                <p className="mt-2 text-sm text-slate-600">
+                  See what matters with live dashboards, alerts, and simple reports.
+                </p>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
         {/* ===== NEW SECTION ===== */}
         {/* <section className="relative py-16 px-6 bg-gray-50">
           <div className="max-w-7xl mx-auto text-center">
@@ -414,6 +496,64 @@ const AboutUs = () => {
           >
             <span className="text-blue-500">CLASSA</span>: Next-Generation Education Platform
           </motion.h2>
+
+          {/* Mobile-only quick features - Icons only, expandable */}
+          <div className="md:hidden -mt-6 mb-8">
+            <div className="grid grid-cols-4 gap-3">
+              {[
+                {
+                  id: 'ai',
+                  icon: <Shield className="h-5 w-5" />,
+                  title: 'AI-Driven',
+                  description: 'Harness AI for personalized learning and insights.',
+                  color: 'bg-sky-100',
+                  textColor: 'text-sky-600'
+                },
+                {
+                  id: 'auto',
+                  icon: <Cog className="h-5 w-5" />,
+                  title: 'Automation',
+                  description: 'Automate workflows to save time and reduce effort.',
+                  color: 'bg-amber-100',
+                  textColor: 'text-amber-600'
+                },
+                {
+                  id: 'smart',
+                  icon: <Crosshair className="h-5 w-5" />,
+                  title: 'Smart',
+                  description: 'Adaptive systems tailored to each learner.',
+                  color: 'bg-emerald-100',
+                  textColor: 'text-emerald-600'
+                },
+                {
+                  id: 'innovate',
+                  icon: <Lightbulb className="h-5 w-5" />,
+                  title: 'Innovation',
+                  description: 'Cutting-edge tools for future-ready education.',
+                  color: 'bg-violet-100',
+                  textColor: 'text-violet-600'
+                }
+              ].map((item) => (
+                <div key={item.id} className="relative">
+                  <button
+                    onClick={() => {
+                      const content = document.getElementById(`mobile-feature-${item.id}`);
+                      if (content) {
+                        content.classList.toggle('hidden');
+                      }
+                    }}
+                    className={`w-full aspect-square flex items-center justify-center rounded-xl ${item.color} ${item.textColor} hover:opacity-90 transition-all duration-200`}
+                  >
+                    {item.icon}
+                  </button>
+                  <div id={`mobile-feature-${item.id}`} className="hidden absolute z-10 mt-2 w-48 p-3 bg-white rounded-lg border border-gray-100 shadow-lg">
+                    <p className="text-sm font-medium text-slate-900">{item.title}</p>
+                    <p className="text-xs text-slate-600 mt-1">{item.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
 
           <div className="relative flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
             <motion.div

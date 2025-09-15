@@ -22,7 +22,7 @@ function FloatingPaths({ position }: { position: number }) {
   return (
     <div className="absolute inset-0 pointer-events-none">
       <svg
-        className="w-full h-full text-blue-500 dark:text-blue-400"
+        className="w-full h-full text-blue-500"
         viewBox="0 0 696 316"
         fill="none"
       >
@@ -64,12 +64,12 @@ const HeroSection = () => {
             className="w-full h-full object-cover"
           />
           {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-white/30 dark:bg-neutral-950/80"></div>
+          <div className="absolute inset-0 bg-white/30"></div>
         </div>
         
         <div className="container relative z-10 mx-auto max-w-4xl text-center pt-20">
           {/* Centered Content with Glass Effect */}
-          <div className="relative z-10 bg-white/30 dark:bg-gray-900/30 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20 dark:border-gray-700/30">
+          <div className="relative z-10 bg-white/30 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-white/20">
             {/* Title */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 animate-fadeInUp">
               All-in-One Platform for{' '}
@@ -78,7 +78,7 @@ const HeroSection = () => {
 
             {/* Subtitle */}
             <p
-              className="mt-6 text-lg md:text-xl text-gray-900 dark:text-white animate-fadeInUp"
+              className="mt-6 text-lg md:text-xl text-gray-900 animate-fadeInUp"
               style={{ animationDelay: '0.3s' }}
             >
               Six Core Modules. Infinite Possibilities.

@@ -2,7 +2,7 @@
 import Navbar from "@/components/Navbar";
 import HeroSection_copy from "@/components/HeroSection_copy";
 import { Check, Plus, Minus } from "lucide-react";
-import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from 'react';
 
 declare global {
@@ -223,18 +223,36 @@ function ClassaPage() {
     return () => observer.disconnect();
   }, []);
   const modulesRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ 
-    target: modulesRef,
-    offset: ["start start", "end end"]
-  });
-
-  const activeModuleIndex = useTransform(scrollYProgress, [0, 1], [0, MODULES.length - 0.5]);
-
+  // Step-by-step wheel navigation between letters (desktop/tablet section)
   useEffect(() => {
-    return activeModuleIndex.onChange((latest) => {
-      setActiveModule(Math.floor(latest));
-    });
-  }, [activeModuleIndex]);
+    const el = modulesRef.current;
+    if (!el) return;
+
+    let lastStepTime = 0;
+    const COOLDOWN_MS = 600; // throttle wheel steps so one scroll = one step
+
+    const onWheel = (e: WheelEvent) => {
+      // Only intercept when pointer is over this section
+      // Prevent default to avoid page scroll while stepping letters
+      e.preventDefault();
+
+      const now = Date.now();
+      if (now - lastStepTime < COOLDOWN_MS) return;
+      lastStepTime = now;
+
+      const direction = e.deltaY > 0 ? 1 : -1; // down -> next, up -> previous
+      setActiveModule(prev => {
+        const next = Math.max(0, Math.min(MODULES.length - 1, prev + direction));
+        return next;
+      });
+    };
+
+    // Add non-passive to allow preventDefault
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel as EventListener);
+    };
+  }, []);
   const currentIndex = activeRole === -1 ? 0 : activeRole;
   // Keyboard nav: roving tabindex and refs for tabs
   const [focusedIdx, setFocusedIdx] = useState<number>(0);
@@ -405,8 +423,8 @@ function ClassaPage() {
       {/* Hero */}
       <HeroSection_copy />
 
-      {/* Modules */}
-      <section ref={modulesRef} aria-labelledby="modules" className="sticky top-16 z-10 bg-white shadow-sm py-4 md:py-6 border-b border-gray-100">
+      {/* Modules (desktop/tablet only) */}
+      <section ref={modulesRef} aria-labelledby="modules" className="hidden md:sticky md:top-16 md:z-10 md:bg-white md:shadow-sm md:py-6 md:border-b md:border-gray-100 md:block">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900">Our Modules</h2>
           
@@ -430,6 +448,7 @@ function ClassaPage() {
                       if (el) moduleRefs.current[index] = el;
                     }}
                     key={index}
+                    onClick={() => setActiveModule(index)}
                     className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold transition-all duration-300 ${
                       activeModule === index 
                         ? `text-white shadow-2xl ${color}`
@@ -460,10 +479,11 @@ function ClassaPage() {
             </div>
 
             {/* Module Display */}
-            <div className="relative w-full" ref={modulesRef}>
+            <div className="relative w-full">
               <AnimatePresence mode="wait">
                 {MODULES.map((module, index) => (
                   <motion.div
+                    id={`module-${index}`}
                     key={index}
                     className="grid grid-cols-1 md:grid-cols-5 gap-8 py-6 w-full min-h-[500px]"
                     initial={{ opacity: 0, y: 30 }}
@@ -582,6 +602,95 @@ function ClassaPage() {
             </div>
           </div>
         {/* </div> */}
+      </section>
+
+      {/* Modules (mobile only) */}
+      <section aria-labelledby="modules-mobile" className="md:hidden px-4 py-6">
+        <div className="w-full max-w-7xl mx-auto">
+          <h2 id="modules-mobile" className="text-2xl font-bold text-center text-gray-900">Our Modules</h2>
+          {/* Staggered list container */}
+          <motion.div 
+            className="mt-5 space-y-4"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ amount: 0.15, once: false }}
+            variants={{
+              hidden: { opacity: 1 },
+              show: { 
+                opacity: 1,
+                transition: { staggerChildren: 0.08, delayChildren: 0.05 }
+              }
+            }}
+          >
+            {MODULES.map((module, index) => (
+              <motion.div
+                key={index}
+                className="rounded-xl border border-gray-100 bg-white shadow-sm p-4"
+                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ amount: 0.2, once: false }}
+                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-lg font-semibold text-gray-900">{module.title}</div>
+                </div>
+                <motion.p 
+                  className="mt-2 text-sm text-gray-600"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ amount: 0.3, once: false }}
+                  transition={{ duration: 0.35, delay: 0.05 }}
+                >
+                  {module.description}
+                </motion.p>
+                <ul className="mt-3 space-y-2">
+                  {module.bullets.slice(0, 3).map((b, i) => (
+                    <motion.li 
+                      key={i} 
+                      className="flex items-start gap-2 text-gray-700 text-sm"
+                      initial={{ opacity: 0, x: -8 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ amount: 0.5, once: false }}
+                      transition={{ duration: 0.3, delay: 0.05 * (i + 1) }}
+                    >
+                      <span className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${module.accent.dot} text-white`}>
+                        <Check size={12} strokeWidth={3} />
+                      </span>
+                      <span className="flex-1">{b.text}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+                <motion.div 
+                  className="mt-4 relative"
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ amount: 0.3, once: false }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <img
+                    src={module.image.src}
+                    alt={module.image.alt}
+                    loading="lazy"
+                    className="w-full h-auto rounded-lg shadow"
+                  />
+                  {/* subtle shimmer */}
+                  <motion.span 
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 rounded-lg"
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ amount: 0.2, once: false }}
+                    style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.04), transparent)' }}
+                    animate={{ x: ['-20%', '120%'] }}
+                    transition={{ duration: 2.2, repeat: Infinity, ease: 'linear' }}
+                  />
+                </motion.div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
       </section>
 
       {/* Tailored for Every Role */}
