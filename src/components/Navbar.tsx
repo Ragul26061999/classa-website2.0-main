@@ -22,14 +22,14 @@ export default function Navbar() {
   // Override link colors contextually: when over HeroSection (#home is in view),
   // use white text with blue hover; otherwise, use default scheme.
   const contextualLinkClass = (href: string) => {
-    const base = "text-lg font-bold transition-colors";
+    const base = "text-lg font-medium transition-colors";
     if (!isScrolled) {
       return isActive(href) 
-        ? `text-white ${base}` 
-        : `text-white hover:text-[#3DA9FC] ${base}`;
+        ? `text-black ${base} font-semibold` 
+        : `text-black hover:text-[#3DA9FC] ${base}`;
     }
     return isActive(href) 
-      ? "text-[#0070F3] font-bold" 
+      ? "text-[#0070F3] font-semibold" 
       : "text-gray-700 hover:text-[#3DA9FC] transition-colors";
   };
 
@@ -63,19 +63,21 @@ export default function Navbar() {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 bg-white/20 backdrop-blur-lg shadow-lg border-b border-white/20 transition-all duration-300"
+      className={`fixed top-0 left-0 right-0 z-50 shadow-lg transition-all duration-300 ${!isScrolled ? 'bg-white' : 'bg-white/20 backdrop-blur-lg border-b border-white/20'}`}
       style={{
         transform: 'translateY(var(--navbar-hidden, 0))',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        backgroundColor: 'rgba(255, 255, 255, 0.2)'
+        ...(!isScrolled ? {} : {
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.2)'
+        })
       }}
     >
       <div className="mx-4 md:mx-10 lg:mx-20 flex max-w-6xl items-center justify-between px-4 py-4 w-full">
         {/* Logo - Hidden on desktop */}
         <Link href="/#home" className="flex items-center gap-3 md:absolute md:left-10">
           <Image
-            src="/image/classa logo.png"
+            src="/image/classa logo 2.png"
             alt="CLASSA logo"
             width={160}
             height={160}
