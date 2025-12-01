@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 
 // Dynamically import both versions with SSR disabled
 const DesktopWhyChooseSection = dynamic<{}>(
-  () => import('./WhyChooseSection').then(mod => mod.WhyChooseSection),
+  () => import('./WhyChooseSectionNew').then(mod => mod.WhyChooseSection),
   { ssr: false, loading: () => null }
 );
 

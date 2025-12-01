@@ -1,25 +1,39 @@
 "use client";
 
 import React from "react";
-import { Phone, MapPin, Send, Sparkles } from "lucide-react";
+import { Phone, MapPin, Send, Mail, ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ContactSection() {
   
   return (
-    <section id="contact" className="w-full bg-white text-zinc-900 overflow-hidden scroll-mt-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 md:py-24 lg:min-h-[80vh] flex flex-col lg:items-start lg:justify-center relative">
-        {/* Heading */}
+    <section id="contact" className="w-full bg-gradient-to-b from-white to-slate-50 text-gray-900 overflow-hidden scroll-mt-24 relative">
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-100 rounded-full blur-3xl opacity-50" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-100 rounded-full blur-3xl opacity-50" />
+      </div>
+      
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10">
+        {/* Header */}
         <motion.div
-          className="w-full lg:max-w-4xl mx-auto lg:mx-0 text-center lg:text-left lg:pl-8 xl:pl-12 2xl:pl-24"
-          initial={{ opacity: 0, y: 40 }}
+          className="text-center mb-12 lg:mb-16"
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-tight bg-gradient-to-r from-[#9333ea] to-[#6b21a8] via-[#c084fc] text-transparent bg-clip-text">Easy to Reach</h2>
-          <p className="mt-1 text-2xl sm:text-4xl font-light bg-gradient-to-r from-[#a855f7] to-[#818cf8] via-[#60a5fa] text-transparent bg-clip-text lg:ml-0 sm:ml-20">Ready to Help</p>
-          <p className="mt-6 text-zinc-600 pb-5">Get in Touch with the CLASSA Team</p>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6">
+            <Mail className="w-4 h-4 text-blue-600" />
+            <span className="text-sm font-medium text-blue-700">Get in Touch</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            Let&apos;s Start a{' '}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">Conversation</span>
+          </h2>
+          <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+            Ready to transform your institution? Get in touch with the CLASSA team today.
+          </p>
         </motion.div>
 
         {/* Content Row */}

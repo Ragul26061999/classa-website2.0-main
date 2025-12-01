@@ -1,846 +1,689 @@
 'use client';
+
 import Navbar from "@/components/Navbar";
-import HeroSection_copy from "@/components/HeroSection_copy";
-import { Check, Plus, Minus } from "lucide-react";
+import { Check, ArrowRight, Sparkles, ChevronRight, BarChart3, GraduationCap, Users, BookOpen, Brain, Shield, Zap, Globe, Play } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useRef, useState } from 'react';
+import { useState, useRef } from 'react';
+import Image from "next/image";
+import Link from "next/link";
 
-declare global {
-  interface Window {
-    scrollAnimationId: number | null;
+// Module data
+const MODULES = [
+  {
+    id: 'cms',
+    letter: 'C',
+    title: 'Content Management System',
+    shortTitle: 'Content',
+    description: 'Upload, organize, and distribute lesson plans, videos, and notes seamlessly.',
+    features: [
+      'Role-based content access permissions',
+      'Version control for content integrity',
+      'NCERT-aligned digital content library',
+      'Centralized resource management'
+    ],
+    image: '/images/cms.png',
+    color: '#3B82F6',
+    gradient: 'from-blue-500 to-cyan-400',
+    lightBg: 'bg-blue-50',
+  },
+  {
+    id: 'lms',
+    letter: 'L',
+    title: 'Learning Management System',
+    shortTitle: 'Learning',
+    description: 'Auto-generate schedules, track assignments, and monitor student progress.',
+    features: [
+      'Automated timetable generation',
+      'Assignment tracking & evaluation',
+      'Attendance monitoring',
+      'Student-centric dashboards'
+    ],
+    image: '/images/lms.png',
+    color: '#F59E0B',
+    gradient: 'from-amber-500 to-orange-400',
+    lightBg: 'bg-amber-50',
+  },
+  {
+    id: 'ams',
+    letter: 'A',
+    title: 'Assessment Management System',
+    shortTitle: 'Assessment',
+    description: 'Design AI-supported evaluations with comprehensive analytics.',
+    features: [
+      'AI-assisted test creation',
+      "Bloom's taxonomy tagging",
+      'NCERT question bank access',
+      'Performance analytics & reports'
+    ],
+    image: '/images/ams.png',
+    color: '#10B981',
+    gradient: 'from-emerald-500 to-teal-400',
+    lightBg: 'bg-emerald-50',
+  },
+  {
+    id: 'senseai',
+    letter: 'S',
+    title: 'SenseAI – Learning Intelligence',
+    shortTitle: 'SenseAI',
+    description: 'AI that adapts to each learner and gives teachers superpowers.',
+    features: [
+      'Adaptive learning paths',
+      'Auto content suggestions',
+      'Real-time insights',
+      'Multilingual support'
+    ],
+    image: '/images/senseAI.png',
+    color: '#8B5CF6',
+    gradient: 'from-purple-500 to-pink-400',
+    lightBg: 'bg-purple-50',
+  },
+  {
+    id: 'sms',
+    letter: 'S',
+    title: 'School Management System',
+    shortTitle: 'School',
+    description: 'Manage admissions, fees, transport, and staff records efficiently.',
+    features: [
+      'RFID/biometric attendance',
+      'Parent communication portal',
+      'Financial & compliance reports',
+      'Staff & inventory management'
+    ],
+    image: '/images/sms.png',
+    color: '#F97316',
+    gradient: 'from-orange-500 to-red-400',
+    lightBg: 'bg-orange-50',
+  },
+  {
+    id: 'adms',
+    letter: 'A',
+    title: 'Admission Management System',
+    shortTitle: 'Admission',
+    description: 'Streamline online applications and enrollment processes.',
+    features: [
+      'Online application portal',
+      'Real-time status tracking',
+      'CRM/ERP integration',
+      'Admission analytics dashboard'
+    ],
+    image: '/adms.png',
+    color: '#EF4444',
+    gradient: 'from-red-500 to-rose-400',
+    lightBg: 'bg-red-50',
   }
-}
-import type React from "react";
-
-type Bullet = { text: string; colorClass: string };
- type Module = {
-  title: string | React.ReactNode;
-  description: string;
-  bullets: Bullet[];
-  image: { src: string; alt: string };
-  accent: {
-    ring: string; // ring color class, can be arbitrary like ring-[#EDC531]
-    ringSoft?: string; // softer ring for image panel, e.g. ring-[#EDC531]/70
-    dot: string; // bullet icon bg, e.g. bg-[#EDC531]
-    gradient: string; // e.g. from-blue-50 to-sky-50
-  };
-};
-
-// Role-specific images for the sticky left panel
-const ROLE_IMAGES: { src: string; alt: string }[] = [
-  {
-    src: "/image/principle.png",
-    alt: "Open office with meeting rooms representing administration and planning",
-  },
-  {
-    src: "/teacher.png",
-    alt: "Teacher in front of a classroom",
-  },
-  {
-    src: "/student.png",
-    alt: "Students studying together in a modern classroom",
-  },
-  {
-    src: "/parent.jpeg",
-    alt: "Parents with child reviewing progress at home",
-  },
 ];
 
-// CLASSA Educational Management Systems
-const MODULES: Module[] = [
+const ROLES = [
   {
-    title: <span className="bg-whitle text-[#007DC6] px-2 py-1 rounded-md">Content Management System</span>,
-    description: "Upload, organize, and distribute lesson plans, videos, and notes → Teachers can seamlessly share learning materials in one centralized platform.",
-    bullets: [
-      { text: "Enable subject/class-specific content access with role-based permissions → Only the right students and staff see the right content at the right time.", colorClass: "bg-[#3B82F6]" },
-      { text: "Maintain content integrity with version control → Updates are tracked, so the latest and most accurate resources are always available.", colorClass: "bg-[#3B82F6]" },
-      { text: "Access Edueron’s NCERT-aligned digital content library → Schools get ready-to-use curriculum resources mapped to NCERT standards.", colorClass: "bg-[#3B82F6]" },
-      // { text: "Customize content for local needs → Tailor resources to meet regional standards and cultural contexts.", colorClass: "bg-[#3B82F6]" }
-    ],
-    image: {
-      src: "images/cms.png",
-      alt: "Content Management System"
-    },
-    accent: { ring: "ring-[#007DC6]", ringSoft: "ring-[#007DC6]/70", dot: "bg-[#007DC6]", gradient: "from-blue-50 to-sky-50" }
+    id: 'leader',
+    title: 'Leaders',
+    icon: BarChart3,
+    color: 'from-blue-500 to-cyan-400',
+    description: 'Comprehensive dashboards with real-time analytics for strategic decision-making.',
+    image: '/image/principle.png'
   },
   {
-    title: <span className="bg-white text-[#EDC531] px-2 py-1 rounded-md">Learning Management System</span>,
-    description: "Auto-generate class schedules and timetables → Saves time by creating optimized timetables instantly.",
-    bullets: [
-      { text: "Assign, evaluate, and track student tasks → Teachers can manage homework and assignments with real-time progress tracking.", colorClass: "bg-[#EDC531]" },
-      { text: "Monitor attendance and generate performance summaries → Attendance data is auto-captured and linked to student performance.", colorClass: "bg-[#EDC531]" },
-      { text: "Provide student-centric dashboards with deadlines and alerts → Students get personalized views of their schedules, tasks, and reminders.", colorClass: "bg-[#EDC531]" },
-      // { text: "Generate reports and insights → Comprehensive analytics tools provide insights into student performance and trends.", colorClass: "bg-[#EDC531]" }
-    ],
-    image: {
-      src: "images/lms.png",
-      alt: "Learning Management System"
-    },
-    accent: { ring: "ring-[#EDC531]", ringSoft: "ring-[#EDC531]/70", dot: "bg-[#EDC531]", gradient: "from-yellow-50 to-amber-50" }
+    id: 'teacher',
+    title: 'Teachers',
+    icon: BookOpen,
+    color: 'from-emerald-500 to-teal-400',
+    description: 'Create lessons, automate grading, and track student progress effortlessly.',
+    image: '/teacher.png'
   },
   {
-    title: <span className="bg-white text-[#12881F] px-2 py-1 rounded-md">Assessment Management System</span>,
-    description: "Design AI-supported or manual evaluations → Teachers can create tests quickly with AI assistance or set them manually.",
-    bullets: [
-      { text: "Tag questions by Bloom’s taxonomy and difficulty level → Assessments are structured for deeper learning and progressive challenge.", colorClass: "bg-[#12881F]" },
-      { text: "Tap into Edueron’s expansive NCERT-aligned question bank → A rich repository of curriculum-based questions is readily available.", colorClass: "bg-[#12881F]" },
-      { text: "Deliver performance-driven analytics and detailed reports → Results provide insights on strengths, gaps, and growth areas.", colorClass: "bg-[#12881F]" },
-      // { text: "Insightful scorecards", colorClass: "bg-[#12881F]" }
-    ],
-    image: {
-      src: "images/ams.png",
-      alt: "Assessment Management System"
-    },
-    accent: { ring: "ring-[#12881F]", ringSoft: "ring-[#12881F]/70", dot: "bg-[#12881F]", gradient: "from-emerald-50 to-green-50" }
+    id: 'student',
+    title: 'Students',
+    icon: GraduationCap,
+    color: 'from-purple-500 to-pink-400',
+    description: 'Personalized learning paths with interactive tools and instant feedback.',
+    image: '/student.png'
   },
   {
-    title: <span className="bg-white text-[#A422D0] px-2 py-1 rounded-md">SenseAI – Learning Intelligence</span>,
-    description: "AI that adapts to each learner and gives teachers superpowers.",
-    bullets: [
-      { text: "Adaptive learning paths", colorClass: "bg-[#A422D0]" },
-      { text: "Auto content suggestions", colorClass: "bg-[#A422D0]" },
-      { text: "Realtime insights", colorClass: "bg-[#A422D0]" },
-      { text: "Multilingual support", colorClass: "bg-[#A422D0]" }
-    ],
-    image: {
-      src: "images/senseAI.png",
-      alt: "SenseAI preview"
-    },
-    accent: { ring: "ring-[#A422D0]", ringSoft: "ring-[#A422D0]/70", dot: "bg-[#A422D0]", gradient: "from-purple-50 to-fuchsia-50" }
-  },
-  {
-    title: <span className="bg-white text-[#F29553] px-2 py-1 rounded-md">School Management System</span>,
-    description: "Manage admissions, fees, transport, and staff records → Automates core administrative processes for efficiency.",
-    bullets: [
-      { text: "Integrate RFID or biometric attendance tracking → Ensures accurate, real-time student and staff presence records.", colorClass: "bg-[#F29553]" },
-      { text: "Enable communication with parents via messages and notices → Strengthens parent-school engagement with instant updates.", colorClass: "bg-[#F29553]" },
-      { text: "Generate financial, operational, and compliance reports → Provides leaders with complete visibility for smarter decisions.", colorClass: "bg-[#F29553]" },
-      { text: "Staff & inventory", colorClass: "bg-[#F29553]" }
-    ],
-    image: {
-      src: "images/sms.png",
-      alt: "School Management System"
-    },
-    accent: { ring: "ring-[#F29553]", ringSoft: "ring-[#F29553]/70", dot: "bg-[#F29553]", gradient: "from-orange-50 to-amber-50" }
-  },
-  {
-    title: <span className="bg-white text-[#E75C5C] px-2 py-1 rounded-md">Admission Management System</span>,
-    description: "Enable online applications with document uploads → Simplifies admissions by moving the entire process online.",
-    bullets: [
-      { text: "Track applicant status and communication in real-time → Keeps parents and schools updated at every step of the process.", colorClass: "bg-[#E75C5C]" },
-      { text: "Integrate with CRM/ERP systems for seamless data flow → Ensures smooth connectivity with back-office systems.", colorClass: "bg-[#E75C5C]" },
-      { text: "Provide dashboards for admissions insights and forecasts → Helps management plan seat availability and resource allocation.", colorClass: "bg-[#E75C5C]" },
-      // { text: "Offer letters & onboarding", colorClass: "bg-[#E75C5C]" }
-    ],
-    image: {
-      src: "/adms.png",
-      alt: "Admission management preview"
-    },
-    accent: { ring: "ring-[#E75C5C]", ringSoft: "ring-[#E75C5C]/70", dot: "bg-[#E75C5C]", gradient: "from-rose-50 to-red-50" }
-  } 
-];
-
- import { BarChart3, GraduationCap, Users, BookOpen } from 'lucide-react';
-
-const ROLES: { title: React.ReactNode; text: string }[] = [
-  {
-    title: (
-      <span className="flex items-center gap-2">
-        <BarChart3 className="w-5 h-5 text-blue-600" />
-        Leader
-      </span>
-    ),
-    text:
-      "Comprehensive dashboards consolidate critical data into accessible insights, while robust analytics tools deliver real-time performance trends for optimized resource allocation and strategic decision-making.",
-  },
-  {
-    title: (
-      <span className="flex items-center gap-2">
-        <BookOpen className="w-5 h-5 text-green-600" />
-        Teachers
-      </span>
-    ),
-    text:
-      "Quickly create customized lessons and tests with automated grading, deliver precise feedback to boost performance, and seamlessly organize plans while tracking progress and managing class content.",
-  },
-  {
-    title: (
-      <span className="flex items-center gap-2">
-        <GraduationCap className="w-5 h-5 text-purple-600" />
-        Students
-      </span>
-    ),
-    text:
-      "Personalized learning journeys adapt to individual styles and pace, supported by interactive tools like flashcards, summaries, mnemonics, and quizzes—plus immediate feedback to highlight strengths.",
-  },
-  {
-    title: (
-      <span className="flex items-center gap-2">
-        <Users className="w-5 h-5 text-amber-600" />
-        Parents
-      </span>
-    ),
-    text:
-      "Clear, timely updates keep parents informed about progress and deadlines, with secure communication channels that foster active engagement and support at home.",
-  },
-];
-
-function ClassaPage() {
-  const [activeRole, setActiveRole] = useState(-1);
-  const [activeModule, setActiveModule] = useState(0);
-  const moduleRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  
-  // Create refs array and track inView state
-  const [inViewRefs, setInViewRefs] = useState<boolean[]>([]);
-  
-  // Initialize refs
-  useEffect(() => {
-    setInViewRefs(Array(MODULES.length).fill(false));
-  }, []);
-  
-  // Handle intersection observer for each module
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          const index = moduleRefs.current.findIndex(ref => ref === entry.target);
-          if (index !== -1) {
-            setInViewRefs(prev => {
-              const newInView = [...prev];
-              newInView[index] = entry.isIntersecting;
-              return newInView;
-            });
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    
-    moduleRefs.current.forEach(ref => {
-      if (ref) observer.observe(ref);
-    });
-    
-    return () => observer.disconnect();
-  }, []);
-  const modulesRef = useRef<HTMLDivElement>(null);
-  // Step-by-step wheel navigation between letters (desktop/tablet section)
-  useEffect(() => {
-    const el = modulesRef.current;
-    if (!el) return;
-
-    let lastStepTime = 0;
-    const COOLDOWN_MS = 600; // throttle wheel steps so one scroll = one step
-
-    const onWheel = (e: WheelEvent) => {
-      // Only intercept when pointer is over this section
-      // Prevent default to avoid page scroll while stepping letters
-      e.preventDefault();
-
-      const now = Date.now();
-      if (now - lastStepTime < COOLDOWN_MS) return;
-      lastStepTime = now;
-
-      const direction = e.deltaY > 0 ? 1 : -1; // down -> next, up -> previous
-      setActiveModule(prev => {
-        const next = Math.max(0, Math.min(MODULES.length - 1, prev + direction));
-        return next;
-      });
-    };
-
-    // Add non-passive to allow preventDefault
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => {
-      el.removeEventListener('wheel', onWheel as EventListener);
-    };
-  }, []);
-  const currentIndex = activeRole === -1 ? 0 : activeRole;
-  // Keyboard nav: roving tabindex and refs for tabs
-  const [focusedIdx, setFocusedIdx] = useState<number>(0);
-  const mobileTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const desktopTabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const imageAreaRef = useRef<HTMLDivElement | null>(null);
-  const panelRef = useRef<HTMLDivElement | null>(null);
-
-  // When a tab opens, ensure the image/panel is in view and focus the panel for accessibility
-  useEffect(() => {
-    if (activeRole !== -1) {
-      if (imageAreaRef.current) {
-        imageAreaRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-      // Move focus shortly after animation starts
-      const t = setTimeout(() => {
-        panelRef.current?.focus();
-      }, 150);
-      return () => clearTimeout(t);
-    }
-  }, [activeRole]);
-
-  // Initialize scroll animation state
-  const animationRef = useRef<number | null>(null);
-
-  const smoothScrollTo = (targetPosition: number, duration = 2500) => {
-    const startPosition = window.pageYOffset;
-    const distance = targetPosition - startPosition;
-    let startTime: number | null = null;
-    const MIN_SCROLL_DISTANCE = 50; // Minimum distance to trigger smooth scroll
-
-    // Cancel any ongoing scroll animation
-    if (animationRef.current !== null) {
-      cancelAnimationFrame(animationRef.current);
-    }
-
-    // If the distance is very small, don't animate
-    if (Math.abs(distance) < MIN_SCROLL_DISTANCE) {
-      window.scrollTo(0, targetPosition);
-      return;
-    }
-
-    const animation = (currentTime: number) => {
-      if (startTime === null) startTime = currentTime;
-      const timeElapsed = currentTime - startTime;
-      const progress = Math.min(timeElapsed / duration, 1);
-      
-      // Custom easing function for extremely smooth movement
-      const ease = (t: number) => {
-        // Very slow start and end, with a very gentle middle
-        if (t < 0.2) return 0.5 * Math.pow(t / 0.2, 3);
-        if (t < 0.8) return 0.5 + 0.4 * ((t - 0.2) / 0.6);
-        return 0.9 + 0.1 * (1 - Math.pow(1 - ((t - 0.8) / 0.2), 4));
-      };
-      
-      const run = startPosition + distance * ease(progress);
-      window.scrollTo(0, run);
-      
-      if (progress < 1) {
-        animationRef.current = requestAnimationFrame(animation);
-      }
-    };
-
-    // Add a delay before starting the animation for better performance
-    setTimeout(() => {
-      // Check if we're already at the target position
-      if (Math.abs(window.pageYOffset - targetPosition) > 5) {
-        animationRef.current = requestAnimationFrame(animation);
-      }
-    }, 80);
-  };
-
-  const scrollToModule = (index: number) => {
-    setActiveModule(index);
-    const element = document.getElementById(`module-${index}`);
-    const header = document.querySelector('header');
-    const headerHeight = header ? header.offsetHeight : 0;
-    
-    if (element) {
-      // Calculate the exact position to scroll to with even more spacing
-      const elementRect = element.getBoundingClientRect();
-      const elementPosition = elementRect.top + window.pageYOffset;
-      
-      // Increased spacing and added dynamic calculation based on viewport height
-      const viewportHeight = window.innerHeight;
-      const elementHeight = elementRect.height;
-      const dynamicOffset = Math.min(100, viewportHeight * 0.15); // 15% of viewport or 100px max
-      const offsetPosition = Math.max(0, elementPosition - (headerHeight + dynamicOffset));
-      
-      // Add a delay before starting scroll to ensure smooth transition
-      setTimeout(() => {
-        // Only scroll if we're not already at the target position
-        if (Math.abs(window.pageYOffset - offsetPosition) > 10) {
-          smoothScrollTo(offsetPosition);
-        }
-      }, 20);
-      
-      // More aggressive visibility checking
-      const checkVisibility = () => {
-        const currentScroll = window.scrollY;
-        const elementTop = elementPosition - headerHeight - 80; // Increased buffer
-        const elementBottom = elementTop + elementRect.height + headerHeight + 100; // Increased buffer
-        
-        if (currentScroll < elementTop || currentScroll > elementBottom) {
-          // If scrolled away, adjust position with a slightly longer duration
-          smoothScrollTo(offsetPosition);
-        }
-      };
-      
-      // More frequent checking during scroll
-      const scrollCheckInterval = setInterval(checkVisibility, 80);
-      setTimeout(() => clearInterval(scrollCheckInterval), 3000); // Longer check duration
-    }
-  };
-
-  function handleKeyDown(
-    e: React.KeyboardEvent,
-    idx: number,
-    orientation: 'horizontal' | 'vertical' = 'horizontal',
-    scope: 'desktop' | 'mobile' = 'desktop'
-  ) {
-    const key = e.key;
-    const last = ROLES.length - 1;
-    let next = idx;
-    const refs = scope === 'mobile' ? mobileTabRefs.current : desktopTabRefs.current;
-
-    const go = (n: number) => {
-      setFocusedIdx(n);
-      const target = refs[n];
-      if (target) {
-        requestAnimationFrame(() => {
-          target.focus();
-          // Slightly increased delay for better focus handling
-          setTimeout(() => {
-            const element = document.getElementById(`module-${n}`);
-            if (element) {
-              const headerOffset = 120; // Increased for better spacing
-              const elementPosition = element.getBoundingClientRect().top;
-              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-              
-              // Use our custom smooth scroll function
-              smoothScrollTo(offsetPosition);
-            }
-          }, 75); // Increased from 50ms to 75ms for better timing
-        });
-      }
-    };
-
-    if (orientation === 'horizontal') {
-      if (key === 'ArrowRight') { e.preventDefault(); next = idx === last ? 0 : idx + 1; go(next); return; }
-      if (key === 'ArrowLeft')  { e.preventDefault(); next = idx === 0 ? last : idx - 1; go(next); return; }
-    } else {
-      if (key === 'ArrowDown') { e.preventDefault(); next = idx === last ? 0 : idx + 1; go(next); return; }
-      if (key === 'ArrowUp')   { e.preventDefault(); next = idx === 0 ? last : idx - 1; go(next); return; }
-    }
-    if (key === 'Home') { e.preventDefault(); go(0); return; }
-    if (key === 'End')  { e.preventDefault(); go(last); return; }
-    if (key === 'Enter' || key === ' ') {
-      e.preventDefault();
-      setActiveRole(prev => (prev === idx ? -1 : idx));
-      return;
-    }
+    id: 'parent',
+    title: 'Parents',
+    icon: Users,
+    color: 'from-amber-500 to-orange-400',
+    description: 'Stay informed with progress updates and secure communication channels.',
+    image: '/parent.jpeg'
   }
+];
+
+// Hero Section Component
+function HeroSection() {
   return (
-    <main className="min-h-screen bg-white  ">
-      <Navbar />
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {/* Animated background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(59,130,246,0.15),transparent_50%)]" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        
+        {/* Grid pattern */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
+          }}
+        />
+      </div>
 
-      {/* Hero */}
-      <HeroSection_copy />
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="text-center">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm mb-8"
+          >
+            <Sparkles className="w-4 h-4 text-blue-400" />
+            <span className="text-sm text-white/80 font-medium">Complete School Suite</span>
+          </motion.div>
 
-      {/* Modules (desktop/tablet only) */}
-      <section ref={modulesRef} aria-labelledby="modules" className="hidden md:sticky md:top-16 md:z-10 md:bg-white md:shadow-sm md:py-6 md:border-b md:border-gray-100 md:block">
-        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900">Our Modules</h2>
-          
-          {/* CLASSA Buttons */}
-          <div className="flex justify-center space-x-2 md:space-x-4 mt-4 flex-wrap">
-              {['C', 'L', 'A', 'S', 'S', 'A'].map((letter, index) => {
-                const color = [
-                  'bg-[#007DC6]', // C - Blue
-                  'bg-[#EDC531]', // L - Yellow
-                  'bg-[#12881F]', // A - Green
-                  'bg-[#A422D0]', // S - Purple
-                  'bg-[#F29553]', // S - Orange
-                  'bg-[#E75C5C]'  // A - Red
-                ][index];
-                
-                const isActive = inViewRefs[index] || activeModule === index;
-                
-                return (
-                  <motion.button
-                    ref={el => {
-                      if (el) moduleRefs.current[index] = el;
-                    }}
-                    key={index}
-                    onClick={() => setActiveModule(index)}
-                    className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold transition-all duration-300 ${
-                      activeModule === index 
-                        ? `text-white shadow-2xl ${color}`
-                        : 'bg-white text-gray-700 shadow-md hover:shadow-lg'
-                    }`}
-                    aria-label={`Show ${MODULES[index].title}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{
-                      opacity: isActive ? 1 : 0.7,
-                      scale: activeModule === index ? 1.15 : isActive ? 1.05 : 1,
-                      y: activeModule === index ? -8 : 0,
-                      transition: {
-                        type: 'spring',
-                        stiffness: 300,
-                        damping: 15,
-                        delay: index * 0.1
-                      }
-                    }}
-                    whileHover={{
-                      scale: 1.1,
-                      transition: { duration: 0.2 }
-                    }}
-                  >
-                    <motion.span>{letter}</motion.span>
-                  </motion.button>
-                );
-              })}
-            </div>
+          {/* Title */}
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
+          >
+            <span className="block">Six Modules.</span>
+            <span className="block mt-2 bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+              One Powerful Platform.
+            </span>
+          </motion.h1>
 
-            {/* Module Display */}
-            <div className="relative w-full">
-              <AnimatePresence mode="wait">
-                {MODULES.map((module, index) => (
-                  <motion.div
-                    id={`module-${index}`}
-                    key={index}
-                    className="grid grid-cols-1 md:grid-cols-5 gap-8 py-6 w-full min-h-[500px]"
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ 
-                      opacity: activeModule === index ? 1 : 0,
-                      y: activeModule === index ? 0 : 30,
-                      height: activeModule === index ? 'auto' : 0,
-                      transition: { 
-                        duration: 0.5,
-                        ease: [0.16, 1, 0.3, 1] 
-                      } 
-                    }}
-                    exit={{ 
-                      opacity: 0, 
-                      y: -20,
-                      transition: { 
-                        duration: 0.3,
-                        ease: [0.5, 0, 1, 1] 
-                      } 
-                    }}
-                    style={{
-                      position: activeModule === index ? 'relative' : 'absolute',
-                      visibility: activeModule === index ? 'visible' : 'hidden'
-                    }}
-                >
-                  {/* Content Panel */}
-                  <motion.div 
-                    className="md:col-span-3 rounded-lg p-4 md:p-6 relative overflow-y-auto group h-auto"
-                    style={{
-                      border: `2px solid ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}`,
-                      boxShadow: `0 0 20px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}40`
-                    }}
-                    initial={{ opacity: 0, x: -20, y: 20 }}
-                    animate={{ 
-                      opacity: activeModule === index ? 1 : 0,
-                      x: activeModule === index ? 0 : -20,
-                      y: activeModule === index ? 0 : 20,
-                      transition: {
-                        duration: 0.5,
-                        ease: [0.16, 1, 0.3, 1],
-                        delay: 0.2
-                      }
-                    }}
-                    whileHover={{
-                      boxShadow: `0 0 30px 0 ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}60`,
-                      transition: { duration: 0.3 }
-                    }}
-                  >
-                    <div className="relative ">
-                      <div 
-                        className="absolute inset-0 opacity-30 transition-opacity duration-500"
-                        style={{
-                          background: `linear-gradient(90deg, transparent, ${MODULES[activeModule].accent.dot.replace('bg-[', '').replace(']', '')}, transparent)`,
-                          animation: 'shimmer 3s infinite',
-                        }}
-                      />
-                    </div>
-                    <div className="relative z-10">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                        {MODULES[activeModule].title}
-                      </h3>
-                      <p className="text-gray-600 mb-6">
-                        {MODULES[activeModule].description}
-                      </p>
-                      <ul className="space-y-3">
-                        {MODULES[activeModule].bullets.map((bullet, idx) => (
-                          <li key={idx} className="flex items-start gap-3 text-gray-700">
-                            <span className={`mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${MODULES[activeModule].accent.dot} text-white shadow-sm`}>
-                              <Check size={14} strokeWidth={3} />
-                            </span>
-                            <span className="text-gray-600">{bullet.text}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </motion.div>
-
-                  {/* Image Panel */}
-                  <motion.div 
-                    className="md:col-span-2 relative h-full"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{
-                      opacity: activeModule === index ? 1 : 0,
-                      x: activeModule === index ? 0 : 20,
-                      transition: {
-                        delay: 0.3,
-                        duration: 0.5
-                      }
-                    }}
-                  >
-                    <div className="sticky top-6 w-full h-full flex items-center">
-                      <motion.div 
-                        className="w-full rounded-xl overflow-hidden"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ 
-                          opacity: 1, 
-                          scale: 1, 
-                          transition: { 
-                            delay: 0.2, 
-                            duration: 0.6 
-                          } 
-                        }}
-                      >
-                        <img
-                          src={MODULES[activeModule].image.src}
-                          alt={MODULES[activeModule].image.alt}
-                          loading="lazy"
-                          className="w-full h-auto rounded-lg shadow-lg"
-                        />
-                      </motion.div>
-                    </div>
-                  </motion.div>
-                </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-          </div>
-        {/* </div> */}
-      </section>
-
-      {/* Modules (mobile only) */}
-      <section aria-labelledby="modules-mobile" className="md:hidden px-4 py-6">
-        <div className="w-full max-w-7xl mx-auto">
-          <h2 id="modules-mobile" className="text-2xl font-bold text-center text-gray-900">Our Modules</h2>
-          {/* Staggered list container */}
-          <motion.div 
-            className="mt-5 space-y-4"
-            initial="hidden"
-            whileInView="show"
-            viewport={{ amount: 0.15, once: false }}
-            variants={{
-              hidden: { opacity: 1 },
-              show: { 
-                opacity: 1,
-                transition: { staggerChildren: 0.08, delayChildren: 0.05 }
-              }
-            }}
+          {/* CLASSA Letters */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex justify-center gap-3 sm:gap-4 my-10"
           >
             {MODULES.map((module, index) => (
               <motion.div
-                key={index}
-                className="rounded-xl border border-gray-100 bg-white shadow-sm p-4"
-                initial={{ opacity: 0, y: 24, scale: 0.98 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ amount: 0.2, once: false }}
-                transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
+                key={module.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + index * 0.1 }}
+                whileHover={{ scale: 1.1, y: -5 }}
+                className="relative group cursor-pointer"
               >
-                <div className="flex items-center justify-between">
-                  <div className="text-lg font-semibold text-gray-900">{module.title}</div>
+                <div 
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center text-white font-bold text-xl sm:text-2xl shadow-lg transition-all duration-300"
+                  style={{ 
+                    backgroundColor: module.color,
+                    boxShadow: `0 10px 40px ${module.color}40`
+                  }}
+                >
+                  {module.letter}
                 </div>
-                <motion.p 
-                  className="mt-2 text-sm text-gray-600"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ amount: 0.3, once: false }}
-                  transition={{ duration: 0.35, delay: 0.05 }}
-                >
-                  {module.description}
-                </motion.p>
-                <ul className="mt-3 space-y-2">
-                  {module.bullets.slice(0, 3).map((b, i) => (
-                    <motion.li 
-                      key={i} 
-                      className="flex items-start gap-2 text-gray-700 text-sm"
-                      initial={{ opacity: 0, x: -8 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ amount: 0.5, once: false }}
-                      transition={{ duration: 0.3, delay: 0.05 * (i + 1) }}
-                    >
-                      <span className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${module.accent.dot} text-white`}>
-                        <Check size={12} strokeWidth={3} />
-                      </span>
-                      <span className="flex-1">{b.text}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-                <motion.div 
-                  className="mt-4 relative"
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ amount: 0.3, once: false }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <img
-                    src={module.image.src}
-                    alt={module.image.alt}
-                    loading="lazy"
-                    className="w-full h-auto rounded-lg shadow"
-                  />
-                  {/* subtle shimmer */}
-                  <motion.span 
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-lg"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ amount: 0.2, once: false }}
-                    style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.04), transparent)' }}
-                    animate={{ x: ['-20%', '120%'] }}
-                    transition={{ duration: 2.2, repeat: Infinity, ease: 'linear' }}
-                  />
-                </motion.div>
+                
+                {/* Tooltip */}
+                <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                  <div className="bg-white/10 backdrop-blur-md text-white text-xs px-3 py-1.5 rounded-lg border border-white/20">
+                    {module.shortTitle}
+                  </div>
+                </div>
               </motion.div>
             ))}
           </motion.div>
+
+          {/* Description */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10"
+          >
+            A comprehensive educational ecosystem designed to transform how institutions manage, teach, and learn.
+          </motion.p>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Link
+              href="/#contact"
+              className="group inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-2xl shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300"
+            >
+              <span>Get Started</span>
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <button className="inline-flex items-center gap-2 px-8 py-4 bg-white/5 border border-white/10 text-white font-semibold rounded-2xl hover:bg-white/10 transition-all duration-300">
+              <Play className="w-5 h-5" />
+              <span>Watch Demo</span>
+            </button>
+          </motion.div>
         </div>
-      </section>
+      </div>
 
-      {/* Tailored for Every Role */}
-      <section aria-labelledby="roles" className="relative pt-24 pb-12 min-h-[80vh]">
-        <div className="mx-auto px-4 lg:px-6">
-          <header className="max-w-6xl">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 ml-5">
-              Tailored for Every Role
-              <span className="block font-normal">in Your Institution</span>
-            </h2>
-            <p className="mt-3 text-slate-600 text-sm md:text-base lg:text-lg ml-5">
-              <span className="text-sky-600 font-semibold ml-">CLASSA</span> offers specialized features for each member of your educational community
-            </p>
-            <p className="mt-3 text-slate-600 text-sm md:text-base lg:text-lg ml-5">streamlining collaboration and boosting productivity.</p>
-          </header>
-
-          {/* Tabs (mobile): horizontal chips */}
-          <div className="mt-8 flex flex-wrap gap-3 lg:hidden" role="tablist" aria-label="Roles tabs (mobile)">
-            {ROLES.map((r, idx) => {
-              const isActive = activeRole === idx;
-              return (
-                <button
-                  key={idx}
-                  id={`role-tab-${idx}`}
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-expanded={isActive}
-                  aria-controls={`role-panel-${idx}`}
-                  onClick={() => setActiveRole(prev => prev === idx ? -1 : idx)}
-                  onKeyDown={(e) => handleKeyDown(e, idx, 'horizontal', 'mobile')}
-                  tabIndex={focusedIdx === idx ? 0 : -1}
-                  ref={(el) => { mobileTabRefs.current[idx] = el; }}
-                  className={
-                    `inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors ` +
-                    (isActive ? "bg-sky-600 text-white border-sky-600" : "bg-white text-slate-700 hover:bg-slate-50 border-slate-200")
-                  }
-                >
-                  <span className="font-medium">{typeof r.title === 'string' ? r.title.replace(/^[^\w\s]+/, '') : r.title}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="mt-10 grid gap-10 lg:grid-cols-10">
-            {/* Left: image with frosted glass content overlay (smaller) */}
-            <div className="relative lg:col-span-7 self-start mx-auto w-full max-w-4xl" ref={imageAreaRef}>
-              <div className="relative h-full w-full rounded-lg">
-                <div className="aspect-[16/9] w-full lg:aspect-auto lg:h-[380px]">
-                  <AnimatePresence mode="wait">
-                    <motion.img
-                      key={currentIndex}
-                      src={ROLE_IMAGES[currentIndex]?.src}
-                      alt={ROLE_IMAGES[currentIndex]?.alt}
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                      initial={{ opacity: 0, scale: 1.02 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.98 }}
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    />
-                  </AnimatePresence>
-                </div>
-                {/* Frosted glass overlay with active content */}
-                <AnimatePresence mode="wait">
-                  {activeRole !== -1 && (
-                    <motion.div
-                      key={`panel-${currentIndex}`}
-                      role="tabpanel"
-                      id={`role-panel-${currentIndex}`}
-                      aria-labelledby={`role-tab-${currentIndex}`}
-                      tabIndex={-1}
-                      ref={panelRef}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute bottom-6 left-6 right-6 md:bottom-8 md:left-8 md:right-8 lg:bottom-10 lg:left-10 lg:right-10 rounded-2xl bg-white/60 backdrop-blur-md ring-1 ring-white/50 shadow-xl p-6 md:p-8"
-                    >
-                      <h3 className="text-xl md:text-2xl font-semibold text-slate-900">
-                        {ROLES[currentIndex].title}
-                      </h3>
-                      <p className="mt-2 text-slate-700 text-sm md:text-base lg:text-lg">
-                        {ROLES[currentIndex].text}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-
-            {/* Right: vertical tabs with straight labels (desktop) */}
-            <div className="lg:col-span-3 mb-8 lg:mb-0 hidden lg:flex lg:self-stretch lg:h-[380px] items-stretch">
-              <div className="flex flex-col w-full h-full items-stretch justify-start divide-y divide-slate-200" role="tablist" aria-orientation="vertical" aria-label="Roles tabs (desktop)">
-                {ROLES.map((r, idx) => {
-                  const isActive = activeRole === idx;
-                  return (
-                    <button
-                      key={idx}
-                      id={`role-tab-${idx}`}
-                      role="tab"
-                      aria-selected={isActive}
-                      aria-expanded={isActive}
-                      aria-controls={`role-panel-${idx}`}
-                      onClick={() => setActiveRole(prev => prev === idx ? -1 : idx)}
-                      onKeyDown={(e) => handleKeyDown(e, idx, 'vertical', 'desktop')}
-                      tabIndex={focusedIdx === idx ? 0 : -1}
-                      ref={(el) => { desktopTabRefs.current[idx] = el; }}
-                      className={`relative group w-full border-l-4 border-transparent hover:border-sky-400 hover:bg-gradient-to-r hover:from-sky-50 hover:to-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/50 px-6 py-4 text-left flex-1 flex transition-all duration-300 ease-out transform hover:scale-[1.02] hover:shadow-lg ${isActive ? 'border-l-sky-500 bg-gradient-to-r from-sky-100 to-blue-100 shadow-md scale-[1.01]' : 'hover:translate-x-1'}`}
-                      title={typeof r.title === 'string' ? r.title : 'Role tab'}
-                    >
-                      {/* Active indicator */}
-                      {isActive && (
-                        <span className="absolute inset-y-0 left-0 w-[3px] bg-gradient-to-b from-sky-400 to-sky-600 rounded-r-full shadow-sm" />
-                      )}
-                      <span className="flex items-center justify-between w-full relative z-10">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-lg font-semibold tracking-tight transition-colors duration-200 ${isActive ? 'text-slate-900' : 'text-slate-700 group-hover:text-slate-900'}`}>
-                            {r.title}
-                          </span>
-                        </div>
-                        <div className={`transition-all duration-300 ease-out flex-shrink-0 ${isActive ? 'rotate-180 scale-110' : 'group-hover:scale-110 group-hover:rotate-90'}`}>
-                          {isActive ? (
-                            <Minus className="text-sky-600 drop-shadow-sm" size={26} strokeWidth={2.5} />
-                          ) : (
-                            <div className="flex items-center gap-1">
-                              <Plus className="text-slate-400 group-hover:text-sky-500 transition-colors duration-200 flex-shrink-0" size={26} strokeWidth={2.5} />
-                              
-                            </div>
-                            
-                          )}
-                        </div>
-                        <>
-                          <span className="text-[10px] font-medium text-slate-400 group-hover:text-sky-500 transition-colors duration-200 writing-vertical-rl uppercase tracking-wider">
-                                Click me
-                          </span>
-                          </>
-                      </span>
-                    </button>
-                  );
-                })}
-                {/* Right edge divider removed; using internal divide-y lines */}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="flex flex-col items-center gap-2 text-white/40"
+        >
+          <span className="text-xs tracking-widest uppercase">Explore</span>
+          <div className="w-px h-8 bg-gradient-to-b from-white/40 to-transparent" />
+        </motion.div>
+      </motion.div>
+    </section>
   );
 }
 
-// (Removed old RoleCard component in favor of the new, image+list layout)
+// Modules Section - CLASSA in single line
+function ModulesSection() {
+  const [activeModule, setActiveModule] = useState(0);
+  const currentModule = MODULES[activeModule];
 
-export default ClassaPage;
+  return (
+    <section className="py-16 lg:py-24 bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-blue-50 to-transparent rounded-full blur-3xl opacity-50" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-tr from-purple-50 to-transparent rounded-full blur-3xl opacity-50" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-10 sm:mb-12"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 mb-6">
+            <Zap className="w-4 h-4 text-blue-500" />
+            <span className="text-sm font-medium text-blue-700">Our Modules</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-3">
+            Everything You Need,{' '}
+            <span className="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">
+              Integrated
+            </span>
+          </h2>
+          <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
+            Click on each letter to explore our six powerful modules.
+          </p>
+        </motion.div>
+
+        {/* CLASSA Letters - Single Line */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 mb-10 sm:mb-12"
+        >
+          {MODULES.map((module, index) => (
+            <motion.button
+              key={module.id}
+              onClick={() => setActiveModule(index)}
+              whileHover={{ scale: 1.1, y: -4 }}
+              whileTap={{ scale: 0.95 }}
+              className={`relative flex flex-col items-center group transition-all duration-300`}
+            >
+              {/* Letter Circle */}
+              <div 
+                className={`w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center text-white font-bold text-lg sm:text-xl md:text-2xl transition-all duration-300 ${
+                  activeModule === index ? 'scale-110' : 'opacity-70 hover:opacity-100'
+                }`}
+                style={{ 
+                  backgroundColor: module.color,
+                  boxShadow: activeModule === index 
+                    ? `0 12px 30px ${module.color}50` 
+                    : `0 4px 15px ${module.color}30`
+                }}
+              >
+                {module.letter}
+              </div>
+              
+              {/* Module short title */}
+              <span className={`mt-2 text-xs sm:text-sm font-medium transition-all duration-300 ${
+                activeModule === index ? 'text-gray-900' : 'text-gray-400'
+              }`}>
+                {module.shortTitle}
+              </span>
+              
+              {/* Active indicator dot */}
+              {activeModule === index && (
+                <motion.div
+                  layoutId="activeIndicator"
+                  className="absolute -bottom-3 w-1.5 h-1.5 rounded-full"
+                  style={{ backgroundColor: module.color }}
+                />
+              )}
+            </motion.button>
+          ))}
+        </motion.div>
+
+        {/* Module Content Card */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeModule}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="relative bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden"
+          >
+            {/* Colored top bar */}
+            <div 
+              className="h-1.5 w-full"
+              style={{ backgroundColor: currentModule.color }}
+            />
+            
+            <div className="grid lg:grid-cols-2">
+              {/* Content */}
+              <div className="p-6 sm:p-8 lg:p-10">
+                {/* Badge */}
+                <div 
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full mb-5"
+                  style={{ backgroundColor: `${currentModule.color}15` }}
+                >
+                  <div 
+                    className="w-6 h-6 rounded-lg flex items-center justify-center text-white text-xs font-bold"
+                    style={{ backgroundColor: currentModule.color }}
+                  >
+                    {currentModule.letter}
+                  </div>
+                  <span 
+                    className="text-sm font-medium"
+                    style={{ color: currentModule.color }}
+                  >
+                    {currentModule.shortTitle} Module
+                  </span>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
+                  {currentModule.title}
+                </h3>
+                
+                {/* Description */}
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  {currentModule.description}
+                </p>
+
+                {/* Features */}
+                <div className="space-y-3">
+                  {currentModule.features.map((feature, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="flex items-center gap-3"
+                    >
+                      <div 
+                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: `${currentModule.color}20` }}
+                      >
+                        <Check className="w-3 h-3" style={{ color: currentModule.color }} />
+                      </div>
+                      <span className="text-sm text-gray-700">{feature}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Image */}
+              <div 
+                className="relative p-6 sm:p-8 flex items-center justify-center min-h-[250px] sm:min-h-[300px] lg:min-h-[350px]"
+                style={{ backgroundColor: `${currentModule.color}08` }}
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4 }}
+                  className="relative w-full h-full"
+                >
+                  <Image
+                    src={currentModule.image}
+                    alt={currentModule.title}
+                    fill
+                    className="object-contain"
+                  />
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </section>
+  );
+}
+
+// Roles Section
+function RolesSection() {
+  const [activeRole, setActiveRole] = useState(0);
+  
+  const roleColors = {
+    leader: { bg: 'from-blue-500 to-cyan-500', light: 'bg-blue-500', shadow: 'shadow-blue-500/30' },
+    teacher: { bg: 'from-emerald-500 to-teal-500', light: 'bg-emerald-500', shadow: 'shadow-emerald-500/30' },
+    student: { bg: 'from-purple-500 to-pink-500', light: 'bg-purple-500', shadow: 'shadow-purple-500/30' },
+    parent: { bg: 'from-amber-500 to-orange-500', light: 'bg-amber-500', shadow: 'shadow-amber-500/30' },
+  };
+
+  return (
+    <section className="py-20 lg:py-28 bg-gradient-to-b from-white via-slate-50/50 to-white relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 right-0 w-[400px] h-[400px] bg-purple-100/40 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 left-0 w-[400px] h-[400px] bg-blue-100/40 rounded-full blur-3xl" />
+      </div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-50 border border-purple-100 mb-6">
+            <Users className="w-4 h-4 text-purple-500" />
+            <span className="text-sm font-medium text-purple-700">For Everyone</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            Tailored for{' '}
+            <span className="bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
+              Every Role
+            </span>
+          </h2>
+          <p className="text-base sm:text-lg text-gray-500 max-w-2xl mx-auto">
+            Specialized features designed for each member of your educational community.
+          </p>
+        </motion.div>
+
+        {/* Role Tabs - Redesigned */}
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 sm:mb-12">
+          {ROLES.map((role, index) => {
+            const Icon = role.icon;
+            const isActive = activeRole === index;
+            const colors = roleColors[role.id as keyof typeof roleColors];
+            
+            return (
+              <motion.button
+                key={role.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                onClick={() => setActiveRole(index)}
+                className={`relative flex items-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full font-medium transition-all duration-300 ${
+                  isActive
+                    ? `bg-gradient-to-r ${colors.bg} text-white shadow-lg ${colors.shadow}`
+                    : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200 hover:border-gray-300 shadow-sm'
+                }`}
+              >
+                <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? '' : 'text-gray-400'}`} />
+                <span className="text-sm sm:text-base">{role.title}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+
+        {/* Role Content */}
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 items-center">
+          {/* Image */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="relative"
+          >
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeRole}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={ROLES[activeRole].image}
+                    alt={ROLES[activeRole].title}
+                    fill
+                    className="object-cover"
+                  />
+                </motion.div>
+              </AnimatePresence>
+              
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              
+              {/* Title overlay */}
+              <div className="absolute bottom-6 left-6 right-6">
+                <motion.div
+                  key={activeRole}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-white"
+                >
+                  <h3 className="text-2xl font-bold mb-2">{ROLES[activeRole].title}</h3>
+                </motion.div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <AnimatePresence mode="wait">
+              {(() => {
+                const colors = roleColors[ROLES[activeRole].id as keyof typeof roleColors];
+                const Icon = ROLES[activeRole].icon;
+                
+                return (
+                  <motion.div
+                    key={activeRole}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                    className="relative p-6 sm:p-8 rounded-3xl bg-white border border-gray-100 shadow-xl overflow-hidden"
+                  >
+                    {/* Colored top accent */}
+                    <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${colors.bg}`} />
+                    
+                    {/* Icon */}
+                    <div className={`inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br ${colors.bg} text-white mb-5 shadow-lg ${colors.shadow}`}>
+                      <Icon className="w-7 h-7 sm:w-8 sm:h-8" />
+                    </div>
+
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3">
+                      For {ROLES[activeRole].title}
+                    </h3>
+                    <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-6">
+                      {ROLES[activeRole].description}
+                    </p>
+
+                    <Link
+                      href="/#contact"
+                      className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r ${colors.bg} text-white font-medium shadow-md ${colors.shadow} hover:shadow-lg transition-all`}
+                    >
+                      <span>Learn more</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </motion.div>
+                );
+              })()}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// CTA Section
+function CTASection() {
+  return (
+    <section className="py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
+      {/* Background effects */}
+      <div className="absolute inset-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+            Ready to Transform Your Institution?
+          </h2>
+          <p className="text-lg text-white/60 mb-10 max-w-2xl mx-auto">
+            Join hundreds of schools already using CLASSA to deliver better educational outcomes.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/#contact"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-gray-900 font-semibold rounded-2xl hover:bg-gray-100 transition-all duration-300"
+            >
+              <span>Schedule a Demo</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-2xl hover:bg-white/20 transition-all duration-300"
+            >
+              <span>Back to Home</span>
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// Main Page Component
+export default function ClassaPage() {
+  return (
+    <main className="min-h-screen bg-white">
+      <Navbar />
+      <HeroSection />
+      <ModulesSection />
+      <RolesSection />
+      <CTASection />
+    </main>
+  );
+}
